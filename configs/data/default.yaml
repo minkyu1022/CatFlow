@@ -1,0 +1,35 @@
+# Data configuration for LMDB dataset
+
+# LMDB file paths
+train_lmdb_path: ${oc.env:PROJECT_ROOT}/dataset/train/dataset.lmdb
+val_lmdb_path: ${oc.env:PROJECT_ROOT}/dataset/val_id/dataset.lmdb
+test_lmdb_path: null
+
+# Batch sizes
+batch_size:
+  train: 32
+  val: 32
+  test: 32
+
+# Number of workers for data loading
+num_workers:
+  train: 16
+  val: 16
+  test: 16
+
+# Whether to preload all data to RAM
+preload_to_ram: true
+
+# Whether to use PyTorch Geometric Data format
+use_pyg: false
+
+# DataModule target
+datamodule:
+  _target_: src.data.datamodule.LMDBDataModule
+  train_lmdb_path: ${data.train_lmdb_path}
+  val_lmdb_path: ${data.val_lmdb_path}
+  test_lmdb_path: ${data.test_lmdb_path}
+  batch_size: ${data.batch_size}
+  num_workers: ${data.num_workers}
+  preload_to_ram: ${data.preload_to_ram}
+  use_pyg: ${data.use_pyg}

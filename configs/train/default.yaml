@@ -1,0 +1,43 @@
+# Training configuration
+
+# Reproducibility
+deterministic: true
+random_seed: 42
+
+# Run test after training
+run_test: true
+
+# PyTorch Lightning Trainer arguments
+pl_trainer:
+  fast_dev_run: false
+  accelerator: "gpu"
+  # For DDP training with multiple GPUs:
+  #   - devices: number of GPUs (e.g., 2, 4, 8) or list of GPU indices (e.g., [0, 1, 2, 3])
+  #   - strategy: "ddp" or "ddp_find_unused_parameters_false" (faster, use if no unused parameters)
+  # For single GPU:
+  #   - devices: 1
+  #   - strategy: "auto"
+  devices: 1
+  strategy: "auto"  # Use "ddp" or "ddp_find_unused_parameters_false" for multi-GPU
+  precision: 32
+  max_epochs: 1000
+  accumulate_grad_batches: 1
+  num_sanity_val_steps: 2
+  gradient_clip_val: 10.0
+  gradient_clip_algorithm: "norm"
+  # profiler: "simple"
+
+# Monitoring
+monitor_metric: "val/total_loss"
+monitor_metric_mode: "min"
+
+# Early stopping (disabled)
+# early_stopping:
+#   patience: 20
+#   verbose: true
+
+# Model checkpoints
+model_checkpoints:
+  save_top_k: 3
+  verbose: true
+  save_last: true

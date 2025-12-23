@@ -1,0 +1,31 @@
+# Main configuration file for EfficientCatGen
+
+expname: effcatgen
+
+# Metadata
+core:
+  version: 0.0.1
+  tags:
+    - ${now:%Y-%m-%d}
+    - ${expname}
+
+# Hydra configuration
+hydra:
+  run:
+    dir: outputs/${expname}
+
+  sweep:
+    dir: outputs/multirun/${now:%Y-%m-%d}/${expname}
+    subdir: ${hydra.job.num}_${hydra.job.id}
+
+  job:
+    env_set:
+      WANDB_START_METHOD: thread
+
+# Include other configs
+defaults:
+  - data: default
+  - logging: default
+  - model: default
+  - optim: default
+  - train: default

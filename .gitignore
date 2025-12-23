@@ -1,0 +1,111 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyTorch
+*.pth
+*.pt
+*.ckpt
+*.pkl
+
+# PyTorch Lightning
+lightning_logs/
+checkpoints/
+
+# Wandb
+wandb/
+.wandb/
+
+# Hydra
+outputs/
+.hydra/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.yaml.bak
+
+# Data files
+*.lmdb
+*.lmdb-lock
+*.traj
+*.json
+*.csv
+!configs/**/*.yaml
+!configs/**/*.yml
+!*.yaml
+!*.yml
+
+# Logs
+*.log
+logs/
+
+# Generated samples
+generated_samples/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+dataset/
+dummy/
+generated_samples/
+metadata/
+outputs/
+*.png
+*.pkl

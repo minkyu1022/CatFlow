@@ -1,0 +1,20 @@
+# Logging configuration
+
+# Validation check interval
+val_check_interval: 1
+
+# Learning rate monitor
+lr_monitor:
+  logging_interval: "step"
+  log_momentum: false
+
+# Weights & Biases configuration
+wandb:
+  project: "CatGen"
+  name: ${expname}
+  mode: "online" # "online", "offline", "disabled"
+  save_dir: ${hydra:run.dir}
+
+wandb_watch:
+  log: "gradients"
+  log_freq: 100

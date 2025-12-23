@@ -1,0 +1,105 @@
+# Model configuration for EfficientCatGen
+
+_target_: src.module.effcat_module.EffCatModule
+
+# Model architecture dimensions
+atom_s: 512
+token_s: 512
+
+# De Novo Generation mode
+dng: false  # De Novo Generation mode
+
+# Flow model arguments
+flow_model_args:
+  atom_encoder_depth: 6
+  atom_encoder_heads: 4
+  atom_encoder_positional_encoding: false  # positional encoding not used
+  token_transformer_depth: 12
+  token_transformer_heads: 8
+  atom_decoder_depth: 6
+  atom_decoder_heads: 4
+  attention_impl: "pytorch" # "pytorch", "xformers", "manual"
+  activation_checkpointing: false
+  dng: ${dng}  # pass to flow model
+
+# Prior sampler arguments
+prior_sampler_args:
+  coord_std: 1.0
+  # LogNormal parameters for lattice lengths (a, b, c) - computed from dataset
+  lognormal_loc: [1.5845935274470484, 1.8048289191348783, 2.0629395870811051]
+  lognormal_scale: [0.3456883565588731, 0.4261945604282258, 0.4394933811412375]
+  # Uniform parameters for lattice angles (alpha, beta, gamma)
+  uniform_low: 60.0
+  uniform_high: 120.0
+  uniform_eps: 0.1
+  # Supercell matrix normalization parameters - computed from train set
+  supercell_mean: [
+    [-0.026726, 0.078970, -0.065390],
+    [-0.133529, 0.188983, -0.132132],
+    [-0.013621, -0.254989, 0.140161]
+  ]
+  supercell_std: [
+    [1.796400, 1.213596, 0.877900],
+    [1.223385, 1.383904, 1.337392],
+    [1.373271, 1.452034, 1.045282]
+  ]
+  # Prim slab coordinate standardization parameters - computed from train set
+  prim_slab_coord_mean: [3.298159, 4.591314, 5.311862]
+  prim_slab_coord_std: [2.842205, 3.540208, 4.057026]
+  # Adsorbate coordinate standardization parameters - computed from train set
+  ads_coord_mean: [0.007402, -0.702398, 0.934607]
+  ads_coord_std: [8.247430, 9.035212, 9.979235]
+  # Note: scaling_factor uses raw Gaussian prior without normalization
+
+# Flow process arguments
+flow_process_args:
+  num_sampling_steps: 50
+  coordinate_augmentation: true
+  synchronize_timesteps: false
+  compile_model: false
+
+# Training arguments
+training_args:
+  train_multiplicity: 1
+  loss_type: "l2" # "l1" or "l2"
+  prim_slab_coord_loss_weight: 1.0  # primitive slab coordinate loss weight
+  ads_coord_loss_weight: 0.1  # adsorbate coordinate loss weight
+  length_loss_weight: 1.0
+  angle_loss_weight: 0.01
+  supercell_matrix_loss_weight: 1.0  # supercell matrix loss weight
+  supercell_matrix_cosine_reg_weight: 0.0  # cosine regularization weight for integer supercell matrix
+  scaling_factor_loss_weight: 1.0  # scaling factor loss weight
+  prim_slab_element_loss_weight: 1.0  # Used when dng=True
+  lr: 1e-4
+  weight_decay: 0.0
+
+# Validation arguments
+validation_args:
+  sample_every_n_epochs: 5
+  flow_samples: 1
+  sampling_steps: 50
+  sampling_center_coords: false
+  timeout: 120
+  num_workers: 4
+  # Additional settings required when dng=True
+  n_prim_slab_atoms_histogram_path: "primitive_atom_distribution.json"  # Histogram JSON file path (default: primitive_atom_distribution.json in project root)
+  max_n_prim_slab_atoms: null  # Maximum size for sampling (automatically calculated from histogram, used as fallback)
+  # Adsorption energy evaluation settings
+  compute_adsorption: false       
+  adsorption_device: "cuda"       
+  adsorption_model: "uma-m-1p1"   
+  adsorption_timeout: 100        
+  structure_matcher_args:
+    ltol: 0.3
+    stol: 0.5
+    angle_tol: 10.0
+
+# Prediction arguments
+predict_args:
+  num_samples: 1
+  sampling_steps: 50
+  sampling_center_coords: false
+  refine_final: true
+
+# Use optimized kernels
+use_kernels: false
