@@ -17,7 +17,7 @@ flow_model_args:
   atom_decoder_heads: 4
   attention_impl: "pytorch" # "pytorch", "xformers", "manual"
   activation_checkpointing: false
-  dng: false  # pass to flow model
+  dng: true  # pass to flow model
 
 # Prior sampler arguments
 prior_sampler_args:
@@ -66,7 +66,7 @@ training_args:
   supercell_matrix_loss_weight: 1.0  # supercell matrix loss weight
   supercell_matrix_cosine_reg_weight: 0.0  # cosine regularization weight for integer supercell matrix
   scaling_factor_loss_weight: 1.0  # scaling factor loss weight
-  prim_slab_element_loss_weight: 1.0  # Used when dng=True
+  prim_slab_element_loss_weight: 10.0  # Used when dng=True
   lr: 1e-4
   weight_decay: 0.0
 

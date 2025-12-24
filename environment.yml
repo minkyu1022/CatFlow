@@ -70,7 +70,6 @@ dependencies:
   - zstd=1.5.7=h3691f8a_5
   - pip:
       - absl-py==2.3.1
-      - adsorbdiff==0.0.1
       - aiohappyeyeballs==2.6.1
       - aiohttp==3.13.2
       - aiosignal==1.4.0
@@ -214,7 +213,7 @@ dependencies:
       - pycparser==2.23
       - pydantic==2.12.5
       - pydantic-core==2.41.5
-      - pyg-lib==0.5.0+pt28cu128
+      - pyg-lib==0.5.0+pt28cu126
       - pymatgen==2025.10.7
       - pymysql==1.1.2
       - pyparsing==3.2.5
@@ -247,16 +246,16 @@ dependencies:
       - terminado==0.18.1
       - tinycss2==1.4.0
       - tomli==2.3.0
-      - torch==2.8.0+cu128
-      - torch-cluster==1.6.3+pt28cu128
+      - torch==2.8.0+cu126
+      - torch-cluster==1.6.3+pt28cu126
       - torch-geometric==2.7.0
-      - torch-scatter==2.1.2+pt28cu128
-      - torch-sparse==0.6.18+pt28cu128
-      - torch-spline-conv==1.2.2+pt28cu128
-      - torchaudio==2.8.0+cu128
+      - torch-scatter==2.1.2+pt28cu126
+      - torch-sparse==0.6.18+pt28cu126
+      - torch-spline-conv==1.2.2+pt28cu126
+      - torchaudio==2.8.0+cu126
       - torchmetrics==1.8.2
       - torchtnt==0.2.4
-      - torchvision==0.23.0+cu128
+      - torchvision==0.23.0+cu126
       - tqdm==4.67.1
       - triton==3.4.0
       - typer-slim==0.20.0

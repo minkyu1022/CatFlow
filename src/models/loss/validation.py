@@ -301,11 +301,12 @@ def find_best_match_rmsd_slab(
 
 def _struct_comp_validity(atoms: Atoms) -> bool:
     """Check structural validity of an Atoms object."""
+    
     # 1. Check cell volume
     try:
         vol = float(atoms.get_volume())
         vol_ok = vol >= 0.1
-    except Exception:
+    except Exception as e:
         vol_ok = False
 
     # 2. Check atom clash
@@ -316,10 +317,10 @@ def _struct_comp_validity(atoms: Atoms) -> bool:
             min_dist = np.min(dists[np.nonzero(dists)])
             dist_ok = min_dist >= 0.5
             if dist_ok is False:
-                print("Atom clash check failed.")
+                print("    Atom clash check failed.")
         else:
             dist_ok = True  # Skip distance check for single atom
-    except Exception:
+    except Exception as e:
         dist_ok = False
     
     # 3. Check min width of cell (a, b axes)
@@ -328,11 +329,7 @@ def _struct_comp_validity(atoms: Atoms) -> bool:
     a_length = np.linalg.norm(atoms.cell[0])
     b_length = np.linalg.norm(atoms.cell[1])
     
-    if a_length < min_ab or b_length < min_ab:
-        print("Width check failed.")
-        width_ok = False
-    else:
-        width_ok = True
+    width_ok = a_length >= min_ab and b_length >= min_ab
     
     # 4. Check min height of cell (c projected onto normal of a×b plane)
     min_height = 20.0
@@ -347,7 +344,7 @@ def _struct_comp_validity(atoms: Atoms) -> bool:
     
     if cross_ab_norm < 1e-10:
         # Degenerate case: a and b are parallel
-        print("Height check failed.")
+        print("    Height check failed (degenerate cell).")
         height_ok = False
     else:
         normal = cross_ab / cross_ab_norm
@@ -358,22 +355,22 @@ def _struct_comp_validity(atoms: Atoms) -> bool:
     basic_valid = bool(vol_ok and dist_ok and width_ok and height_ok)
     
     if not basic_valid:
-        print("")
         return False
 
     # 6. SMACT validity (charge neutrality etc)
     try:
         smact_ok = smact_validity(atoms)
-    except Exception:
+    except Exception as e:
         smact_ok = False
 
     # 7. Crystal validity (connectivity check)
     try:
         crystal_ok = crystal_validity(atoms)
-    except Exception:
+    except Exception as e:
         crystal_ok = False
 
-    return bool(basic_valid and smact_ok and crystal_ok)
+    final_result = bool(basic_valid and smact_ok and crystal_ok)
+    return final_result
 
 def _structural_validity(atoms: Atoms) -> bool:
     """Check structural validity of an Atoms object."""
@@ -404,7 +401,6 @@ def _structural_validity(atoms: Atoms) -> bool:
     b_length = np.linalg.norm(atoms.cell[1])
     
     if a_length < min_ab or b_length < min_ab:
-        print("Width check failed.")
         width_ok = False
     else:
         width_ok = True
@@ -718,11 +714,13 @@ def smact_validity(structures,
     if isinstance(structures, Atoms):
         structures = adaptor.get_structure(structures)
     elem_symbols = tuple(structures.composition.as_dict().keys())
-    count = structures.composition.as_dict().values()
+    count = list(structures.composition.as_dict().values())  # Convert to list for proper iteration
+    
     space = smact.element_dictionary(elem_symbols)
     smact_elems = [e[1] for e in space.items()]
     electronegs = [e.pauling_eneg for e in smact_elems]
     ox_combos = [e.oxidation_states for e in smact_elems]
+    
     if len(set(elem_symbols)) == 1:
         return True
     if include_alloys:
@@ -732,13 +730,22 @@ def smact_validity(structures,
 
     threshold = np.max(count)
     compositions = []
+    
+    checked_count = 0
+    valid_cn_e_count = 0
+    valid_electroneg_count = 0
+    
     for ox_states in itertools.product(*ox_combos):
+        checked_count += 1
+        
         stoichs = [(int(c),) for c in count]
         # Test for charge balance
         cn_e, cn_r = smact.neutral_ratios(
             ox_states, stoichs=stoichs, threshold=threshold)
+        
         # Electronegativity test
         if cn_e:
+            valid_cn_e_count += 1
             if use_pauling_test:
                 try:
                     electroneg_OK = pauling_test(ox_states, electronegs)
@@ -747,16 +754,19 @@ def smact_validity(structures,
                     electroneg_OK = True
             else:
                 electroneg_OK = True
+            
             if electroneg_OK:
+                valid_electroneg_count += 1
                 for ratio in cn_r:
                     compositions.append(
                         tuple([elem_symbols, ox_states, ratio]))
+    
     compositions = [(i[0], i[2]) for i in compositions]
     compositions = list(set(compositions))
     if len(compositions) > 0:
         return True
     else:
-        print("No valid composition found in SMACT check.")
+        print("      No valid composition found in SMACT check.")
         return False
 
 def crystal_validity(crystal, cutoff=4.1):

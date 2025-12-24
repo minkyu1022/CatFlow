@@ -13,12 +13,13 @@ pl_trainer:
   accelerator: "gpu"
   # For DDP training with multiple GPUs:
   #   - devices: number of GPUs (e.g., 2, 4, 8) or list of GPU indices (e.g., [0, 1, 2, 3])
-  #   - strategy: "ddp" or "ddp_find_unused_parameters_false" (faster, use if no unused parameters)
+  #   - strategy: "ddp_find_unused_parameters_true" (required if model has unused parameters)
+  #              or "ddp_find_unused_parameters_false" (faster, use only if no unused parameters)
   # For single GPU:
   #   - devices: 1
   #   - strategy: "auto"
   devices: 1
-  strategy: "auto"  # Use "ddp" or "ddp_find_unused_parameters_false" for multi-GPU
+  strategy: "auto"  # Use "ddp_find_unused_parameters_true" for multi-GPU if model has unused parameters
   precision: 32
   max_epochs: 1000
   accumulate_grad_batches: 1

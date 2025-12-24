@@ -51,6 +51,12 @@ class EffCatModule(LightningModule):
         self.training_args = training_args
         self.validation_args = validation_args
         self.predict_args = predict_args
+        
+        # Use dng from flow_model_args if not explicitly provided at top level
+        # This ensures consistency: flow_model_args.dng is the source of truth
+        if "dng" in flow_model_args:
+            dng = flow_model_args["dng"]
+        
         self.dng = dng
 
         # Kernels
@@ -170,6 +176,7 @@ class EffCatModule(LightningModule):
             # When dng=True: sample n_prim_slab_atoms from histogram and dynamically create mask
             if self.dng:
                 batch_size = feats["ref_prim_slab_element"].shape[0]
+                original_n = feats["prim_slab_cart_coords"].shape[1]  # Original number of atoms in feats
                 
                 # Sample number of atoms from histogram according to probability
                 # Index of prim_slab_num_atoms_hist = number of atoms, value = probability
@@ -192,6 +199,47 @@ class EffCatModule(LightningModule):
                 # Also dynamically regenerate prim_slab_atom_to_token
                 prim_slab_atom_to_token = torch.eye(max_n, device=self.device).unsqueeze(0).expand(batch_size * multiplicity_flow_sample, -1, -1)
                 feats["prim_slab_atom_to_token"] = prim_slab_atom_to_token
+                
+                # Adjust feats to match max_n: pad or slice prim_slab-related tensors
+                # If max_n > original_n, pad with zeros/padding values
+                # If max_n < original_n, slice to max_n
+                if max_n != original_n:
+                    # Adjust prim_slab_cart_coords
+                    if max_n > original_n:
+                        # Pad with zeros
+                        padding = torch.zeros((batch_size, max_n - original_n, 3), device=feats["prim_slab_cart_coords"].device, dtype=feats["prim_slab_cart_coords"].dtype)
+                        feats["prim_slab_cart_coords"] = torch.cat([feats["prim_slab_cart_coords"], padding], dim=1)
+                    else:
+                        # Slice to max_n
+                        feats["prim_slab_cart_coords"] = feats["prim_slab_cart_coords"][:, :max_n, :]
+                    
+                    # Adjust prim_slab_atom_pad_mask
+                    if max_n > original_n:
+                        # Pad with False (padding)
+                        padding = torch.zeros((batch_size, max_n - original_n), device=feats["prim_slab_atom_pad_mask"].device, dtype=feats["prim_slab_atom_pad_mask"].dtype)
+                        feats["prim_slab_atom_pad_mask"] = torch.cat([feats["prim_slab_atom_pad_mask"], padding], dim=1)
+                    else:
+                        # Slice to max_n
+                        feats["prim_slab_atom_pad_mask"] = feats["prim_slab_atom_pad_mask"][:, :max_n]
+                    
+                    # Adjust ref_prim_slab_element
+                    if max_n > original_n:
+                        # Pad with 0 (padding element)
+                        padding = torch.zeros((batch_size, max_n - original_n), device=feats["ref_prim_slab_element"].device, dtype=feats["ref_prim_slab_element"].dtype)
+                        feats["ref_prim_slab_element"] = torch.cat([feats["ref_prim_slab_element"], padding], dim=1)
+                    else:
+                        # Slice to max_n
+                        feats["ref_prim_slab_element"] = feats["ref_prim_slab_element"][:, :max_n]
+                    
+                    # Adjust prim_slab_token_pad_mask (used in TokenTransformer)
+                    if "prim_slab_token_pad_mask" in feats:
+                        if max_n > original_n:
+                            # Pad with 0 (padding)
+                            padding = torch.zeros((batch_size, max_n - original_n), device=feats["prim_slab_token_pad_mask"].device, dtype=feats["prim_slab_token_pad_mask"].dtype)
+                            feats["prim_slab_token_pad_mask"] = torch.cat([feats["prim_slab_token_pad_mask"], padding], dim=1)
+                        else:
+                            # Slice to max_n
+                            feats["prim_slab_token_pad_mask"] = feats["prim_slab_token_pad_mask"][:, :max_n]
             else:
                 prim_slab_atom_mask = feats["prim_slab_atom_pad_mask"]
             
@@ -792,23 +840,24 @@ class EffCatModule(LightningModule):
                             self.val_adsorption_energy.update(e_ads)
 
             # Log aggregated metrics
-            # Primitive slab RMSD
-            self.log(
-                "val/prim_match_rate", self.val_prim_match_rate.compute(), rank_zero_only=True
-            )
-            if self.val_prim_rmsd.update_count > 0:
-                self.log("val/avg_prim_rmsd", self.val_prim_rmsd.compute(), rank_zero_only=True)
-            else:
-                self.log("val/avg_prim_rmsd", float("nan"), rank_zero_only=True)
-            
-            # Slab RMSD (whole slab after assemble)
-            self.log(
-                "val/slab_match_rate", self.val_slab_match_rate.compute(), rank_zero_only=True
-            )
-            if self.val_slab_rmsd.update_count > 0:
-                self.log("val/avg_slab_rmsd", self.val_slab_rmsd.compute(), rank_zero_only=True)
-            else:
-                self.log("val/avg_slab_rmsd", float("nan"), rank_zero_only=True)
+            # Primitive slab RMSD (only when dng=False, as RMSD is not computed when dng=True)
+            if not self.dng:
+                self.log(
+                    "val/prim_match_rate", self.val_prim_match_rate.compute(), rank_zero_only=True
+                )
+                if self.val_prim_rmsd.update_count > 0:
+                    self.log("val/avg_prim_rmsd", self.val_prim_rmsd.compute(), rank_zero_only=True)
+                else:
+                    self.log("val/avg_prim_rmsd", float("nan"), rank_zero_only=True)
+                
+                # Slab RMSD (whole slab after assemble) - only when dng=False
+                self.log(
+                    "val/slab_match_rate", self.val_slab_match_rate.compute(), rank_zero_only=True
+                )
+                if self.val_slab_rmsd.update_count > 0:
+                    self.log("val/avg_slab_rmsd", self.val_slab_rmsd.compute(), rank_zero_only=True)
+                else:
+                    self.log("val/avg_slab_rmsd", float("nan"), rank_zero_only=True)
             
             # Log prim structural validity (always computed, regardless of compute_adsorption)
             self.log(

@@ -99,13 +99,28 @@ class AtomAttentionEncoder(Module):
         # Features: atom_pad_mask (1) + element one-hot (NUM_ELEMENTS)
         # Use prim_slab_element_t (probabilities) when dng=True, convert ref_prim_slab_element to one-hot when dng=False
         if prim_slab_element_t is not None:
-            # dng=True: prim_slab_element_t is already in (B*mult, N, NUM_ELEMENTS) format as probabilities
-            # Extract B and N from feats
-            B, N, _ = feats["prim_slab_cart_coords"].shape
-            # prim_slab_element_t already has multiplicity applied, so use as is
-            prim_slab_element_onehot = prim_slab_element_t  # (B*mult, N, NUM_ELEMENTS) - probabilities
-            # mask needs multiplicity applied
-            prim_slab_mask_for_feats = feats["prim_slab_atom_pad_mask"].repeat_interleave(multiplicity, 0)  # (B*mult, N)
+            # dng=True: prim_slab_element_t is already in (B*mult, N_actual, NUM_ELEMENTS) format as probabilities
+            # Extract actual N from prim_slab_element_t (may differ from feats N during sampling)
+            B_mult, N_actual, _ = prim_slab_element_t.shape
+            B_feats, N_feats, _ = feats["prim_slab_cart_coords"].shape
+            # Also check prim_slab_x_t to ensure consistency
+            B_x, N_x, _ = prim_slab_x_t.shape
+            
+            # Ensure N_actual matches prim_slab_x_t (use the smaller one if they differ)
+            if N_actual != N_x:
+                N_actual = N_x
+                # Slice prim_slab_element_t to match prim_slab_x_t
+                prim_slab_element_onehot = prim_slab_element_t[:, :N_actual, :]  # (B*mult, N_actual, NUM_ELEMENTS)
+            else:
+                prim_slab_element_onehot = prim_slab_element_t  # (B*mult, N_actual, NUM_ELEMENTS) - probabilities
+            
+            # mask needs multiplicity applied and sliced to match N_actual
+            prim_slab_mask_for_feats = feats["prim_slab_atom_pad_mask"].repeat_interleave(multiplicity, 0)  # (B*mult, N_feats)
+            # Slice to match actual number of atoms
+            prim_slab_mask_for_feats = prim_slab_mask_for_feats[:, :N_actual]  # (B*mult, N_actual)
+            
+            # Update N to N_actual for later use
+            N = N_actual
         else:
             # dng=False: existing approach
             prim_slab_element_onehot = F.one_hot(
@@ -152,6 +167,7 @@ class AtomAttentionEncoder(Module):
 
         # === Concat prim_slab and adsorbate ===
         # Now both c_prim_slab and c_ads are in (B*mult, ...) format
+        # N may have been updated to N_actual in dng=True branch
         c = torch.cat([c_prim_slab, c_ads], dim=1)  # (B*mult, N+M, atom_s)
         joint_mask = torch.cat([prim_slab_mask_for_feats, ads_mask.repeat_interleave(multiplicity, 0)], dim=1)  # (B*mult, N+M)
 
@@ -159,6 +175,9 @@ class AtomAttentionEncoder(Module):
 
         # === Add noisy positions ===
         # Concat noisy coords: prim_slab_x_t (B*mult, N, 3) + ads_x_t (B*mult, M, 3)
+        # Ensure prim_slab_x_t matches N (may need slicing if N was updated)
+        if prim_slab_x_t.shape[1] != N:
+            prim_slab_x_t = prim_slab_x_t[:, :N, :]
         x_t = torch.cat([prim_slab_x_t, ads_x_t], dim=1)  # (B*mult, N+M, 3)
         q = q + self.x_to_q_trans(x_t)
 

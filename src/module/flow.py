@@ -547,8 +547,8 @@ class AtomFlowMatching(Module):
             # Flow matching loss: vector field loss (mathematically equivalent to comparing pred_element_1_probs with true_element_onehot)
             element_loss = loss_fn(pred_element_1_probs, true_element_onehot, reduction="none")
             element_loss = (element_loss * prim_slab_mask[..., None]).sum(dim=(1, 2)) / (
-                prim_slab_mask.sum(dim=1)[:, None] + 1e-8
-            )
+                prim_slab_mask.sum(dim=1) + 1e-8
+            )  # (B*mult,) shape to match other losses
             loss_dict["prim_slab_element_loss"] = element_loss
         
         return loss_dict
