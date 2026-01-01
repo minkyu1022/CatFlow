@@ -14,6 +14,7 @@ from src.models.layers import (
 )
 from src.models.utils import LinearNoBias, center_random_augmentation, default
 from scripts.refine_sc_mat import refine_sc_mat
+from scripts.refine_prim_type import refine_prim_element_logits
 
 
 class FlowModule(nn.Module):
@@ -595,12 +596,28 @@ class AtomFlowMatching(Module):
         """
         ### Setup and initialize
         num_steps = default(num_sampling_steps, self.num_sampling_steps)
-        prim_slab_atom_mask = prim_slab_atom_mask.repeat_interleave(multiplicity, 0)
-        ads_atom_mask = ads_atom_mask.repeat_interleave(multiplicity, 0)
+        # When dng=True and multiplicity > 1, masks and feats are already expanded in effcat_module.py
+        # Check if masks are already expanded by checking if both masks have the same batch size
+        # (which would be batch_size * multiplicity if already expanded)
+        feats_already_expanded = False
+        if self.dng and multiplicity > 1 and prim_slab_atom_mask.shape[0] == ads_atom_mask.shape[0]:
+            # Masks are already expanded in effcat_module.py, don't expand again
+            # Also, feats are already expanded, so we should pass multiplicity=1 to flow_model.forward
+            feats_already_expanded = True
+        else:
+            # Normal case: expand masks by multiplicity
+            prim_slab_atom_mask = prim_slab_atom_mask.repeat_interleave(multiplicity, 0)
+            ads_atom_mask = ads_atom_mask.repeat_interleave(multiplicity, 0)
         batch_size = prim_slab_atom_mask.shape[0]
+        # Use multiplicity=1 for flow_model if feats are already expanded
+        flow_model_multiplicity = 1 if feats_already_expanded else multiplicity
         num_prim_slab_atoms = prim_slab_atom_mask.shape[1]
         num_ads_atoms = ads_atom_mask.shape[1]
         timesteps = torch.linspace(0.0, 1.0, num_steps + 1, device=self.device)
+        
+        # Update network_condition_kwargs to use flow_model_multiplicity if feats are already expanded
+        # Create a copy to avoid modifying the original
+        network_condition_kwargs = {**network_condition_kwargs, "multiplicity": flow_model_multiplicity}
 
         # Dummy data dict for correct sampling shape
         sampler_data = {
@@ -647,10 +664,7 @@ class AtomFlowMatching(Module):
                     noised_scaling_factor=scaling_factor_t,
                     time=t.item(),
                     training=False,
-                    network_condition_kwargs=dict(
-                        multiplicity=multiplicity,
-                        **network_condition_kwargs,
-                    ),
+                    network_condition_kwargs=network_condition_kwargs,
                     noised_prim_slab_element=prim_slab_element_t,
                 )
                 # Apply softmax to model output (logits) to convert to probabilities
@@ -664,10 +678,7 @@ class AtomFlowMatching(Module):
                     noised_scaling_factor=scaling_factor_t,
                     time=t.item(),
                     training=False,
-                    network_condition_kwargs=dict(
-                        multiplicity=multiplicity,
-                        **network_condition_kwargs,
-                    ),
+                    network_condition_kwargs=network_condition_kwargs,
                 )
 
             # Calculate the flow (vector field)
@@ -765,7 +776,9 @@ class AtomFlowMatching(Module):
         
         # Final element conversion when dng=True (argmax from probabilities then to atomic number)
         if self.dng:
-            sampled_prim_slab_element = prim_slab_element_t.argmax(dim=-1) + 1  # (batch_size * multiplicity, N)
+            # Apply vocabulary mask to exclude invalid elements (e.g., He, Li, Be) from argmax
+            refined_element_logits = refine_prim_element_logits(prim_slab_element_t)
+            sampled_prim_slab_element = refined_element_logits.argmax(dim=-1) + 1  # (batch_size * multiplicity, N)
             output["sampled_prim_slab_element"] = sampled_prim_slab_element
 
         if return_trajectory:
@@ -810,10 +823,7 @@ class AtomFlowMatching(Module):
             noised_scaling_factor=scaling_factor_t,
             time=1.0,
             training=False,
-            network_condition_kwargs=dict(
-                multiplicity=multiplicity,
-                **network_condition_kwargs,
-            ),
+                network_condition_kwargs=network_condition_kwargs,
         )
 
         final_prim_slab_coords = pred_prim_slab_coords_1

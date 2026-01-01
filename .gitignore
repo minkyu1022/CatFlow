@@ -103,9 +103,17 @@ htmlcov/
 dmypy.json
 
 dataset/
+dataset_per_adsorbate/
+energies/
 dummy/
 generated_samples/
 metadata/
 outputs/
 *.png
 *.pkl
+
+unrelaxed_samples/
+*.cif
+*.traj
+*.json
+*.csv

@@ -26,6 +26,73 @@ from pymatgen.io.ase import AseAtomsAdaptor
 from ase.geometry import cellpar_to_cell
 from ase.cell import Cell
 
+import ase
+import numpy as np
+
+def tag_surface_atoms(
+    slab_atoms: ase.Atoms = None,
+):
+    """
+    Sets the tags of an `ase.Atoms` object. Any atom that we consider a "bulk"
+    atom will have a tag of 0, and any atom that we consider a "surface" atom
+    will have a tag of 1. We use a combination of Voronoi neighbor algorithms
+    (adapted from `pymatgen.core.surface.Slab.get_surface_sites`; see
+    https://pymatgen.org/pymatgen.core.surface.html) and a distance cutoff.
+
+    Arguments
+    ---------
+    slab_atoms: ase.Atoms
+        The slab where you are trying to find surface sites.
+    bulk_atoms: ase.Atoms
+        The bulk structure that the surface was cut from.
+
+    Returns
+    -------
+    slab_atoms: ase.Atoms
+        A copy of the slab atoms with the surface atoms tagged as 1.
+    """
+    assert slab_atoms is not None
+    slab_atoms = slab_atoms.copy()
+
+    height_tags = find_surface_atoms_by_height(slab_atoms)
+
+    tags = height_tags
+
+    slab_atoms.set_tags(tags)
+
+    return slab_atoms
+
+def find_surface_atoms_by_height(surface_atoms):
+    """
+    As discussed in the docstring for `find_surface_atoms_with_voronoi`,
+    sometimes we might accidentally tag a surface atom as a bulk atom if there
+    are multiple coordination environments for that atom type within the bulk.
+    One heuristic that we use to address this is to simply figure out if an
+    atom is close to the surface. This function will figure that out.
+
+    Specifically:  We consider an atom a surface atom if it is within 2
+    Angstroms of the heighest atom in the z-direction (or more accurately, the
+    direction of the 3rd unit cell vector).
+
+    Arguments
+    ---------
+    surface_atoms: ase.Atoms
+
+    Returns
+    -------
+    tags: list
+        A list that contains the indices of the surface atoms.
+    """
+    unit_cell_height = np.linalg.norm(surface_atoms.cell[2])
+    scaled_positions = surface_atoms.get_scaled_positions()
+    scaled_max_height = max(scaled_position[2] for scaled_position in scaled_positions)
+    scaled_threshold = scaled_max_height - 2.0 / unit_cell_height
+
+    return [
+        0 if scaled_position[2] < scaled_threshold else 1
+        for scaled_position in scaled_positions
+    ]
+
 
 def assemble(
     generated_prim_slab_coords: np.ndarray,
@@ -104,7 +171,8 @@ def assemble(
     recon_slab.set_cell(recon_cell)
     
     # Set tags for slab atoms: tag 0
-    recon_slab.set_tags(np.zeros(len(recon_slab), dtype=int))
+    # recon_slab.set_tags(np.zeros(len(recon_slab), dtype=int))
+    recon_slab = tag_surface_atoms(slab_atoms=recon_slab)
     
     # Create adsorbate Atoms
     ads_atoms = Atoms(

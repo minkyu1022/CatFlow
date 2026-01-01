@@ -240,10 +240,48 @@ class EffCatModule(LightningModule):
                         else:
                             # Slice to max_n
                             feats["prim_slab_token_pad_mask"] = feats["prim_slab_token_pad_mask"][:, :max_n]
+                
+                # Expand all ads-related tensors in feats to match prim_slab batch size (batch_size * multiplicity_flow_sample)
+                # This is needed because prim_slab tensors are already expanded
+                if "ads_atom_to_token" in feats:
+                    feats["ads_atom_to_token"] = feats["ads_atom_to_token"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "ads_cart_coords" in feats:
+                    feats["ads_cart_coords"] = feats["ads_cart_coords"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "ads_atom_pad_mask" in feats:
+                    feats["ads_atom_pad_mask"] = feats["ads_atom_pad_mask"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "ads_token_pad_mask" in feats:
+                    feats["ads_token_pad_mask"] = feats["ads_token_pad_mask"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "ref_ads_element" in feats:
+                    feats["ref_ads_element"] = feats["ref_ads_element"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "ref_ads_pos" in feats:
+                    feats["ref_ads_pos"] = feats["ref_ads_pos"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "bind_ads_atom" in feats:
+                    feats["bind_ads_atom"] = feats["bind_ads_atom"].repeat_interleave(multiplicity_flow_sample, 0)
+                
+                # Expand prim_slab-related tensors in feats that haven't been expanded yet
+                # (prim_slab_atom_to_token is already expanded above, but other tensors need expansion)
+                if "prim_slab_cart_coords" in feats:
+                    feats["prim_slab_cart_coords"] = feats["prim_slab_cart_coords"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "prim_slab_atom_pad_mask" in feats:
+                    feats["prim_slab_atom_pad_mask"] = feats["prim_slab_atom_pad_mask"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "prim_slab_token_pad_mask" in feats:
+                    feats["prim_slab_token_pad_mask"] = feats["prim_slab_token_pad_mask"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "ref_prim_slab_element" in feats:
+                    feats["ref_prim_slab_element"] = feats["ref_prim_slab_element"].repeat_interleave(multiplicity_flow_sample, 0)
+                
+                # Expand other global tensors if they exist
+                if "lattice" in feats:
+                    feats["lattice"] = feats["lattice"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "supercell_matrix" in feats:
+                    feats["supercell_matrix"] = feats["supercell_matrix"].repeat_interleave(multiplicity_flow_sample, 0)
+                if "scaling_factor" in feats:
+                    feats["scaling_factor"] = feats["scaling_factor"].repeat_interleave(multiplicity_flow_sample, 0)
+                
+                # Expand ads_atom_mask to match prim_slab_atom_mask batch size (batch_size * multiplicity_flow_sample)
+                ads_atom_mask = feats["ads_atom_pad_mask"]
             else:
                 prim_slab_atom_mask = feats["prim_slab_atom_pad_mask"]
-            
-            ads_atom_mask = feats["ads_atom_pad_mask"]
+                ads_atom_mask = feats["ads_atom_pad_mask"]
 
             network_condition_kwargs = dict(
                 feats=feats,
