@@ -209,11 +209,24 @@ class DiT(nn.Module):
         dropout=0.0,
         attention_impl: AttentionImpl = "pytorch",
         activation_checkpointing=False,
+        use_energy_cond=False,
     ):
         super().__init__()
 
         self.activation_checkpointing = activation_checkpointing
         self.t_embedder = TimestepEmbedder(dim)
+
+        
+        # Energy conditioning (optional)
+        self.use_energy_cond = use_energy_cond
+        if use_energy_cond:
+            self.energy_embedder = nn.Sequential(
+                nn.Linear(1, dim),
+                nn.SiLU(),
+                nn.Linear(dim, dim),
+            )
+        
+
         self.layers = nn.ModuleList(
             [
                 DiTBlock(
@@ -227,21 +240,29 @@ class DiT(nn.Module):
             ]
         )
 
-    def forward(self, x, t, mask):
+    def forward(self, x, t, mask, energy=None):
         """
         Args:
             x (torch.Tensor): Input tensor of shape (B, N, D)
             t (torch.Tensor): Time step for each sample (B,)
             mask (torch.Tensor): True if valid token, False if padding (B, N)
+            energy (torch.Tensor, optional): Energy value for each sample (B,)
         """
         # Embed t
         time_embed = self.t_embedder(t)  # (B, D)
+        
+        # Add energy embedding if provided
+        if self.use_energy_cond and energy is not None:
+            energy_embed = self.energy_embedder(energy.unsqueeze(-1))  # (B,) -> (B, 1) -> (B, D)
+            cond = time_embed + energy_embed
+        else:
+            cond = time_embed
 
         for layer in self.layers:
             if self.activation_checkpointing and self.training:
                 x = torch.utils.checkpoint.checkpoint(
-                    layer, x, time_embed, mask, use_reentrant=False
+                    layer, x, cond, mask, use_reentrant=False
                 )
             else:
-                x = layer(x, time_embed, mask)
+                x = layer(x, cond, mask)
         return x

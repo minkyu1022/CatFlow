@@ -317,6 +317,7 @@ class EffCatModule(LightningModule):
             out,
             multiplicity=self.training_args["train_multiplicity"],
             loss_type=self.training_args["loss_type"],
+            flow_loss_type=self.training_args.get("flow_loss_type", "v_loss"),
         )
 
         # Calculate total weighted loss
@@ -1004,13 +1005,32 @@ class EffCatModule(LightningModule):
                 raise e
 
     def configure_optimizers(self):
-        # TODO: Add af3 scheduler
         optimizer = torch.optim.AdamW(
             params=self.parameters(),
             lr=self.training_args["lr"],
             weight_decay=self.training_args["weight_decay"],
         )
-        return {"optimizer": optimizer}
+        
+        # Learning rate scheduler with warm up only
+        warmup_steps = self.training_args.get("warmup_steps", 10000)
+        
+        # Linear warm up scheduler (lr increases from lr*0.01 to lr, then stays constant)
+        scheduler = torch.optim.lr_scheduler.LinearLR(
+            optimizer, 
+            start_factor=0.01, 
+            end_factor=1.0,  
+            total_iters=warmup_steps
+        )
+        
+        return {
+            "optimizer": optimizer,
+            "lr_scheduler": {
+                "scheduler": scheduler,
+                "interval": "step",  # Update lr at every step
+                "frequency": 1,
+            }
+        }
+
 
     def configure_callbacks(self) -> list[Callback]:
         """Configure model callbacks.

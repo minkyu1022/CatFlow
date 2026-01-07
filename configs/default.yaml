@@ -12,10 +12,10 @@ core:
 # Hydra configuration
 hydra:
   run:
-    dir: outputs/${expname}
+    dir: /home/jovyan/minkyu-ckpts/${expname}
 
   sweep:
-    dir: outputs/multirun/${now:%Y-%m-%d}/${expname}
+    dir: /home/jovyan/minkyu-ckpts/multirun/${now:%Y-%m-%d}/${expname}
     subdir: ${hydra.job.num}_${hydra.job.id}
 
   job:

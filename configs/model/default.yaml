@@ -18,6 +18,7 @@ flow_model_args:
   attention_impl: "pytorch" # "pytorch", "xformers", "manual"
   activation_checkpointing: false
   dng: true  # pass to flow model
+  use_energy_cond: true  # energy conditioning for ads_energy
 
 # Prior sampler arguments
 prior_sampler_args:
@@ -59,6 +60,7 @@ flow_process_args:
 training_args:
   train_multiplicity: 1
   loss_type: "l2" # "l1" or "l2"
+  flow_loss_type: "x1_loss"  # "x1_loss" (predict final state) or "v_loss" (predict velocity)
   prim_slab_coord_loss_weight: 1.0  # primitive slab coordinate loss weight
   ads_coord_loss_weight: 0.1  # adsorbate coordinate loss weight
   length_loss_weight: 1.0
@@ -69,6 +71,7 @@ training_args:
   prim_slab_element_loss_weight: 5.0  # Used when dng=True
   lr: 1e-4
   weight_decay: 0.0
+  warmup_steps: 10000      # Number of warm up steps (lr increases from lr*0.01 to lr)
 
 # Validation arguments
 validation_args:
@@ -84,7 +87,7 @@ validation_args:
   # Adsorption energy evaluation settings
   compute_adsorption: false       
   adsorption_device: "cuda"       
-  adsorption_model: "uma-m-1p1"   
+  adsorption_model: "uma-s-1p1"   
   adsorption_timeout: 100        
   structure_matcher_args:
     ltol: 0.3

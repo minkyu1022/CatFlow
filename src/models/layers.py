@@ -42,10 +42,12 @@ class AtomAttentionEncoder(Module):
         positional_encoding=False,
         activation_checkpointing=False,
         dng: bool = False,
+        use_energy_cond: bool = False,
     ):
         super().__init__()
         
         self.dng = dng
+        self.use_energy_cond = use_energy_cond
 
         # Prim slab features: atom_pad_mask (1) + element one-hot
         # dng=True: includes MASK token (NUM_ELEMENTS_WITH_MASK = 101)
@@ -56,7 +58,7 @@ class AtomAttentionEncoder(Module):
             prim_slab_feature_dim = 1 + NUM_ELEMENTS  # 101
         self.embed_prim_slab_features = LinearNoBias(prim_slab_feature_dim, atom_s)
         
-        # Adsorbate features: ref_pos (3) + atom_pad_mask (1) + bind_atomic_num (1) + element one-hot (NUM_ELEMENTS)
+        # Adsorbate features: ref_pos (3) + atom_pad_mask (1) + bind_atomic_num (NUM_ELEMENTS) + element one-hot (NUM_ELEMENTS)
         ads_feature_dim = 3 + 1 + NUM_ELEMENTS + NUM_ELEMENTS
         self.embed_ads_features = LinearNoBias(ads_feature_dim, atom_s)
 
@@ -82,6 +84,7 @@ class AtomAttentionEncoder(Module):
             heads=atom_encoder_heads,
             attention_impl=attention_impl,
             activation_checkpointing=activation_checkpointing,
+            use_energy_cond=use_energy_cond,
         )
 
     def forward(self, prim_slab_x_t, ads_x_t, l_t, sm_t, sf_t, t, feats, multiplicity=1, prim_slab_element_t: Optional[torch.Tensor] = None):
@@ -209,8 +212,13 @@ class AtomAttentionEncoder(Module):
         sf_embed = self.sf_to_q_trans(sf_t.unsqueeze(-1))  # (B*mult, atom_s)
         q = q + rearrange(sf_embed, "b d -> b 1 d")
 
+        # Get energy conditioning if enabled
+        energy = None
+        if self.use_energy_cond and "ref_energy" in feats:
+            energy = feats["ref_energy"].repeat_interleave(multiplicity, 0)  # (B*mult,)
+
         # Pass through transformer (joint attention over all atoms)
-        q = self.atom_encoder(q, t, joint_mask)  # (B*mult, N+M, atom_s)
+        q = self.atom_encoder(q, t, joint_mask, energy=energy)  # (B*mult, N+M, atom_s)
 
         return q, N, M
 
@@ -238,14 +246,17 @@ class AtomAttentionDecoder(Module):
         attention_impl,
         activation_checkpointing=False,
         dng: bool = False,
+        use_energy_cond: bool = False,
     ):
         super().__init__()
+        self.use_energy_cond = use_energy_cond
         self.atom_decoder = DiT(
             dim=atom_s,
             depth=atom_decoder_depth,
             heads=atom_decoder_heads,
             attention_impl=attention_impl,
             activation_checkpointing=activation_checkpointing,
+            use_energy_cond=use_energy_cond,
         )
 
         # Projection heads for prim_slab coords
@@ -306,7 +317,12 @@ class AtomAttentionDecoder(Module):
         
         joint_mask = torch.cat([prim_slab_mask, ads_mask], dim=1)
 
-        x = self.atom_decoder(x, t, joint_mask)
+        # Get energy conditioning if enabled
+        energy = None
+        if self.use_energy_cond and "ref_energy" in feats:
+            energy = feats["ref_energy"].repeat_interleave(multiplicity, 0)  # (B*mult,)
+
+        x = self.atom_decoder(x, t, joint_mask, energy=energy)
 
         # Split back to prim_slab and adsorbate
         x_prim_slab = x[:, :n_prim_slab, :]  # (B*mult, N, atom_s)
@@ -353,9 +369,11 @@ class TokenTransformer(Module):
         token_transformer_heads,
         attention_impl,
         activation_checkpointing=False,
+        use_energy_cond: bool = False,
     ):
         super().__init__()
 
+        self.use_energy_cond = use_energy_cond
         self.s_init = nn.Linear(token_s, token_s, bias=False)
 
         # Normalization layers
@@ -369,6 +387,7 @@ class TokenTransformer(Module):
             heads=token_transformer_heads,
             attention_impl=attention_impl,
             activation_checkpointing=activation_checkpointing,
+            use_energy_cond=use_energy_cond,
         )
 
     def forward(self, x, t, feats, multiplicity=1):
@@ -378,10 +397,15 @@ class TokenTransformer(Module):
         token_mask = torch.cat([prim_slab_token_mask, ads_token_mask], dim=1)
         token_mask = token_mask.repeat_interleave(multiplicity, 0)
 
+        # Get energy conditioning if enabled
+        energy = None
+        if self.use_energy_cond and "ref_energy" in feats:
+            energy = feats["ref_energy"].repeat_interleave(multiplicity, 0)  # (B*mult,)
+
         # Initialize single embeddings
         s_init = self.s_init(x)  # (batch_size, num_tokens, token_s)
 
         s = self.s_mlp(s_init)
-        x = self.token_transformer(s, t, token_mask)
+        x = self.token_transformer(s, t, token_mask, energy=energy)
 
         return x

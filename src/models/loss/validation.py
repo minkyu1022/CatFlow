@@ -424,9 +424,14 @@ def _structural_validity(atoms: Atoms) -> bool:
         normal = cross_ab / cross_ab_norm
         proj_height = abs(np.dot(normal, c_vec))
         height_ok = proj_height >= min_height
+    
+    try:
+        crystal_ok = crystal_validity(atoms)
+    except Exception:
+        crystal_ok = False
 
     # 5. Basic validity check
-    basic_valid = bool(vol_ok and dist_ok and width_ok and height_ok)
+    basic_valid = bool(vol_ok and dist_ok and width_ok and height_ok and crystal_ok)
 
     return basic_valid
 
@@ -451,9 +456,14 @@ def _prim_structural_validity(atoms: Atoms) -> bool:
             dist_ok = True  # Skip distance check for single atom
     except Exception:
         dist_ok = False
+    
+    try:
+        crystal_ok = crystal_validity(atoms)
+    except Exception:
+        crystal_ok = False
 
     # 5. Basic validity check
-    basic_valid = bool(vol_ok and dist_ok)
+    basic_valid = bool(vol_ok and dist_ok and crystal_ok)
 
     return basic_valid
 

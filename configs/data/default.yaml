@@ -1,8 +1,8 @@
 # Data configuration for LMDB dataset
 
 # LMDB file paths
-train_lmdb_path: ${oc.env:PROJECT_ROOT}/dataset/train/dataset.lmdb
-val_lmdb_path: ${oc.env:PROJECT_ROOT}/dataset/val_id/dataset.lmdb
+train_lmdb_path: /home/jovyan/minkyu-data/dataset/train/dataset.lmdb
+val_lmdb_path: /home/jovyan/minkyu-data/dataset/val_id/dataset.lmdb
 test_lmdb_path: null
 
 # Batch sizes

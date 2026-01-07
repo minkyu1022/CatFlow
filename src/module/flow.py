@@ -42,6 +42,7 @@ class FlowModule(nn.Module):
         attention_impl,
         activation_checkpointing=False,
         dng: bool = False,
+        use_energy_cond: bool = False,
         **kwargs,
     ):
         super().__init__()
@@ -55,6 +56,7 @@ class FlowModule(nn.Module):
             attention_impl=attention_impl,
             activation_checkpointing=activation_checkpointing,
             dng=dng,
+            use_energy_cond=use_energy_cond,
         )
         self.atom_to_token_trans = nn.Sequential(
             LinearNoBias(atom_s, token_s), nn.ReLU()
@@ -67,6 +69,7 @@ class FlowModule(nn.Module):
             token_transformer_heads=token_transformer_heads,
             attention_impl=attention_impl,
             activation_checkpointing=activation_checkpointing,
+            use_energy_cond=use_energy_cond,
         )
         self.token_to_atom_trans = nn.Sequential(
             LinearNoBias(token_s, atom_s), nn.ReLU()
@@ -80,6 +83,7 @@ class FlowModule(nn.Module):
             attention_impl=attention_impl,
             activation_checkpointing=activation_checkpointing,
             dng=dng,
+            use_energy_cond=use_energy_cond,
         )
         self.dng = dng
 
@@ -439,6 +443,11 @@ class AtomFlowMatching(Module):
             aligned_true_lattice=lattice,  # raw space (Angstrom, degrees)
             aligned_true_supercell_matrix=supercell_matrix,  # raw space
             aligned_true_scaling_factor=scaling_factor,  # raw space
+            noised_prim_slab_coords=noised_prim_slab_coords,  # raw space (for v_loss)
+            noised_ads_coords=noised_ads_coords,  # raw space (for v_loss)
+            noised_lattice=noised_lattice,  # raw space (for v_loss)
+            noised_supercell_matrix=noised_supercell_matrix,  # raw space (for v_loss)
+            noised_scaling_factor=noised_scaling_factor,  # raw space (for v_loss)
         )
         
         # Add element-related information when dng=True
@@ -448,14 +457,15 @@ class AtomFlowMatching(Module):
         
         return out_dict
 
-    def compute_loss(self, feats, out_dict, multiplicity=1, loss_type: str = "l2") -> tuple[dict, dict]:
+    def compute_loss(self, feats, out_dict, multiplicity=1, loss_type: str = "l2", flow_loss_type: str = "v_loss") -> tuple[dict, dict]:
         """Compute losses for prim_slab coords, adsorbate coords, lattice, supercell matrix, and scaling factor.
 
         Args:
             feats: Input features dictionary
             out_dict: Output dictionary from forward pass
             multiplicity: number of samples per input
-            loss_type: "l1" or "l2" loss
+            loss_type: "l1" or "l2" 
+            flow_loss_type: "x1_loss" (predict final state) or "v_loss" (predict velocity)
 
         Returns:
             Dictionary with per-sample losses:
@@ -476,22 +486,52 @@ class AtomFlowMatching(Module):
                 f"Unsupported loss_type: {loss_type}. Must be 'l1' or 'l2'."
             )
 
-        # Loss for prim_slab Cartesian coordinates (raw space)
-        true_prim_slab_coords = out_dict["aligned_true_prim_slab_coords"]  # raw space
-        pred_prim_slab_coords = out_dict["denoised_prim_slab_coords"]  # raw space
+        # Get masks
         prim_slab_mask = feats["prim_slab_atom_pad_mask"].repeat_interleave(multiplicity, 0)
+        ads_mask = feats["ads_atom_pad_mask"].repeat_interleave(multiplicity, 0)
+        
+        # Determine prediction and target based on flow_loss_type
+        if flow_loss_type == "x1_loss":
+            # Standard x_1 prediction loss
+            true_prim_slab = out_dict["aligned_true_prim_slab_coords"]
+            pred_prim_slab = out_dict["denoised_prim_slab_coords"]
+            true_ads = out_dict["aligned_true_ads_coords"]
+            pred_ads = out_dict["denoised_ads_coords"]
+            true_lattice = out_dict["aligned_true_lattice"]
+            pred_lattice = out_dict["denoised_lattice"]
+            true_supercell_matrix = out_dict["aligned_true_supercell_matrix"]
+            pred_supercell_matrix = out_dict["denoised_supercell_matrix"]
+            true_scaling_factor = out_dict["aligned_true_scaling_factor"]
+            pred_scaling_factor = out_dict["denoised_scaling_factor"]
+        elif flow_loss_type == "v_loss":
+            # Velocity prediction loss: v_t = (x_1 - x_t) / (1 - t)
+            times = out_dict["times"]
+            eps = 1e-6
+            
+            # True velocity
+            true_prim_slab = (out_dict["aligned_true_prim_slab_coords"] - out_dict["noised_prim_slab_coords"]) / (1 - times[:, None, None] + eps)
+            true_ads = (out_dict["aligned_true_ads_coords"] - out_dict["noised_ads_coords"]) / (1 - times[:, None, None] + eps)
+            true_lattice = (out_dict["aligned_true_lattice"] - out_dict["noised_lattice"]) / (1 - times[:, None] + eps)
+            true_supercell_matrix = (out_dict["aligned_true_supercell_matrix"] - out_dict["noised_supercell_matrix"]) / (1 - times[:, None, None] + eps)
+            true_scaling_factor = (out_dict["aligned_true_scaling_factor"] - out_dict["noised_scaling_factor"]) / (1 - times + eps)
+            
+            # Predicted velocity
+            pred_prim_slab = (out_dict["denoised_prim_slab_coords"] - out_dict["noised_prim_slab_coords"]) / (1 - times[:, None, None] + eps)
+            pred_ads = (out_dict["denoised_ads_coords"] - out_dict["noised_ads_coords"]) / (1 - times[:, None, None] + eps)
+            pred_lattice = (out_dict["denoised_lattice"] - out_dict["noised_lattice"]) / (1 - times[:, None] + eps)
+            pred_supercell_matrix = (out_dict["denoised_supercell_matrix"] - out_dict["noised_supercell_matrix"]) / (1 - times[:, None, None] + eps)
+            pred_scaling_factor = (out_dict["denoised_scaling_factor"] - out_dict["noised_scaling_factor"]) / (1 - times + eps)
+        else:
+            raise ValueError(f"Unsupported flow_loss_type: {flow_loss_type}. Must be 'x1_loss' or 'v_loss'.")
 
-        prim_slab_coord_loss = loss_fn(pred_prim_slab_coords, true_prim_slab_coords, reduction="none")
+        # Loss for prim_slab Cartesian coordinates (raw space)
+        prim_slab_coord_loss = loss_fn(pred_prim_slab, true_prim_slab, reduction="none")
         prim_slab_coord_loss = (prim_slab_coord_loss * prim_slab_mask[..., None]).sum(dim=(1, 2)) / (
             prim_slab_mask.sum(dim=1) + 1e-8
         )
 
         # Loss for adsorbate Cartesian coordinates (raw space)
-        true_ads_coords = out_dict["aligned_true_ads_coords"]  # raw space
-        pred_ads_coords = out_dict["denoised_ads_coords"]  # raw space
-        ads_mask = feats["ads_atom_pad_mask"].repeat_interleave(multiplicity, 0)
-
-        ads_coord_loss = loss_fn(pred_ads_coords, true_ads_coords, reduction="none")
+        ads_coord_loss = loss_fn(pred_ads, true_ads, reduction="none")
         # Handle case where all adsorbate atoms are masked (no adsorbate)
         ads_mask_sum = ads_mask.sum(dim=1)
         ads_coord_loss = (ads_coord_loss * ads_mask[..., None]).sum(dim=(1, 2)) / (ads_mask_sum + 1e-8)
@@ -499,9 +539,6 @@ class AtomFlowMatching(Module):
         ads_coord_loss = torch.where(ads_mask_sum > 0, ads_coord_loss, torch.zeros_like(ads_coord_loss))
 
         # Loss for lattice (6-dimensional: a, b, c, alpha, beta, gamma) in raw space
-        true_lattice = out_dict["aligned_true_lattice"]  # (B, 6) raw space (Angstrom, degrees)
-        pred_lattice = out_dict["denoised_lattice"]  # (B, 6) raw space (Angstrom, degrees)
-
         # Separate loss for lengths (a, b, c) and angles (alpha, beta, gamma)
         length_loss = loss_fn(
             pred_lattice[:, :3], true_lattice[:, :3], reduction="none"
@@ -511,17 +548,11 @@ class AtomFlowMatching(Module):
         ).mean(dim=1)
 
         # Loss for supercell matrix (raw space)
-        true_supercell_matrix = out_dict["aligned_true_supercell_matrix"]  # (B, 3, 3) raw space
-        pred_supercell_matrix = out_dict["denoised_supercell_matrix"]  # (B, 3, 3) raw space
-
         supercell_loss = loss_fn(
             pred_supercell_matrix, true_supercell_matrix, reduction="none"
         ).mean(dim=(1, 2))
         
         # Loss for scaling factor (raw space, no normalization)
-        true_scaling_factor = out_dict["aligned_true_scaling_factor"]  # (B,) raw
-        pred_scaling_factor = out_dict["denoised_scaling_factor"]  # (B,) raw
-
         scaling_factor_loss = loss_fn(
             pred_scaling_factor, true_scaling_factor, reduction="none"
         )
@@ -708,11 +739,11 @@ class AtomFlowMatching(Module):
                 )
 
             # Calculate the flow (vector field)
-            flow_prim_slab_coords = (pred_prim_slab_coords_1 - prim_slab_coords_t) / (1 - t + 1e-5)
-            flow_ads_coords = (pred_ads_coords_1 - ads_coords_t) / (1 - t + 1e-5)
-            flow_lattice = (pred_lattice_1 - lattice_t) / (1 - t + 1e-5)
-            flow_supercell_matrix = (pred_supercell_matrix_1 - supercell_matrix_t) / (1 - t + 1e-5)
-            flow_scaling_factor = (pred_scaling_factor_1 - scaling_factor_t) / (1 - t + 1e-5)
+            flow_prim_slab_coords = (pred_prim_slab_coords_1 - prim_slab_coords_t) / (1 - t + 1e-6)
+            flow_ads_coords = (pred_ads_coords_1 - ads_coords_t) / (1 - t + 1e-6)
+            flow_lattice = (pred_lattice_1 - lattice_t) / (1 - t + 1e-6)
+            flow_supercell_matrix = (pred_supercell_matrix_1 - supercell_matrix_t) / (1 - t + 1e-6)
+            flow_scaling_factor = (pred_scaling_factor_1 - scaling_factor_t) / (1 - t + 1e-6)
 
             # Perform one step of Euler's method
             dt = t_next - t

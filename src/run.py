@@ -87,24 +87,28 @@ torch.load = _patched_torch_load
 
 
 class SaveEveryEpochCheckpoint(Callback):
-    """Save a checkpoint at the end of every training epoch."""
+    """Save a checkpoint at the end of every N training epochs."""
 
     def __init__(
         self,
         dirpath: Path,
         filename_fmt: str = "epoch={epoch:03d}-train_epoch.ckpt",
+        every_n_epochs: int = 5,
     ) -> None:
         super().__init__()
         self.dirpath = Path(dirpath)
         self.filename_fmt = filename_fmt
+        self.every_n_epochs = every_n_epochs
         self.dirpath.mkdir(parents=True, exist_ok=True)
 
     def on_train_epoch_end(
         self, trainer: pl.Trainer, pl_module: pl.LightningModule
     ) -> None:
         epoch = trainer.current_epoch
-        filepath = self.dirpath / self.filename_fmt.format(epoch=epoch)
-        trainer.save_checkpoint(str(filepath))
+        # Save checkpoint only if epoch is a multiple of every_n_epochs
+        if epoch % self.every_n_epochs == 0:
+            filepath = self.dirpath / self.filename_fmt.format(epoch=epoch)
+            trainer.save_checkpoint(str(filepath))
 
 
 def build_callbacks(cfg: DictConfig, hydra_dir: Path) -> List[Callback]:
