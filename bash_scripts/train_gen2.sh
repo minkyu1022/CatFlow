@@ -1,7 +1,7 @@
 #!/bin/bash
 
 HYDRA_FULL_ERROR=1 CUDA_VISIBLE_DEVICES=4,5,6,7 python src/run.py \
-    expname=gen_431M_E_cond_128_2500 \
+    expname=gen_431M_E_cond_ads_aug_128_2500 \
     train.pl_trainer.devices=4 \
     train.pl_trainer.strategy=ddp \
     model.flow_model_args.dng=true \

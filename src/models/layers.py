@@ -58,8 +58,8 @@ class AtomAttentionEncoder(Module):
             prim_slab_feature_dim = 1 + NUM_ELEMENTS  # 101
         self.embed_prim_slab_features = LinearNoBias(prim_slab_feature_dim, atom_s)
         
-        # Adsorbate features: ref_pos (3) + atom_pad_mask (1) + bind_atomic_num (NUM_ELEMENTS) + element one-hot (NUM_ELEMENTS)
-        ads_feature_dim = 3 + 1 + NUM_ELEMENTS + NUM_ELEMENTS
+        # Adsorbate features: ref_pos (3) + atom_pad_mask (1) + element one-hot (NUM_ELEMENTS)
+        ads_feature_dim = 3 + 1 + NUM_ELEMENTS
         self.embed_ads_features = LinearNoBias(ads_feature_dim, atom_s)
 
         self.positional_encoding = positional_encoding
@@ -166,16 +166,20 @@ class AtomAttentionEncoder(Module):
             num_classes=NUM_ELEMENTS
         ).float()  # (B, M, NUM_ELEMENTS)
         
-        ref_ads_pos = feats["ref_ads_pos"] # (B, M, 3)
+        ref_ads_pos = feats["ref_ads_pos"]  # (B, M, 3)
+        ads_mask_float = feats["ads_atom_pad_mask"]  # (B, M)
         
-        bind_atom_idx = feats["bind_ads_atom"].clamp(0, NUM_ELEMENTS - 1) # (B)
-        bind_atom_onehot = F.one_hot(bind_atom_idx, num_classes=NUM_ELEMENTS).float() # (B, NUM_ELEMENTS)
-        bind_atom_expanded = bind_atom_onehot.unsqueeze(1).expand(-1, M, -1) # (B, M, NUM_ELEMENTS)
+        from src.models.utils import center_random_augmentation
+        ref_ads_augmented = center_random_augmentation(
+            ref_ads_pos,
+            ads_mask_float,
+            augmentation=True,
+            centering=True,
+        )  # (B, M, 3)
         
         ads_feats = torch.cat([
-            ref_ads_pos, # (B, M, 3)
+            ref_ads_augmented,  # (B, M, 3) - augmented reference positions
             feats["ads_atom_pad_mask"].unsqueeze(-1),  # (B, M, 1)
-            bind_atom_expanded, # (B, M, NUM_ELEMENTS)
             ads_element_onehot,  # (B, M, NUM_ELEMENTS)
         ], dim=-1)
         

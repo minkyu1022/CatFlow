@@ -62,7 +62,7 @@ training_args:
   loss_type: "l2" # "l1" or "l2"
   flow_loss_type: "x1_loss"  # "x1_loss" (predict final state) or "v_loss" (predict velocity)
   prim_slab_coord_loss_weight: 1.0  # primitive slab coordinate loss weight
-  ads_coord_loss_weight: 0.1  # adsorbate coordinate loss weight
+  ads_coord_loss_weight: 1.0  # adsorbate coordinate loss weight
   length_loss_weight: 1.0
   angle_loss_weight: 0.01
   supercell_matrix_loss_weight: 1.0  # supercell matrix loss weight
