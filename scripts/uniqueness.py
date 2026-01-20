@@ -96,7 +96,7 @@ def get_uniqueness_parallel(base_directory, file_pattern="*.traj", num_workers=4
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--target_dir", type=str, default="unrelaxed_samples/de_novo_generation/C2H2O")
+    parser.add_argument("--target_dir", type=str, default="unrelaxed_samples")
     parser.add_argument("--num_workers", type=int, default=16)
     args = parser.parse_args()
     target_dir = args.target_dir

@@ -301,3 +301,55 @@ def random_rotations(
     """
     quaternions = random_quaternions(n, dtype=dtype, device=device)
     return quaternion_to_matrix(quaternions)
+
+def smooth_lddt_loss(pred_coords, true_coords, coords_mask, t):
+        """
+        Differentiable Soft LDDT Loss (adapted from SimpleFold).
+        Returns (B,) loss tensor.
+        """
+        
+        lddt_cutoff = 15.0
+        
+        B, N, _ = true_coords.shape
+        device = pred_coords.device
+
+        true_dists = torch.cdist(true_coords, true_coords)
+        
+        mask = (true_dists < lddt_cutoff).float()
+        
+        mask = mask * (1 - torch.eye(N, device=device).unsqueeze(0))
+        
+        mask = mask * (coords_mask.unsqueeze(-1) * coords_mask.unsqueeze(-2))
+
+        pred_dists = torch.cdist(pred_coords, pred_coords)
+        dist_diff = torch.abs(true_dists - pred_dists)
+
+        eps = (
+            torch.sigmoid(0.5 - dist_diff)
+            + torch.sigmoid(1.0 - dist_diff)
+            + torch.sigmoid(2.0 - dist_diff)
+            + torch.sigmoid(4.0 - dist_diff)
+        ) / 4.0
+
+        num = (eps * mask).sum(dim=(-1, -2))
+        den = mask.sum(dim=(-1, -2)).clamp(min=1) 
+        
+        lddt_score = num / den # (B,)
+
+        loss = 1.0 - lddt_score
+
+        if isinstance(t, float):
+             t_val = torch.tensor(t, device=device)
+        else:
+             t_val = t
+             
+        if t_val.dim() > 0 and t_val.shape[0] != B:
+             t_val = t_val.view(-1)
+
+        t_weight = 1.0 + 8.0 * torch.relu(t_val - 0.5)
+        loss = loss * t_weight
+
+        valid_molecule = (coords_mask.sum(dim=1) >= 2).float()
+        loss = loss * valid_molecule
+        
+        return loss

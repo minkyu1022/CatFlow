@@ -14,8 +14,7 @@ from src.models.layers import (
     MASK_TOKEN_INDEX,
     NUM_ELEMENTS_WITH_MASK,
 )
-from src.models.utils import LinearNoBias, center_random_augmentation, default
-from scripts.refine_sc_mat import refine_sc_mat
+from src.models.utils import LinearNoBias, center_random_augmentation, default, smooth_lddt_loss
 
 
 class FlowModule(nn.Module):
@@ -603,6 +602,22 @@ class AtomFlowMatching(Module):
             
             cosine_reg = (1 - torch.cos(2 * torch.pi * out_dict["denoised_supercell_matrix"])).mean(dim=(1, 2))
             check_dict["supercell_matrix_cosine_reg"] = cosine_reg
+
+            true_ads_center_x1 = out_dict["aligned_true_ads_center"]
+            true_ads_rel_pos_x1 = out_dict["aligned_true_ads_rel_pos"]
+            true_ads_coords = true_ads_center_x1.unsqueeze(1) + true_ads_rel_pos_x1
+            pred_ads_center_x1 = out_dict["denoised_ads_center"]
+            pred_ads_rel_pos_x1 = out_dict["denoised_ads_rel_pos"]
+            pred_ads_coords = pred_ads_center_x1.unsqueeze(1) + pred_ads_rel_pos_x1
+
+            ads_internal_lddt = smooth_lddt_loss(
+                pred_coords=pred_ads_coords,
+                true_coords=true_ads_coords,
+                coords_mask=ads_mask,
+                t=out_dict["times"]
+            )
+
+            check_dict["ads_internal_lddt"] = ads_internal_lddt
         
         # Add prim_slab_element_loss when dng=True (Cross-Entropy for Discrete Flow Matching)
         if self.dng:
@@ -675,6 +690,7 @@ class AtomFlowMatching(Module):
         dict
             Dictionary containing sampled prim_slab coords, adsorbate coords (center + rel_pos), lattice, supercell matrix, and scaling factor.
         """
+
         ### Setup and initialize
         num_steps = default(num_sampling_steps, self.num_sampling_steps)
         # When dng=True and multiplicity > 1, masks and feats are already expanded in effcat_module.py
@@ -716,6 +732,11 @@ class AtomFlowMatching(Module):
         lattice_t = priors["lattice_0"]
         supercell_matrix_t = priors["supercell_matrix_0"]
         scaling_factor_t = priors["scaling_factor_0"]
+
+        ads_mask_sum = ads_atom_mask.sum(dim=1, keepdim=True)
+        current_center = (ads_rel_pos_t * ads_atom_mask.unsqueeze(-1)).sum(dim=1, keepdim=True) / (ads_mask_sum.unsqueeze(-1) + 1e-8)
+        ads_rel_pos_t = ads_rel_pos_t - current_center
+        ads_rel_pos_t = ads_rel_pos_t * ads_atom_mask.unsqueeze(-1)
         
         # Initialize element when dng=True (Discrete Flow Matching with Masking)
         if self.dng:
@@ -737,12 +758,14 @@ class AtomFlowMatching(Module):
             lattice_trajectory = [lattice_t]
             supercell_matrix_trajectory = [supercell_matrix_t]
             scaling_factor_trajectory = [scaling_factor_t]
+            prim_slab_element_trajectory = [prim_slab_element_t] if (return_trajectory and self.dng) else None
         else:
             prim_slab_coord_trajectory = None
             ads_coord_trajectory = None
             lattice_trajectory = None
             supercell_matrix_trajectory = None
             scaling_factor_trajectory = None
+            prim_slab_element_trajectory = None
 
         ### ODE Solver Loop (Euler's Method)
         for i in range(num_steps):
@@ -793,19 +816,16 @@ class AtomFlowMatching(Module):
             supercell_matrix_t = supercell_matrix_t + flow_supercell_matrix * dt
             scaling_factor_t = scaling_factor_t + flow_scaling_factor * dt
             
-            # Update element when dng=True (Rate-based unmask, OMatG-style)
+            # Update element when dng=True (Rate-based unmask)
             if self.dng:
                 # Model predicts logits → convert to probabilities → sample
                 pred_element_logits = pred_element_1  # (B*mult, N, NUM_ELEMENTS)
                 x_1_probs = F.softmax(pred_element_logits, dim=-1)  # (B*mult, N, NUM_ELEMENTS)
                 x_1 = torch.distributions.Categorical(x_1_probs).sample() + 1  # (B*mult, N), 1-indexed
                 
-                # Rate-based transition (OMatG DiscreteFlowMatchingMask style)
-                eps = 1e-5
-                
                 # Unmask rate: dt / (1 - t)
                 # Higher rate as t approaches 1 (more aggressive unmasking near the end)
-                unmask_rate = dt / (1.0 - t + eps)
+                unmask_rate = dt / (1.0 - t + 1e-6)
                 will_unmask = torch.rand_like(prim_slab_element_t.float()) < unmask_rate
                 will_unmask = will_unmask & (prim_slab_element_t == MASK_TOKEN_INDEX)  # Only unmask MASK tokens
                 
@@ -814,6 +834,11 @@ class AtomFlowMatching(Module):
 
             # Ensure padding atoms remain at zero
             prim_slab_coords_t = prim_slab_coords_t * prim_slab_atom_mask.unsqueeze(-1)
+            ads_rel_pos_t = ads_rel_pos_t * ads_atom_mask.unsqueeze(-1)
+
+            ads_mask_sum = ads_atom_mask.sum(dim=1, keepdim=True)
+            current_center = (ads_rel_pos_t * ads_atom_mask.unsqueeze(-1)).sum(dim=1, keepdim=True) / (ads_mask_sum.unsqueeze(-1) + 1e-8)
+            ads_rel_pos_t = ads_rel_pos_t - current_center
             ads_rel_pos_t = ads_rel_pos_t * ads_atom_mask.unsqueeze(-1)
 
             # Store the current state if collecting trajectories
@@ -825,6 +850,8 @@ class AtomFlowMatching(Module):
                 lattice_trajectory.append(lattice_t)
                 supercell_matrix_trajectory.append(supercell_matrix_t)
                 scaling_factor_trajectory.append(scaling_factor_t)
+                if self.dng:
+                    prim_slab_element_trajectory.append(prim_slab_element_t)
 
         ### Final Refinement Step
         if refine_final:
@@ -879,6 +906,8 @@ class AtomFlowMatching(Module):
             # Unmask all remaining MASK tokens
             remaining_masks = (prim_slab_element_t == MASK_TOKEN_INDEX)
             final_prim_slab_element = torch.where(remaining_masks, x_1_final, prim_slab_element_t)
+
+            final_prim_slab_element = final_prim_slab_element * prim_slab_atom_mask.long()
             
             # prim_slab_element_t is already integer tensor (1-indexed)
             output["sampled_prim_slab_element"] = final_prim_slab_element  # (batch_size * multiplicity, N)
@@ -893,12 +922,16 @@ class AtomFlowMatching(Module):
                 lattice_trajectory.append(final_lattice)
                 supercell_matrix_trajectory.append(final_supercell_matrix)
                 scaling_factor_trajectory.append(final_scaling_factor)
+                if self.dng:
+                    prim_slab_element_trajectory.append(prim_slab_element_t)
 
             output["prim_slab_coord_trajectory"] = torch.stack(prim_slab_coord_trajectory, dim=0)
             output["ads_coord_trajectory"] = torch.stack(ads_coord_trajectory, dim=0)
             output["lattice_trajectory"] = torch.stack(lattice_trajectory, dim=0)
             output["supercell_matrix_trajectory"] = torch.stack(supercell_matrix_trajectory, dim=0)
             output["scaling_factor_trajectory"] = torch.stack(scaling_factor_trajectory, dim=0)
+            if self.dng:
+                output["prim_slab_element_trajectory"] = torch.stack(prim_slab_element_trajectory, dim=0)
 
         return output
 

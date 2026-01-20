@@ -124,13 +124,23 @@ class CatPriorSampler:
         # Denormalize to raw space (Angstrom)
         ads_center_0 = self.denormalize_ads_center(ads_center_0_normalized)
 
-        # Sample adsorbate relative positions from Gaussian N(0, coord_std^2) in normalized space, then denormalize to raw space
-        ads_rel_pos_0_normalized = (
-            torch.randn(batch_size, num_ads_atoms, 3, device=device, dtype=dtype)
-            * self.coord_std
-        )
-        ads_rel_pos_0_normalized = ads_rel_pos_0_normalized * ads_atom_mask.unsqueeze(-1)
-        # Denormalize to raw space (Angstrom)
+        # # Sample adsorbate relative positions from Gaussian N(0, coord_std^2) in normalized space, then denormalize to raw space
+        # ads_rel_pos_0_normalized = (
+        #     torch.randn(batch_size, num_ads_atoms, 3, device=device, dtype=dtype)
+        #     * self.coord_std
+        # )
+        # ads_rel_pos_0_normalized = ads_rel_pos_0_normalized * ads_atom_mask.unsqueeze(-1)
+        # # Denormalize to raw space (Angstrom)
+        # ads_rel_pos_0 = self.denormalize_ads_rel_pos(ads_rel_pos_0_normalized)
+
+        noise = torch.randn(batch_size, num_ads_atoms, 3, device=device, dtype=dtype)
+        noise_mask = ads_atom_mask.unsqueeze(-1)
+        noise = noise * noise_mask
+
+        noise_mean = noise.sum(dim=1, keepdim=True) / (ads_atom_mask.sum(dim=1, keepdim=True).unsqueeze(-1) + 1e-8)
+        ads_rel_pos_0_normalized = (noise - noise_mean) * self.coord_std
+        ads_rel_pos_0_normalized = ads_rel_pos_0_normalized * noise_mask
+
         ads_rel_pos_0 = self.denormalize_ads_rel_pos(ads_rel_pos_0_normalized)
 
         # Sample lattice lengths from LogNormal distribution

@@ -147,159 +147,130 @@ class EffCatModule(LightningModule):
                 rank_zero_info(f"| [CHECKPOINT] Resuming from epoch: {checkpoint['epoch']}")
 
     def forward(
-        self,
-        feats: dict[str, Tensor],
-        # Training arguments
-        multiplicity_flow_train: int = 1,
-        # Sampling arguments
-        multiplicity_flow_sample: int = 1,
-        num_sampling_steps: Optional[int] = None,
-        center_during_sampling: bool = False,
-        refine_final: bool = False,
-        return_trajectory: bool = False,
-    ) -> dict[str, Any]:
+            self,
+            feats: dict[str, Tensor],
+            # Training arguments
+            multiplicity_flow_train: int = 1,
+            # Sampling arguments
+            multiplicity_flow_sample: int = 1,
+            num_sampling_steps: Optional[int] = None,
+            center_during_sampling: bool = False,
+            refine_final: bool = False,
+            return_trajectory: bool = False,
+        ) -> dict[str, Any]:
 
-        dict_out = {}
+            dict_out = {}
 
-        if self.training:
-            # Returns denoised predictions for loss computation
-            dict_out.update(
-                self.structure_module(feats=feats, multiplicity=multiplicity_flow_train)
-            )
-        else:
-            # Returns sampled structure
-            # When dng=True: sample n_prim_slab_atoms from histogram and dynamically create mask
-            if self.dng:
-                batch_size = feats["ref_prim_slab_element"].shape[0]
-                original_n = feats["prim_slab_cart_coords"].shape[1]  # Original number of atoms in feats
-                
-                # Sample number of atoms from histogram according to probability
-                # Index of prim_slab_num_atoms_hist = number of atoms, value = probability
-                n_atoms_indices = np.arange(len(self.n_prim_slab_atoms_hist))
-                sampled_n_atoms = np.random.choice(
-                    n_atoms_indices,  # Indices to sample (number of atoms)
-                    size=batch_size * multiplicity_flow_sample,
-                    p=self.n_prim_slab_atoms_hist,  # Probability distribution
-                    replace=True
-                ).tolist()
-                
-                # Determine max_n_prim_slab_atoms
-                max_n = max(sampled_n_atoms) if len(sampled_n_atoms) > 0 else self.max_n_prim_slab_atoms
-                
-                # Dynamically create prim_slab_atom_mask
-                prim_slab_atom_mask = torch.zeros((batch_size * multiplicity_flow_sample, max_n), dtype=torch.bool, device=self.device)
-                for i, n in enumerate(sampled_n_atoms):
-                    prim_slab_atom_mask[i, :n] = True
-                
-                # Also dynamically regenerate prim_slab_atom_to_token
-                prim_slab_atom_to_token = torch.eye(max_n, device=self.device).unsqueeze(0).expand(batch_size * multiplicity_flow_sample, -1, -1)
-                feats["prim_slab_atom_to_token"] = prim_slab_atom_to_token
-                
-                # Adjust feats to match max_n: pad or slice prim_slab-related tensors
-                # If max_n > original_n, pad with zeros/padding values
-                # If max_n < original_n, slice to max_n
-                if max_n != original_n:
-                    # Adjust prim_slab_cart_coords
-                    if max_n > original_n:
-                        # Pad with zeros
-                        padding = torch.zeros((batch_size, max_n - original_n, 3), device=feats["prim_slab_cart_coords"].device, dtype=feats["prim_slab_cart_coords"].dtype)
-                        feats["prim_slab_cart_coords"] = torch.cat([feats["prim_slab_cart_coords"], padding], dim=1)
-                    else:
-                        # Slice to max_n
-                        feats["prim_slab_cart_coords"] = feats["prim_slab_cart_coords"][:, :max_n, :]
-                    
-                    # Adjust prim_slab_atom_pad_mask
-                    if max_n > original_n:
-                        # Pad with False (padding)
-                        padding = torch.zeros((batch_size, max_n - original_n), device=feats["prim_slab_atom_pad_mask"].device, dtype=feats["prim_slab_atom_pad_mask"].dtype)
-                        feats["prim_slab_atom_pad_mask"] = torch.cat([feats["prim_slab_atom_pad_mask"], padding], dim=1)
-                    else:
-                        # Slice to max_n
-                        feats["prim_slab_atom_pad_mask"] = feats["prim_slab_atom_pad_mask"][:, :max_n]
-                    
-                    # Adjust ref_prim_slab_element
-                    if max_n > original_n:
-                        # Pad with 0 (padding element)
-                        padding = torch.zeros((batch_size, max_n - original_n), device=feats["ref_prim_slab_element"].device, dtype=feats["ref_prim_slab_element"].dtype)
-                        feats["ref_prim_slab_element"] = torch.cat([feats["ref_prim_slab_element"], padding], dim=1)
-                    else:
-                        # Slice to max_n
-                        feats["ref_prim_slab_element"] = feats["ref_prim_slab_element"][:, :max_n]
-                    
-                    # Adjust prim_slab_token_pad_mask (used in TokenTransformer)
-                    if "prim_slab_token_pad_mask" in feats:
-                        if max_n > original_n:
-                            # Pad with 0 (padding)
-                            padding = torch.zeros((batch_size, max_n - original_n), device=feats["prim_slab_token_pad_mask"].device, dtype=feats["prim_slab_token_pad_mask"].dtype)
-                            feats["prim_slab_token_pad_mask"] = torch.cat([feats["prim_slab_token_pad_mask"], padding], dim=1)
-                        else:
-                            # Slice to max_n
-                            feats["prim_slab_token_pad_mask"] = feats["prim_slab_token_pad_mask"][:, :max_n]
-                
-                # Expand all ads-related tensors in feats to match prim_slab batch size (batch_size * multiplicity_flow_sample)
-                # This is needed because prim_slab tensors are already expanded
-                if "ads_atom_to_token" in feats:
-                    feats["ads_atom_to_token"] = feats["ads_atom_to_token"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "ads_cart_coords" in feats:
-                    feats["ads_cart_coords"] = feats["ads_cart_coords"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "ads_center" in feats:
-                    feats["ads_center"] = feats["ads_center"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "ads_rel_pos" in feats:
-                    feats["ads_rel_pos"] = feats["ads_rel_pos"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "ads_atom_pad_mask" in feats:
-                    feats["ads_atom_pad_mask"] = feats["ads_atom_pad_mask"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "ads_token_pad_mask" in feats:
-                    feats["ads_token_pad_mask"] = feats["ads_token_pad_mask"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "ref_ads_element" in feats:
-                    feats["ref_ads_element"] = feats["ref_ads_element"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "ref_ads_pos" in feats:
-                    feats["ref_ads_pos"] = feats["ref_ads_pos"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "bind_ads_atom" in feats:
-                    feats["bind_ads_atom"] = feats["bind_ads_atom"].repeat_interleave(multiplicity_flow_sample, 0)
-                
-                # Expand prim_slab-related tensors in feats that haven't been expanded yet
-                # (prim_slab_atom_to_token is already expanded above, but other tensors need expansion)
-                if "prim_slab_cart_coords" in feats:
-                    feats["prim_slab_cart_coords"] = feats["prim_slab_cart_coords"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "prim_slab_atom_pad_mask" in feats:
-                    feats["prim_slab_atom_pad_mask"] = feats["prim_slab_atom_pad_mask"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "prim_slab_token_pad_mask" in feats:
-                    feats["prim_slab_token_pad_mask"] = feats["prim_slab_token_pad_mask"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "ref_prim_slab_element" in feats:
-                    feats["ref_prim_slab_element"] = feats["ref_prim_slab_element"].repeat_interleave(multiplicity_flow_sample, 0)
-                
-                # Expand other global tensors if they exist
-                if "lattice" in feats:
-                    feats["lattice"] = feats["lattice"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "supercell_matrix" in feats:
-                    feats["supercell_matrix"] = feats["supercell_matrix"].repeat_interleave(multiplicity_flow_sample, 0)
-                if "scaling_factor" in feats:
-                    feats["scaling_factor"] = feats["scaling_factor"].repeat_interleave(multiplicity_flow_sample, 0)
-                
-                # Expand ads_atom_mask to match prim_slab_atom_mask batch size (batch_size * multiplicity_flow_sample)
-                ads_atom_mask = feats["ads_atom_pad_mask"]
-            else:
-                prim_slab_atom_mask = feats["prim_slab_atom_pad_mask"]
-                ads_atom_mask = feats["ads_atom_pad_mask"]
-
-            network_condition_kwargs = dict(
-                feats=feats,
-            )
-
-            dict_out.update(
-                self.structure_module.sample(
-                    prim_slab_atom_mask=prim_slab_atom_mask,
-                    ads_atom_mask=ads_atom_mask,
-                    num_sampling_steps=num_sampling_steps,
-                    multiplicity=multiplicity_flow_sample,
-                    center_coords=False,
-                    refine_final=refine_final,
-                    return_trajectory=return_trajectory,
-                    **network_condition_kwargs,
+            if self.training:
+                # Returns denoised predictions for loss computation
+                dict_out.update(
+                    self.structure_module(feats=feats, multiplicity=multiplicity_flow_train)
                 )
-            )
+            else:
+                # Returns sampled structure
+                # When dng=True: sample n_prim_slab_atoms from histogram and dynamically create mask
+                if self.dng:
+                    batch_size = feats["ref_prim_slab_element"].shape[0]
+                    original_n = feats["prim_slab_cart_coords"].shape[1]  # Original number of atoms in feats
+                    
+                    # Sample number of atoms from histogram according to probability
+                    n_atoms_indices = np.arange(len(self.n_prim_slab_atoms_hist))
+                    sampled_n_atoms = np.random.choice(
+                        n_atoms_indices,
+                        size=batch_size * multiplicity_flow_sample,
+                        p=self.n_prim_slab_atoms_hist,
+                        replace=True
+                    ).tolist()
+                    
+                    # Determine max_n_prim_slab_atoms
+                    max_n = max(sampled_n_atoms) if len(sampled_n_atoms) > 0 else self.max_n_prim_slab_atoms
+                    
+                    prim_slab_atom_mask = torch.zeros((batch_size * multiplicity_flow_sample, max_n), dtype=torch.bool, device=self.device)
+                    for i, n in enumerate(sampled_n_atoms):
+                        prim_slab_atom_mask[i, :n] = True
+                    
+                    feats["prim_slab_atom_pad_mask"] = prim_slab_atom_mask
+                    
+                    feats["prim_slab_token_pad_mask"] = prim_slab_atom_mask.clone()
+                    
+                    # Also dynamically regenerate prim_slab_atom_to_token
+                    prim_slab_atom_to_token = torch.eye(max_n, device=self.device).unsqueeze(0).expand(batch_size * multiplicity_flow_sample, -1, -1)
+                    feats["prim_slab_atom_to_token"] = prim_slab_atom_to_token
+                    
+                    # Adjust feats to match max_n: pad or slice prim_slab-related tensors
+                    if max_n != original_n:
+                        # Adjust prim_slab_cart_coords (Original Batch Size B -> Padded B)
+                        if max_n > original_n:
+                            padding = torch.zeros((batch_size, max_n - original_n, 3), device=feats["prim_slab_cart_coords"].device, dtype=feats["prim_slab_cart_coords"].dtype)
+                            feats["prim_slab_cart_coords"] = torch.cat([feats["prim_slab_cart_coords"], padding], dim=1)
+                        else:
+                            feats["prim_slab_cart_coords"] = feats["prim_slab_cart_coords"][:, :max_n, :]
+                        
+                        # Adjust ref_prim_slab_element (Original Batch Size B -> Padded B)
+                        if max_n > original_n:
+                            padding = torch.zeros((batch_size, max_n - original_n), device=feats["ref_prim_slab_element"].device, dtype=feats["ref_prim_slab_element"].dtype)
+                            feats["ref_prim_slab_element"] = torch.cat([feats["ref_prim_slab_element"], padding], dim=1)
+                        else:
+                            feats["ref_prim_slab_element"] = feats["ref_prim_slab_element"][:, :max_n]
+                    
+                    # Expand all ads-related tensors in feats to match prim_slab batch size
+                    if "ads_atom_to_token" in feats:
+                        feats["ads_atom_to_token"] = feats["ads_atom_to_token"].repeat_interleave(multiplicity_flow_sample, 0)
+                    if "ads_cart_coords" in feats:
+                        feats["ads_cart_coords"] = feats["ads_cart_coords"].repeat_interleave(multiplicity_flow_sample, 0)
+                    if "ads_center" in feats:
+                        feats["ads_center"] = feats["ads_center"].repeat_interleave(multiplicity_flow_sample, 0)
+                    if "ads_rel_pos" in feats:
+                        feats["ads_rel_pos"] = feats["ads_rel_pos"].repeat_interleave(multiplicity_flow_sample, 0)
+                    if "ads_atom_pad_mask" in feats:
+                        feats["ads_atom_pad_mask"] = feats["ads_atom_pad_mask"].repeat_interleave(multiplicity_flow_sample, 0)
+                    if "ads_token_pad_mask" in feats:
+                        feats["ads_token_pad_mask"] = feats["ads_token_pad_mask"].repeat_interleave(multiplicity_flow_sample, 0)
+                    if "ref_ads_element" in feats:
+                        feats["ref_ads_element"] = feats["ref_ads_element"].repeat_interleave(multiplicity_flow_sample, 0)
+                    if "ref_ads_pos" in feats:
+                        feats["ref_ads_pos"] = feats["ref_ads_pos"].repeat_interleave(multiplicity_flow_sample, 0)
+                    if "bind_ads_atom" in feats:
+                        feats["bind_ads_atom"] = feats["bind_ads_atom"].repeat_interleave(multiplicity_flow_sample, 0)
+                    
+                    
+                    if "prim_slab_cart_coords" in feats:
+                        feats["prim_slab_cart_coords"] = feats["prim_slab_cart_coords"].repeat_interleave(multiplicity_flow_sample, 0)
+                    
+                    if "ref_prim_slab_element" in feats:
+                        feats["ref_prim_slab_element"] = feats["ref_prim_slab_element"].repeat_interleave(multiplicity_flow_sample, 0)
+                    
+                    # Expand other global tensors if they exist
+                    if "lattice" in feats:
+                        feats["lattice"] = feats["lattice"].repeat_interleave(multiplicity_flow_sample, 0)
+                    if "supercell_matrix" in feats:
+                        feats["supercell_matrix"] = feats["supercell_matrix"].repeat_interleave(multiplicity_flow_sample, 0)
+                    if "scaling_factor" in feats:
+                        feats["scaling_factor"] = feats["scaling_factor"].repeat_interleave(multiplicity_flow_sample, 0)
+                    
+                    ads_atom_mask = feats["ads_atom_pad_mask"]
+                else:
+                    prim_slab_atom_mask = feats["prim_slab_atom_pad_mask"]
+                    ads_atom_mask = feats["ads_atom_pad_mask"]
 
-        return dict_out
+                network_condition_kwargs = dict(
+                    feats=feats,
+                )
+
+                dict_out.update(
+                    self.structure_module.sample(
+                        prim_slab_atom_mask=prim_slab_atom_mask,
+                        ads_atom_mask=ads_atom_mask,
+                        num_sampling_steps=num_sampling_steps,
+                        multiplicity=multiplicity_flow_sample,
+                        center_coords=False,
+                        refine_final=refine_final,
+                        return_trajectory=return_trajectory,
+                        **network_condition_kwargs,
+                    )
+                )
+
+            return dict_out
 
     def _compute_and_log_loss(
         self, batch: dict[str, Tensor], prefix: str
@@ -429,6 +400,30 @@ class EffCatModule(LightningModule):
             else:
                 raise e
 
+        sampled_ads_coords = out["sampled_ads_coords"]  # (B*n_samples, M, 3)
+        true_ads_coords = batch["ads_cart_coords"]  # (B, M, 3)
+        ads_mask = batch["ads_atom_pad_mask"]  # (B, M)
+        
+        B = true_ads_coords.shape[0]
+        M = true_ads_coords.shape[1]
+        sampled_ads_coords_reshaped = sampled_ads_coords.view(B, n_samples, M, 3)
+        
+        true_ads_coords_expanded = true_ads_coords.unsqueeze(1)  # (B, 1, M, 3)
+        ads_mask_expanded = ads_mask.unsqueeze(1).unsqueeze(-1)  # (B, 1, M, 1)
+        
+        mse_per_sample = ((sampled_ads_coords_reshaped - true_ads_coords_expanded) ** 2) * ads_mask_expanded
+        mse_per_sample = mse_per_sample.sum(dim=(2, 3)) / (ads_mask.sum(dim=1, keepdim=True) + 1e-8)  # (B, n_samples)
+        
+        ads_coord_err = mse_per_sample.mean()
+        
+        batch_size = batch["ref_prim_slab_element"].shape[0]
+        self.log(
+            "val/ads_coord_err",
+            ads_coord_err,
+            batch_size=batch_size,
+            sync_dist=True,
+        )
+
         # Aggregate outputs
         return_dict = {
             "sampled_prim_slab_coords": out["sampled_prim_slab_coords"],
@@ -447,7 +442,7 @@ class EffCatModule(LightningModule):
         
         # Use sampled_prim_slab_element when dng=True, ref_prim_slab_element when dng=False
         if self.dng:
-            return_dict["prim_slab_atom_types"] = out.get("sampled_prim_slab_element", batch["ref_prim_slab_element"])
+            return_dict["prim_slab_atom_types"] = out.get("sampled_prim_slab_element")
         else:
             return_dict["prim_slab_atom_types"] = batch["ref_prim_slab_element"]
         
@@ -925,4 +920,23 @@ class EffCatModule(LightningModule):
         """
         return []
 
-        return []
+    def on_train_start(self) -> None:
+
+        new_lr = self.training_args["lr"] 
+        
+        if self.global_rank == 0:
+            rank_zero_info(f"| [OVERRIDE] Resetting Learning Rate to {new_lr} at step {self.global_step}")
+
+        if self.trainer.optimizers:
+            for opt in self.trainer.optimizers:
+                for param_group in opt.param_groups:
+                    param_group["lr"] = new_lr
+                    if "initial_lr" in param_group:
+                        param_group["initial_lr"] = new_lr
+
+        if self.trainer.lr_scheduler_configs:
+            for config in self.trainer.lr_scheduler_configs:
+                scheduler = config.scheduler
+                
+                if hasattr(scheduler, "base_lrs"):
+                    scheduler.base_lrs = [new_lr] * len(scheduler.base_lrs)

@@ -26,6 +26,7 @@ import os
 import sys
 from pathlib import Path
 from typing import Dict, Any, List, Optional
+import json
 
 # Add project root to Python path
 project_root = Path(__file__).parent.parent
@@ -202,7 +203,6 @@ def generate_samples_and_save_valid(
             'vol_invalid': output_path / 'vol_invalid',
             'dist_invalid': output_path / 'dist_invalid',
             'height_invalid': output_path / 'height_invalid',
-            'crystal_invalid': output_path / 'crystal_invalid',
             'assemble_failed': output_path / 'assemble_failed',
         }
         for invalid_dir in invalid_dirs.values():
@@ -248,7 +248,6 @@ def generate_samples_and_save_valid(
         'vol_failed': 0,
         'dist_failed': 0,
         'height_failed': 0,
-        'crystal_failed': 0,
         'assemble_failed': 0,
     }
     
@@ -265,8 +264,6 @@ def generate_samples_and_save_valid(
             print(f"  - Using {world_size} GPUs (rank {rank})")
     
     # Iterate over batches
-    # Note: For DDP, DistributedSampler already distributes batches across ranks
-    # We need to track the original dataset indices for each batch
     cumulative_samples_processed = 0  # Track cumulative count to handle variable batch sizes
     
     for batch_idx, batch in enumerate(tqdm(dataloader, desc=f"Processing batches (rank {rank})", disable=(rank != 0))):
@@ -278,13 +275,8 @@ def generate_samples_and_save_valid(
         original_indices = []
         
         if sampler is not None and world_size > 1:
-            # For DistributedSampler, get the actual indices it would return
-            # DistributedSampler distributes indices as: rank + i * num_replicas
-            # where i = 0, 1, 2, ... (sequential within each rank)
             for i in range(current_batch_size):
-                # Calculate which sample in the sampler's sequence this is (0-indexed within this rank)
                 sample_in_rank_sequence = cumulative_samples_processed + i
-                # DistributedSampler formula: rank + sample_in_rank_sequence * world_size
                 original_idx = rank + sample_in_rank_sequence * world_size
                 original_indices.append(original_idx)
         else:
@@ -297,11 +289,9 @@ def generate_samples_and_save_valid(
         
         # Move batch to device
         if device == "cuda" and torch.cuda.is_available():
-            # For DataParallel or DDP, use appropriate device
             if isinstance(model, torch.nn.DataParallel):
                 batch = {k: v.cuda() if isinstance(v, torch.Tensor) else v for k, v in batch.items()}
             elif world_size > 1:
-                # DDP: each process uses its own GPU (use local_rank)
                 batch = {k: v.cuda(local_rank) if isinstance(v, torch.Tensor) else v for k, v in batch.items()}
             else:
                 batch = {k: v.cuda() if isinstance(v, torch.Tensor) else v for k, v in batch.items()}
@@ -309,7 +299,6 @@ def generate_samples_and_save_valid(
         try:
             # Generate samples using forward (like validation_step)
             with torch.no_grad():
-                # For DataParallel, unwrap the model for forward call
                 if isinstance(model, torch.nn.DataParallel):
                     out = model.module(
                         batch,
@@ -336,65 +325,50 @@ def generate_samples_and_save_valid(
             sampled_prim_slab_coords = to_numpy(out["sampled_prim_slab_coords"])  # (B*M, N, 3)
             sampled_ads_coords = to_numpy(out["sampled_ads_coords"])  # (B*M, A, 3)
             sampled_lattices = to_numpy(out["sampled_lattice"])  # (B*M, 6)
-            sampled_supercell_matrices = to_numpy(out["sampled_supercell_matrix"])  # (B*M, 3, 3) or (B*M, 9)
+            sampled_supercell_matrices = to_numpy(out["sampled_supercell_matrix"])  # (B*M, 3, 3)
             sampled_scaling_factors = to_numpy(out["sampled_scaling_factor"])  # (B*M,)
             
-            # Check if model is in dng mode and uses generated prim_slab_atom_types
             if isinstance(model, torch.nn.DataParallel):
                 model_dng = model.module.dng
             else:
                 model_dng = model.dng
             
             if model_dng and "sampled_prim_slab_element" in out:
-                # dng=True: use model-generated prim_slab_atom_types
                 prim_slab_atom_types = to_numpy(out["sampled_prim_slab_element"])  # (B*M, N)
             else:
-                # dng=False: use reference from batch
                 prim_slab_atom_types = to_numpy(batch["ref_prim_slab_element"])  # (B, N)
             
             ads_atom_types = to_numpy(batch["ref_ads_element"])  # (B, A)
             prim_slab_atom_mask = to_numpy(batch["prim_slab_atom_pad_mask"])  # (B, N)
             ads_atom_mask = to_numpy(batch["ads_atom_pad_mask"])  # (B, A)
             
-            # Get tags if available
             tags = batch.get("tags", None)
             if tags is not None:
-                tags = to_numpy(tags)  # (B,)
+                tags = to_numpy(tags)
             
-            # Process each sample
             total_samples_in_batch = sampled_prim_slab_coords.shape[0]
             
             for sample_idx in range(total_samples_in_batch):
-                # Calculate original batch index
                 batch_item_idx = sample_idx // num_samples
-                
-                # Get original dataset index for this batch item
                 original_dataset_idx = original_indices[batch_item_idx]
-                
-                # Get sample index within this input (0 to num_samples-1)
                 sample_in_item = sample_idx % num_samples
                 
-                # Prepare data for this sample
-                sample_prim_slab_coords = sampled_prim_slab_coords[sample_idx]  # (N, 3)
-                sample_ads_coords = sampled_ads_coords[sample_idx]  # (A, 3)
-                sample_lattice = sampled_lattices[sample_idx]  # (6,)
-                sample_supercell_matrix = sampled_supercell_matrices[sample_idx]  # (3, 3) or (9,)
-                sample_scaling_factor = sampled_scaling_factors[sample_idx]  # scalar
+                sample_prim_slab_coords = sampled_prim_slab_coords[sample_idx]
+                sample_ads_coords = sampled_ads_coords[sample_idx]
+                sample_lattice = sampled_lattices[sample_idx]
+                sample_supercell_matrix = sampled_supercell_matrices[sample_idx]
+                sample_scaling_factor = sampled_scaling_factors[sample_idx]
                 
-                # prim_slab_atom_types shape depends on dng mode
                 if model_dng and "sampled_prim_slab_element" in out:
-                    # dng=True: (B*M, N) - use sample_idx
-                    prim_slab_types = prim_slab_atom_types[sample_idx]  # (N,)
+                    prim_slab_types = prim_slab_atom_types[sample_idx]
                 else:
-                    # dng=False: (B, N) - use batch_item_idx
-                    prim_slab_types = prim_slab_atom_types[batch_item_idx]  # (N,)
+                    prim_slab_types = prim_slab_atom_types[batch_item_idx]
                 
-                ads_types = ads_atom_types[batch_item_idx]  # (A,)
-                prim_slab_mask = prim_slab_atom_mask[batch_item_idx]  # (N,)
-                ads_mask = ads_atom_mask[batch_item_idx]  # (A,)
+                ads_types = ads_atom_types[batch_item_idx]
+                prim_slab_mask = prim_slab_atom_mask[batch_item_idx]
+                ads_mask = ads_atom_mask[batch_item_idx]
                 
                 try:
-                    # Try to assemble the structure
                     assemble_failed = False
                     recon_system = None
                     recon_slab = None
@@ -416,44 +390,36 @@ def generate_samples_and_save_valid(
                         if rank == 0:
                             print(f"\n[WARNING] Assembly failed for sample {original_dataset_idx}: {e}")
                     
-                    # Check structural validity (only if assemble succeeded)
                     if not assemble_failed:
-                        # Reshape supercell_matrix to (3, 3) first, then add sample dimension
                         sc_matrix_3x3 = sample_supercell_matrix.reshape(3, 3)
                         validity_task = (
-                            sample_prim_slab_coords[np.newaxis, :],  # (1, N, 3) - add sample dimension
-                            sample_ads_coords[np.newaxis, :],  # (1, A, 3)
-                            sample_lattice[np.newaxis, :],  # (1, 6)
-                            sc_matrix_3x3[np.newaxis, :, :],  # (1, 3, 3)
-                            np.array([sample_scaling_factor]),  # (1,)
-                            prim_slab_types,  # (N,)
-                            ads_types,  # (A,)
-                            prim_slab_mask,  # (N,)
-                            ads_mask,  # (A,)
+                            sample_prim_slab_coords[np.newaxis, :],
+                            sample_ads_coords[np.newaxis, :],
+                            sample_lattice[np.newaxis, :],
+                            sc_matrix_3x3[np.newaxis, :, :],
+                            np.array([sample_scaling_factor]),
+                            prim_slab_types,
+                            ads_types,
+                            prim_slab_mask,
+                            ads_mask,
                         )
                         
-                        # Check validity (returns list of bools and details, one per sample)
                         validity_results, validity_details = compute_structural_validity_single(
                             validity_task, return_details=True
                         )
                         is_valid = validity_results[0]
                         details = validity_details[0]
                     else:
-                        # Assembly failed - mark as invalid
                         is_valid = False
                         details = {
                             'vol_ok': False,
                             'dist_ok': False,
                             'height_ok': False,
-                            'crystal_ok': False,
                             'assemble_failed': True
                         }
                     
-                    # Update per-check statistics and save invalid samples
                     if not is_valid:
-                        # Track which checks failed
                         failed_checks = []
-                        
                         if details.get('assemble_failed', False):
                             validity_stats['assemble_failed'] += 1
                             failed_checks.append('assemble_failed')
@@ -467,50 +433,35 @@ def generate_samples_and_save_valid(
                             if not details.get('height_ok', True):
                                 validity_stats['height_failed'] += 1
                                 failed_checks.append('height_invalid')
-                            if not details.get('crystal_ok', True):
-                                validity_stats['crystal_failed'] += 1
-                                failed_checks.append('crystal_invalid')
                         
-                        # Save invalid structure to corresponding failure directory/directories
-                        # (only if save_invalid=True)
                         if save_invalid and failed_checks:
                             for failed_check in failed_checks:
                                 if num_samples > 1:
-                                    # Save to: output_dir/{failed_check}/{sample_in_item}/{original_dataset_idx}.*
                                     invalid_traj_path = sample_invalid_dirs[failed_check][sample_in_item] / f"{original_dataset_idx}.traj"
                                     invalid_pt_path = sample_invalid_dirs[failed_check][sample_in_item] / f"{original_dataset_idx}.pt"
                                 else:
-                                    # Save to: output_dir/{failed_check}/{original_dataset_idx}.*
                                     invalid_traj_path = invalid_dirs[failed_check] / f"{original_dataset_idx}.traj"
                                     invalid_pt_path = invalid_dirs[failed_check] / f"{original_dataset_idx}.pt"
                                 
                                 try:
-                                    # Save assembled structure as .traj (only if assemble succeeded)
                                     if not details.get('assemble_failed', False) and recon_system is not None:
                                         ase_write(str(invalid_traj_path), recon_system, format="traj")
                                     
-                                    # Save all model-generated data as .pt (always, even for assemble_failed)
-                                    # Convert validity_details to Python native types (avoid numpy bool)
                                     validity_details_clean = {
                                         k: bool(v) if isinstance(v, (np.bool_, bool)) else v
                                         for k, v in details.items()
                                     }
                                     
                                     invalid_sample_data = {
-                                        # Model outputs (raw predictions)
-                                        "prim_slab_coords": torch.from_numpy(sample_prim_slab_coords).cpu(),  # (N, 3)
-                                        "ads_coords": torch.from_numpy(sample_ads_coords).cpu(),  # (A, 3)
-                                        "lattice": torch.from_numpy(sample_lattice).cpu(),  # (6,)
-                                        "supercell_matrix": torch.from_numpy(sample_supercell_matrix.reshape(3, 3)).cpu(),  # (3, 3)
-                                        "scaling_factor": torch.tensor(float(sample_scaling_factor)).cpu(),  # scalar
-                                        
-                                        # Atom types and masks
-                                        "prim_slab_atom_types": torch.from_numpy(prim_slab_types).cpu() if isinstance(prim_slab_types, np.ndarray) else prim_slab_types.cpu() if isinstance(prim_slab_types, torch.Tensor) else torch.tensor(prim_slab_types).cpu(),  # (N,)
-                                        "ads_atom_types": torch.from_numpy(ads_types).cpu() if isinstance(ads_types, np.ndarray) else ads_types.cpu() if isinstance(ads_types, torch.Tensor) else torch.tensor(ads_types).cpu(),  # (A,)
-                                        "prim_slab_atom_mask": torch.from_numpy(prim_slab_mask).cpu() if isinstance(prim_slab_mask, np.ndarray) else prim_slab_mask.cpu() if isinstance(prim_slab_mask, torch.Tensor) else torch.tensor(prim_slab_mask).cpu(),  # (N,)
-                                        "ads_atom_mask": torch.from_numpy(ads_mask).cpu() if isinstance(ads_mask, np.ndarray) else ads_mask.cpu() if isinstance(ads_mask, torch.Tensor) else torch.tensor(ads_mask).cpu(),  # (A,)
-                                        
-                                        # Metadata (convert to Python native types)
+                                        "prim_slab_coords": torch.from_numpy(sample_prim_slab_coords).cpu(),
+                                        "ads_coords": torch.from_numpy(sample_ads_coords).cpu(),
+                                        "lattice": torch.from_numpy(sample_lattice).cpu(),
+                                        "supercell_matrix": torch.from_numpy(sample_supercell_matrix.reshape(3, 3)).cpu(),
+                                        "scaling_factor": torch.tensor(float(sample_scaling_factor)).cpu(),
+                                        "prim_slab_atom_types": torch.from_numpy(prim_slab_types).cpu() if isinstance(prim_slab_types, np.ndarray) else prim_slab_types.cpu() if isinstance(prim_slab_types, torch.Tensor) else torch.tensor(prim_slab_types).cpu(),
+                                        "ads_atom_types": torch.from_numpy(ads_types).cpu() if isinstance(ads_types, np.ndarray) else ads_types.cpu() if isinstance(ads_types, torch.Tensor) else torch.tensor(ads_types).cpu(),
+                                        "prim_slab_atom_mask": torch.from_numpy(prim_slab_mask).cpu() if isinstance(prim_slab_mask, np.ndarray) else prim_slab_mask.cpu() if isinstance(prim_slab_mask, torch.Tensor) else torch.tensor(prim_slab_mask).cpu(),
+                                        "ads_atom_mask": torch.from_numpy(ads_mask).cpu() if isinstance(ads_mask, np.ndarray) else ads_mask.cpu() if isinstance(ads_mask, torch.Tensor) else torch.tensor(ads_mask).cpu(),
                                         "original_dataset_idx": int(original_dataset_idx),
                                         "sample_in_item": int(sample_in_item),
                                         "batch_idx": int(batch_idx),
@@ -518,65 +469,49 @@ def generate_samples_and_save_valid(
                                         "failed_check": str(failed_check),
                                     }
                                     torch.save(invalid_sample_data, invalid_pt_path, _use_new_zipfile_serialization=True)
-                                    
                                 except Exception as e:
                                     if rank == 0:
                                         print(f"\n[WARNING] Failed to save invalid sample {original_dataset_idx} to {failed_check}: {e}")
                     
                     if is_valid:
-                        # Save valid structure with tag information preserved
-                        # For num_samples > 1, save to subdirectory based on sample_in_item
-                        # For num_samples = 1, save directly to output_path
                         if num_samples > 1:
-                            # Save to: output_dir/{sample_in_item}/{original_dataset_idx}.traj
                             traj_path = sample_dirs[sample_in_item] / f"{original_dataset_idx}.traj"
                         else:
-                            # Save to: output_dir/{original_dataset_idx}.traj
                             traj_path = output_path / f"{original_dataset_idx}.traj"
                         
-                        # If save_trajectory is True, save full trajectory
                         if save_trajectory and "prim_slab_coord_trajectory" in out:
-                            # Get trajectory tensors (keep as torch.Tensor for .pt file saving)
-                            traj_prim_slab_coords_tensor = out["prim_slab_coord_trajectory"]  # (num_steps, B*M, N, 3) - torch.Tensor
-                            traj_ads_coords_tensor = out["ads_coord_trajectory"]  # (num_steps, B*M, A, 3) - torch.Tensor
-                            traj_lattices_tensor = out["lattice_trajectory"]  # (num_steps, B*M, 6) - torch.Tensor
-                            traj_supercell_matrices_tensor = out["supercell_matrix_trajectory"]  # (num_steps, B*M, 3, 3) - torch.Tensor
-                            traj_scaling_factors_tensor = out["scaling_factor_trajectory"]  # (num_steps, B*M,) - torch.Tensor
+                            traj_prim_slab_coords_tensor = out["prim_slab_coord_trajectory"]
+                            traj_ads_coords_tensor = out["ads_coord_trajectory"]
+                            traj_lattices_tensor = out["lattice_trajectory"]
+                            traj_supercell_matrices_tensor = out["supercell_matrix_trajectory"]
+                            traj_scaling_factors_tensor = out["scaling_factor_trajectory"]
                             
-                            # Get prim_slab_element_trajectory if dng=True
                             traj_prim_slab_element_tensor = None
                             traj_prim_slab_elements = None
                             if model_dng and "prim_slab_element_trajectory" in out:
-                                traj_prim_slab_element_tensor = out["prim_slab_element_trajectory"]  # (num_steps, B*M, N) - torch.Tensor
-                                traj_prim_slab_elements = to_numpy(traj_prim_slab_element_tensor)  # (num_steps, B*M, N)
+                                traj_prim_slab_element_tensor = out["prim_slab_element_trajectory"]
+                                traj_prim_slab_elements = to_numpy(traj_prim_slab_element_tensor)
                             
-                            # Convert to numpy for assemble
-                            traj_prim_slab_coords = to_numpy(traj_prim_slab_coords_tensor)  # (num_steps, B*M, N, 3)
-                            traj_ads_coords = to_numpy(traj_ads_coords_tensor)  # (num_steps, B*M, A, 3)
-                            traj_lattices = to_numpy(traj_lattices_tensor)  # (num_steps, B*M, 6)
-                            traj_supercell_matrices = to_numpy(traj_supercell_matrices_tensor)  # (num_steps, B*M, 3, 3)
-                            traj_scaling_factors = to_numpy(traj_scaling_factors_tensor)  # (num_steps, B*M,)
+                            traj_prim_slab_coords = to_numpy(traj_prim_slab_coords_tensor)
+                            traj_ads_coords = to_numpy(traj_ads_coords_tensor)
+                            traj_lattices = to_numpy(traj_lattices_tensor)
+                            traj_supercell_matrices = to_numpy(traj_supercell_matrices_tensor)
+                            traj_scaling_factors = to_numpy(traj_scaling_factors_tensor)
                             
                             num_steps = traj_prim_slab_coords.shape[0]
                             trajectory_structures = []
                             
                             for step_idx in range(num_steps):
-                                step_prim_slab_coords = traj_prim_slab_coords[step_idx, sample_idx]  # (N, 3)
-                                step_ads_coords = traj_ads_coords[step_idx, sample_idx]  # (A, 3)
-                                step_lattice = traj_lattices[step_idx, sample_idx]  # (6,)
-                                step_supercell_matrix = traj_supercell_matrices[step_idx, sample_idx]  # (3, 3)
-                                step_scaling_factor = traj_scaling_factors[step_idx, sample_idx]  # scalar
+                                step_prim_slab_coords = traj_prim_slab_coords[step_idx, sample_idx]
+                                step_ads_coords = traj_ads_coords[step_idx, sample_idx]
+                                step_lattice = traj_lattices[step_idx, sample_idx]
+                                step_supercell_matrix = traj_supercell_matrices[step_idx, sample_idx]
+                                step_scaling_factor = traj_scaling_factors[step_idx, sample_idx]
                                 
-                                # Use step-specific prim_slab_element_t if available (dng=True), otherwise use final prim_slab_types
                                 if traj_prim_slab_elements is not None:
-                                    # Use step-specific element types (may contain MASK tokens = 0)
-                                    # ASE recognizes 0 as virtual element "X" and displays it in black
-                                    step_prim_slab_types = traj_prim_slab_elements[step_idx, sample_idx]  # (N,)
+                                    step_prim_slab_types = traj_prim_slab_elements[step_idx, sample_idx]
                                 else:
-                                    step_prim_slab_types = prim_slab_types  # (N,) - use final value for dng=False
-                                
-                                # # Convert np.int64 to Python int for assemble function
-                                # step_prim_slab_types = [int(x) for x in step_prim_slab_types]
+                                    step_prim_slab_types = prim_slab_types
                                 
                                 try:
                                     step_system, _ = assemble(
@@ -591,39 +526,30 @@ def generate_samples_and_save_valid(
                                         ads_atom_mask=ads_mask,
                                     )
                                     trajectory_structures.append(step_system)
-                                except Exception as e:
-                                    # If a step fails, skip it but continue with other steps
-                                    if rank == 0:
-                                        print(f"\n[WARNING] Failed to assemble trajectory step {step_idx} for sample {original_dataset_idx}: {e}")
+                                except Exception:
                                     continue
                             
-                            # Write all trajectory steps to traj file
                             if trajectory_structures:
                                 ase_write(str(traj_path), trajectory_structures, format="traj")
                             
-                            # Save trajectory tensors to .pt file
-                            # Extract trajectory for this specific sample: (num_steps, ...) -> (num_steps, ...)
                             sample_trajectory = {
-                                "prim_slab_coord_trajectory": traj_prim_slab_coords_tensor[:, sample_idx, :, :].cpu(),  # (num_steps, N, 3)
-                                "ads_coord_trajectory": traj_ads_coords_tensor[:, sample_idx, :, :].cpu(),  # (num_steps, A, 3)
-                                "lattice_trajectory": traj_lattices_tensor[:, sample_idx, :].cpu(),  # (num_steps, 6)
-                                "supercell_matrix_trajectory": traj_supercell_matrices_tensor[:, sample_idx, :, :].cpu(),  # (num_steps, 3, 3)
-                                "scaling_factor_trajectory": traj_scaling_factors_tensor[:, sample_idx].cpu(),  # (num_steps,)
-                                "prim_slab_atom_types": torch.from_numpy(prim_slab_types).cpu() if isinstance(prim_slab_types, np.ndarray) else prim_slab_types.cpu() if isinstance(prim_slab_types, torch.Tensor) else prim_slab_types,  # (N,)
-                                "ads_atom_types": torch.from_numpy(ads_types).cpu() if isinstance(ads_types, np.ndarray) else ads_types.cpu() if isinstance(ads_types, torch.Tensor) else ads_types,  # (A,)
-                                "prim_slab_atom_mask": torch.from_numpy(prim_slab_mask).cpu() if isinstance(prim_slab_mask, np.ndarray) else prim_slab_mask.cpu() if isinstance(prim_slab_mask, torch.Tensor) else prim_slab_mask,  # (N,)
-                                "ads_atom_mask": torch.from_numpy(ads_mask).cpu() if isinstance(ads_mask, np.ndarray) else ads_mask.cpu() if isinstance(ads_mask, torch.Tensor) else ads_mask,  # (A,)
+                                "prim_slab_coord_trajectory": traj_prim_slab_coords_tensor[:, sample_idx, :, :].cpu(),
+                                "ads_coord_trajectory": traj_ads_coords_tensor[:, sample_idx, :, :].cpu(),
+                                "lattice_trajectory": traj_lattices_tensor[:, sample_idx, :].cpu(),
+                                "supercell_matrix_trajectory": traj_supercell_matrices_tensor[:, sample_idx, :, :].cpu(),
+                                "scaling_factor_trajectory": traj_scaling_factors_tensor[:, sample_idx].cpu(),
+                                "prim_slab_atom_types": torch.from_numpy(prim_slab_types).cpu() if isinstance(prim_slab_types, np.ndarray) else prim_slab_types.cpu() if isinstance(prim_slab_types, torch.Tensor) else prim_slab_types,
+                                "ads_atom_types": torch.from_numpy(ads_types).cpu() if isinstance(ads_types, np.ndarray) else ads_types.cpu() if isinstance(ads_types, torch.Tensor) else ads_types,
+                                "prim_slab_atom_mask": torch.from_numpy(prim_slab_mask).cpu() if isinstance(prim_slab_mask, np.ndarray) else prim_slab_mask.cpu() if isinstance(prim_slab_mask, torch.Tensor) else prim_slab_mask,
+                                "ads_atom_mask": torch.from_numpy(ads_mask).cpu() if isinstance(ads_mask, np.ndarray) else ads_mask.cpu() if isinstance(ads_mask, torch.Tensor) else ads_mask,
                             }
                             
-                            # Add prim_slab_element_trajectory if dng=True
                             if traj_prim_slab_element_tensor is not None:
-                                sample_trajectory["prim_slab_element_trajectory"] = traj_prim_slab_element_tensor[:, sample_idx, :].cpu()  # (num_steps, N)
+                                sample_trajectory["prim_slab_element_trajectory"] = traj_prim_slab_element_tensor[:, sample_idx, :].cpu()
                             
-                            # Save to .pt file (same path as traj but with .pt extension)
                             pt_path = traj_path.with_suffix('.pt')
                             torch.save(sample_trajectory, pt_path)
                         else:
-                            # Save only final structure
                             ase_write(str(traj_path), recon_system, format="traj")
                         
                         total_valid += 1
@@ -634,7 +560,7 @@ def generate_samples_and_save_valid(
                     
                 except Exception as e:
                     if rank == 0:
-                        print(f"\n[WARNING] Failed to process sample (batch {batch_idx}, sample {sample_idx}, original_idx {original_dataset_idx}, sample_in_item {sample_in_item}): {e}")
+                        print(f"\n[WARNING] Failed to process sample (batch {batch_idx}, sample {sample_idx}): {e}")
                     total_failed += 1
                     total_processed += 1
                     continue
@@ -678,7 +604,6 @@ def generate_samples_and_save_valid(
         print(f"  - Failed (assemble/error): {total_failed}")
         print(f"  - Structural validity rate: {validity_rate:.2f}%")
         
-        # Validity check breakdown
         if total_invalid > 0:
             print(f"\n[VALIDITY CHECK BREAKDOWN]")
             print(f"  Total invalid samples: {total_invalid}")
@@ -686,25 +611,40 @@ def generate_samples_and_save_valid(
                 print(f"  - Volume check failed: {validity_stats['vol_failed']} ({validity_stats['vol_failed']/total_invalid*100:.2f}%) → saved to vol_invalid/ (.traj + .pt)")
                 print(f"  - Distance check failed: {validity_stats['dist_failed']} ({validity_stats['dist_failed']/total_invalid*100:.2f}%) → saved to dist_invalid/ (.traj + .pt)")
                 print(f"  - Height check failed: {validity_stats['height_failed']} ({validity_stats['height_failed']/total_invalid*100:.2f}%) → saved to height_invalid/ (.traj + .pt)")
-                print(f"  - Crystal connectivity failed: {validity_stats['crystal_failed']} ({validity_stats['crystal_failed']/total_invalid*100:.2f}%) → saved to crystal_invalid/ (.traj + .pt)")
                 print(f"  - Assembly failed: {validity_stats['assemble_failed']} ({validity_stats['assemble_failed']/total_invalid*100:.2f}%) → saved to assemble_failed/ (.pt only)")
-                print(f"  Note: A sample may fail multiple checks and be saved to multiple directories")
-                print(f"        Each invalid sample is saved as .traj (assembled structure, if possible) and .pt (all model outputs)")
             else:
                 print(f"  - Volume check failed: {validity_stats['vol_failed']} ({validity_stats['vol_failed']/total_invalid*100:.2f}%)")
                 print(f"  - Distance check failed: {validity_stats['dist_failed']} ({validity_stats['dist_failed']/total_invalid*100:.2f}%)")
                 print(f"  - Height check failed: {validity_stats['height_failed']} ({validity_stats['height_failed']/total_invalid*100:.2f}%)")
-                print(f"  - Crystal connectivity failed: {validity_stats['crystal_failed']} ({validity_stats['crystal_failed']/total_invalid*100:.2f}%)")
                 print(f"  - Assembly failed: {validity_stats['assemble_failed']} ({validity_stats['assemble_failed']/total_invalid*100:.2f}%)")
-                print(f"  Note: A sample may fail multiple checks. Use --save_invalid to save invalid samples.")
         
         print(f"\n[OUTPUT]")
         print(f"  - Output directory: {output_path}")
         if world_size > 1:
             print(f"  - Rank: {rank}/{world_size}")
         print("=" * 50)
+        
+        # [NEW] Save stats.json here, ensuring it runs for both single-GPU/DP and DDP rank 0
+        stats_file_path = output_path / "stats.json"
+        
+        class NumpyEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, np.integer):
+                    return int(obj)
+                if isinstance(obj, np.floating):
+                    return float(obj)
+                if isinstance(obj, np.ndarray):
+                    return obj.tolist()
+                return super(NumpyEncoder, self).default(obj)
+        
+        try:
+            with open(stats_file_path, 'w') as f:
+                json.dump(results, f, indent=4, cls=NumpyEncoder)
+            print(f"[INFO] Statistics saved to: {stats_file_path}")
+        except Exception as e:
+            print(f"[WARNING] Failed to save statistics json: {e}")
+
     else:
-        # For non-zero ranks, print minimal summary
         print(f"\n[Rank {rank}] Saved {total_valid} valid samples out of {total_processed} processed ({saved_rate:.2f}%)")
     
     return results
@@ -793,14 +733,12 @@ def main():
     
     args = parser.parse_args()
     
-    # Check for DDP environment variables
     use_ddp = args.use_ddp
     rank = 0
     world_size = 1
     local_rank = 0
     
     if use_ddp:
-        # Check if running with torchrun
         if "RANK" in os.environ and "WORLD_SIZE" in os.environ:
             rank = int(os.environ["RANK"])
             world_size = int(os.environ["WORLD_SIZE"])
@@ -812,10 +750,8 @@ def main():
             print("[WARNING] --use_ddp specified but not running with torchrun. Falling back to DataParallel.")
             use_ddp = False
     
-    # Load model (pass local_rank for DDP)
     model = load_model(args.checkpoint, device=args.device, use_ddp=use_ddp, local_rank=local_rank)
     
-    # For DDP, wrap model
     if use_ddp and world_size > 1:
         model = torch.nn.parallel.DistributedDataParallel(
             model,
@@ -825,14 +761,12 @@ def main():
         )
         print(f"[INFO] Model wrapped with DDP on rank {rank} (local_rank {local_rank})")
     
-    # Load dataloader
     dataloader = load_val_dataloader(
         val_lmdb_path=args.val_lmdb_path,
         batch_size=args.batch_size,
         num_workers=args.num_workers,
     )
     
-    # For DDP, wrap dataloader with DistributedSampler
     sampler = None
     if use_ddp and world_size > 1:
         from torch.utils.data.distributed import DistributedSampler
@@ -851,7 +785,6 @@ def main():
             pin_memory=dataloader.pin_memory,
         )
     
-    # Generate samples and save valid ones
     results = generate_samples_and_save_valid(
         model=model,
         dataloader=dataloader,
@@ -868,26 +801,21 @@ def main():
         save_invalid=args.save_invalid,
     )
     
-    # For DDP, aggregate results from all ranks
     if use_ddp and world_size > 1:
-        # Gather results from all ranks
         import torch.distributed as dist
         gathered_results = [None] * world_size
         dist.all_gather_object(gathered_results, results)
         
         if rank == 0:
-            # Aggregate statistics
             total_processed_all = sum(r["total_processed"] for r in gathered_results)
             total_valid_all = sum(r["total_valid"] for r in gathered_results)
             total_invalid_all = sum(r["total_invalid"] for r in gathered_results)
             total_failed_all = sum(r["total_failed"] for r in gathered_results)
             
-            # Aggregate validity stats
             validity_stats_all = {
                 'vol_failed': sum(r["validity_stats"]['vol_failed'] for r in gathered_results),
                 'dist_failed': sum(r["validity_stats"]['dist_failed'] for r in gathered_results),
                 'height_failed': sum(r["validity_stats"]['height_failed'] for r in gathered_results),
-                'crystal_failed': sum(r["validity_stats"]['crystal_failed'] for r in gathered_results),
                 'assemble_failed': sum(r["validity_stats"]['assemble_failed'] for r in gathered_results),
             }
             
@@ -898,48 +826,19 @@ def main():
             print("FINAL AGGREGATED RESULTS (All Ranks)")
             print("=" * 50)
             print(f"Total processed (all ranks): {total_processed_all}")
-            print(f"\n[FINAL RESULTS]")
-            print(f"  - Total saved samples (valid structures): {total_valid_all}")
-            print(f"  - Total saved sample rate: {saved_rate_all:.2f}% ({total_valid_all}/{total_processed_all})")
-            print(f"\n[BREAKDOWN]")
-            print(f"  - Valid structures saved: {total_valid_all}")
-            print(f"  - Invalid structures (not saved): {total_invalid_all}")
-            print(f"  - Failed (assemble/error): {total_failed_all}")
-            print(f"  - Structural validity rate: {validity_rate_all:.2f}%")
+            print(f"  - Total saved: {total_valid_all}")
+            print(f"  - Validity rate: {validity_rate_all:.2f}%")
             
-            # Validity check breakdown (aggregated)
-            if total_invalid_all > 0:
-                print(f"\n[VALIDITY CHECK BREAKDOWN]")
-                print(f"  Total invalid samples: {total_invalid_all}")
-                if args.save_invalid:
-                    print(f"  - Volume check failed: {validity_stats_all['vol_failed']} ({validity_stats_all['vol_failed']/total_invalid_all*100:.2f}%) → saved to vol_invalid/ (.traj + .pt)")
-                    print(f"  - Distance check failed: {validity_stats_all['dist_failed']} ({validity_stats_all['dist_failed']/total_invalid_all*100:.2f}%) → saved to dist_invalid/ (.traj + .pt)")
-                    print(f"  - Height check failed: {validity_stats_all['height_failed']} ({validity_stats_all['height_failed']/total_invalid_all*100:.2f}%) → saved to height_invalid/ (.traj + .pt)")
-                    print(f"  - Crystal connectivity failed: {validity_stats_all['crystal_failed']} ({validity_stats_all['crystal_failed']/total_invalid_all*100:.2f}%) → saved to crystal_invalid/ (.traj + .pt)")
-                    print(f"  - Assembly failed: {validity_stats_all['assemble_failed']} ({validity_stats_all['assemble_failed']/total_invalid_all*100:.2f}%) → saved to assemble_failed/ (.pt only)")
-                    print(f"  Note: A sample may fail multiple checks and be saved to multiple directories")
-                    print(f"        Each invalid sample is saved as .traj (assembled structure, if possible) and .pt (all model outputs)")
-                else:
-                    print(f"  - Volume check failed: {validity_stats_all['vol_failed']} ({validity_stats_all['vol_failed']/total_invalid_all*100:.2f}%)")
-                    print(f"  - Distance check failed: {validity_stats_all['dist_failed']} ({validity_stats_all['dist_failed']/total_invalid_all*100:.2f}%)")
-                    print(f"  - Height check failed: {validity_stats_all['height_failed']} ({validity_stats_all['height_failed']/total_invalid_all*100:.2f}%)")
-                    print(f"  - Crystal connectivity failed: {validity_stats_all['crystal_failed']} ({validity_stats_all['crystal_failed']/total_invalid_all*100:.2f}%)")
-                    print(f"  - Assembly failed: {validity_stats_all['assemble_failed']} ({validity_stats_all['assemble_failed']/total_invalid_all*100:.2f}%)")
-                    print(f"  Note: A sample may fail multiple checks. Use --save_invalid to save invalid samples.")
+            # Note: We don't save stats.json here for the aggregated results to avoid conflict with the per-rank file 
+            # saved inside the function. If needed, save to 'stats_aggregated.json'.
             
             print(f"\n[OUTPUT]")
             print(f"  - Output directory: {Path(args.output_dir)}")
-            print(f"  - Number of GPUs used: {world_size}")
             print("=" * 50)
         
         torch.distributed.destroy_process_group()
-    elif not use_ddp:
-        # Single GPU or DataParallel - results already printed
-        pass
     
     return results
 
-
 if __name__ == "__main__":
     main()
-

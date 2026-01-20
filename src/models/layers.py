@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from torch import nn
 from torch.nn import Module
 
-from src.models.utils import LinearNoBias
+from src.models.utils import LinearNoBias, center_random_augmentation
 from src.models.transformers import DiT, PositionalEmbedder
 
 # Number of elements for one-hot encoding (covers most elements in periodic table)
@@ -15,6 +15,70 @@ NUM_ELEMENTS = 100
 # Discrete Flow Matching constants (for dng=True mode)
 MASK_TOKEN_INDEX = 0  # Mask token index (used as prior in DFM)
 NUM_ELEMENTS_WITH_MASK = NUM_ELEMENTS + 1  # 101 (0=MASK, 1-100=elements)
+
+
+def lattice_params_to_matrix_torch(lengths, angles):
+    """
+    lengths: (B, 3) a, b, c
+    angles: (B, 3) alpha, beta, gamma (in degrees)
+    Returns: (B, 3, 3) Cell matrix (rows are lattice vectors)
+    """
+    a, b, c = lengths[:, 0], lengths[:, 1], lengths[:, 2]
+    alpha, beta, gamma = angles[:, 0], angles[:, 1], angles[:, 2]
+    
+    zeros = torch.zeros_like(a)
+    
+    # Deg to Rad
+    alpha_rad = alpha * torch.pi / 180.0
+    beta_rad = beta * torch.pi / 180.0
+    gamma_rad = gamma * torch.pi / 180.0
+    
+    val = (torch.cos(alpha_rad) * torch.cos(beta_rad) - torch.cos(gamma_rad)) / (torch.sin(alpha_rad) * torch.sin(beta_rad))
+    # Clamp val to avoid nan in sqrt
+    val = torch.clamp(val, -1.0, 1.0)
+    
+    gamma_star = torch.acos(val)
+    
+    vector_a = torch.stack([a * torch.sin(beta_rad), zeros, a * torch.cos(beta_rad)], dim=1)
+    vector_b = torch.stack([-b * torch.sin(alpha_rad) * torch.cos(gamma_star), b * torch.sin(alpha_rad) * torch.sin(gamma_star), b * torch.cos(alpha_rad)], dim=1)
+    vector_c = torch.stack([zeros, zeros, c], dim=1)
+    
+    return torch.stack([vector_a, vector_b, vector_c], dim=1)
+
+
+class GaussianRBF(nn.Module):
+    def __init__(self, n_rbf=24, cutoff=4.0, start=0.0):
+        super().__init__()
+        self.cutoff = cutoff
+        self.centers = nn.Parameter(torch.linspace(start, cutoff, n_rbf), requires_grad=False)
+        self.gamma = nn.Parameter(torch.tensor(0.5), requires_grad=False)
+
+    def forward(self, dists, mask):
+        # dists: (B, M, M)
+        # mask: (B, M)
+        
+        dists_expanded = dists.unsqueeze(-1)
+        centers = self.centers.view(1, 1, 1, -1)
+        
+        # (B, M, M, n_rbf)
+        rbf = torch.exp(-self.gamma * (dists_expanded - centers)**2)
+        
+        # Masking
+        pair_mask = mask.unsqueeze(2) * mask.unsqueeze(1) 
+        
+        # Self-interaction exclusion
+        B, M = mask.shape
+        identity = torch.eye(M, device=mask.device).unsqueeze(0).expand(B, -1, -1)
+        pair_mask = pair_mask * (1 - identity)
+        
+        rbf = rbf * pair_mask.unsqueeze(-1)
+        
+        # Mask-Normalized Mean Aggregation
+        rbf_sum = rbf.sum(dim=2)
+        neighbor_counts = pair_mask.sum(dim=2, keepdim=True)
+        rbf_mean = rbf_sum / (neighbor_counts + 1e-8)
+        
+        return rbf_mean
 
 
 class AtomAttentionEncoder(Module):
@@ -33,11 +97,7 @@ class AtomAttentionEncoder(Module):
     
     Note:
         Internally reconstructs ads_x_t = ads_center_t + ads_rel_pos_t for position embedding.
-    
-    Output:
-        - joint representation: (B, N+M, atom_s)
     """
-    
     def __init__(
         self,
         atom_s,
@@ -54,34 +114,31 @@ class AtomAttentionEncoder(Module):
         self.dng = dng
         self.use_energy_cond = use_energy_cond
 
-        # Prim slab features: atom_pad_mask (1) + element one-hot
-        # dng=True: includes MASK token (NUM_ELEMENTS_WITH_MASK = 101)
-        # dng=False: no MASK token (NUM_ELEMENTS = 100)
+        # 1. Base Feature Embedding
         if dng:
-            prim_slab_feature_dim = 1 + NUM_ELEMENTS_WITH_MASK  # 102
+            prim_slab_feature_dim = 1 + NUM_ELEMENTS_WITH_MASK
         else:
-            prim_slab_feature_dim = 1 + NUM_ELEMENTS  # 101
+            prim_slab_feature_dim = 1 + NUM_ELEMENTS
         self.embed_prim_slab_features = LinearNoBias(prim_slab_feature_dim, atom_s)
         
-        # Adsorbate features: ref_pos (3) + atom_pad_mask (1) + element one-hot (NUM_ELEMENTS)
         ads_feature_dim = 3 + 1 + NUM_ELEMENTS
         self.embed_ads_features = LinearNoBias(ads_feature_dim, atom_s)
 
-        self.positional_encoding = positional_encoding
-        if self.positional_encoding:
-            self.pos_emb = PositionalEmbedder(atom_s)
+        # 2. Coordinate Embeddings
+        self.x_to_q_trans = LinearNoBias(3, atom_s) 
+        
+        # RBF Density Embedding (Adsorbate Only)
+        self.rbf_fn = GaussianRBF(n_rbf=24, cutoff=4.0)
+        self.rbf_to_q_trans = LinearNoBias(24, atom_s)
+        self.rbf_gate = nn.Parameter(torch.tensor(0.1))
 
-        # Position embedding for noisy coords
-        self.x_to_q_trans = LinearNoBias(3, atom_s)
-
-        # Lattice is 6-dimensional (a, b, c, alpha, beta, gamma)
+        # 3. Global Condition Embeddings
         self.l_to_q_trans = LinearNoBias(6, atom_s)
-
-        # Supercell matrix is 9-dimensional (flattened 3x3)
         self.sm_to_q_trans = LinearNoBias(9, atom_s)
-
-        # Scaling factor is scalar (1-dimensional)
         self.sf_to_q_trans = LinearNoBias(1, atom_s)
+        
+        # Explicit Supercell Lattice Embedding
+        self.super_l_to_q_trans = LinearNoBias(9, atom_s)
 
         self.atom_encoder = DiT(
             dim=atom_s,
@@ -109,130 +166,95 @@ class AtomAttentionEncoder(Module):
             q: (B*mult, N+M, atom_s) joint atom representations
             n_prim_slab: int, number of prim_slab atoms (N)
             n_ads: int, number of adsorbate atoms (M)
-        """
+        """        
         B, N, _ = feats["prim_slab_cart_coords"].shape
         M = feats["ads_cart_coords"].shape[1]
-        
-        prim_slab_mask = feats["prim_slab_atom_pad_mask"].bool()
-        ads_mask = feats["ads_atom_pad_mask"].bool()
 
-        # === Prim slab features ===
-        # Features: atom_pad_mask (1) + element one-hot
-        # dng=True: prim_slab_element_t is integer tensor (0=MASK, 1-100=elements) → one-hot with MASK
-        # dng=False: use ref_prim_slab_element directly → one-hot without MASK
+        # --- 1. Basic Node Featurization ---
         if prim_slab_element_t is not None and self.dng:
-            # dng=True: prim_slab_element_t is integer tensor (B*mult, N_actual)
-            # Values: 0=MASK, 1-100=element atomic numbers
-            B_mult = prim_slab_element_t.shape[0]
-            N_actual = prim_slab_element_t.shape[1]
-            B_x, N_x, _ = prim_slab_x_t.shape
-            
-            # Ensure N_actual matches prim_slab_x_t
-            if N_actual != N_x:
-                N_actual = N_x
-                prim_slab_element_t = prim_slab_element_t[:, :N_actual]
-            
-            # Convert integer tensor to one-hot with MASK token
-            # prim_slab_element_t: (B*mult, N_actual) integer tensor (0=MASK, 1-100=elements)
-            prim_slab_element_onehot = F.one_hot(
-                prim_slab_element_t.clamp(0, NUM_ELEMENTS_WITH_MASK - 1).long(),
-                num_classes=NUM_ELEMENTS_WITH_MASK
-            ).float()  # (B*mult, N_actual, NUM_ELEMENTS_WITH_MASK)
-            
-            # mask needs multiplicity applied and sliced to match N_actual
-            prim_slab_mask_for_feats = feats["prim_slab_atom_pad_mask"].repeat_interleave(multiplicity, 0)
-            prim_slab_mask_for_feats = prim_slab_mask_for_feats[:, :N_actual]
-            
-            # Update N to N_actual for later use
-            N = N_actual
+             # Handle DNG case (Discrete Flow Matching)
+             B_mult = prim_slab_element_t.shape[0]
+             N_actual = prim_slab_element_t.shape[1]
+             prim_slab_element_onehot = F.one_hot(prim_slab_element_t.clamp(0, NUM_ELEMENTS_WITH_MASK - 1).long(), num_classes=NUM_ELEMENTS_WITH_MASK).float()
+             
+             # Expand and slice mask
+             prim_slab_mask_for_feats = feats["prim_slab_atom_pad_mask"].repeat_interleave(multiplicity, 0)
+             if prim_slab_mask_for_feats.shape[1] > N_actual:
+                 prim_slab_mask_for_feats = prim_slab_mask_for_feats[:, :N_actual]
+             
+             N = N_actual
         else:
-            # dng=False: existing approach (no MASK token)
-            prim_slab_element_onehot = F.one_hot(
-                feats["ref_prim_slab_element"].clamp(0, NUM_ELEMENTS - 1), 
-                num_classes=NUM_ELEMENTS
-            ).float()  # (B, N, NUM_ELEMENTS)
-            prim_slab_mask_for_feats = feats["prim_slab_atom_pad_mask"]  # (B, N)
+             prim_slab_element_onehot = F.one_hot(feats["ref_prim_slab_element"].clamp(0, NUM_ELEMENTS - 1), num_classes=NUM_ELEMENTS).float()
+             prim_slab_mask_for_feats = feats["prim_slab_atom_pad_mask"]
+
+        prim_slab_feats = torch.cat([prim_slab_mask_for_feats.unsqueeze(-1), prim_slab_element_onehot], dim=-1)
+        c_prim_slab = self.embed_prim_slab_features(prim_slab_feats)
         
-        prim_slab_feats = torch.cat([
-            prim_slab_mask_for_feats.unsqueeze(-1),  # (B*mult, N, 1) or (B, N, 1)
-            prim_slab_element_onehot,  # (B*mult, N, NUM_ELEMENTS) or (B, N, NUM_ELEMENTS)
-        ], dim=-1)
-        
-        c_prim_slab = self.embed_prim_slab_features(prim_slab_feats)  # (B*mult, N, atom_s) or (B, N, atom_s)
-        
-        # Apply multiplicity only when not in dng mode with prim_slab_element_t
         if prim_slab_element_t is None or not self.dng:
-            # Existing approach: (B, N, atom_s) -> (B*mult, N, atom_s)
             c_prim_slab = c_prim_slab.repeat_interleave(multiplicity, 0)
-        
-        # === Adsorbate features ===
-        # Features: atom_pad_mask (1) + element one-hot (NUM_ELEMENTS)
-        ads_element_onehot = F.one_hot(
-            feats["ref_ads_element"].clamp(0, NUM_ELEMENTS - 1), 
-            num_classes=NUM_ELEMENTS
-        ).float()  # (B, M, NUM_ELEMENTS)
-        
-        ref_ads_pos = feats["ref_ads_pos"]  # (B, M, 3)
-        ads_mask_float = feats["ads_atom_pad_mask"]  # (B, M)
-        
-        from src.models.utils import center_random_augmentation
-        ref_ads_pos_augmented = center_random_augmentation(
-            ref_ads_pos,
-            ads_mask_float,
-            s_trans=0.0,
-            augmentation=True,
-            centering=True,
-        )  # (B, M, 3)
-        
-        ads_feats = torch.cat([
-            ref_ads_pos_augmented,  # (B, M, 3) - reference positions
-            feats["ads_atom_pad_mask"].unsqueeze(-1),  # (B, M, 1)
-            ads_element_onehot,  # (B, M, NUM_ELEMENTS)
-        ], dim=-1)
-        
-        c_ads = self.embed_ads_features(ads_feats)  # (B, M, atom_s)
-        # ads always needs multiplicity applied
-        c_ads = c_ads.repeat_interleave(multiplicity, 0)  # (B*mult, M, atom_s)
 
-        # === Concat prim_slab and adsorbate ===
-        # Now both c_prim_slab and c_ads are in (B*mult, ...) format
-        # N may have been updated to N_actual in dng=True branch
-        c = torch.cat([c_prim_slab, c_ads], dim=1)  # (B*mult, N+M, atom_s)
-        joint_mask = torch.cat([prim_slab_mask_for_feats, ads_mask.repeat_interleave(multiplicity, 0)], dim=1)  # (B*mult, N+M)
+        ads_element_onehot = F.one_hot(feats["ref_ads_element"].clamp(0, NUM_ELEMENTS - 1), num_classes=NUM_ELEMENTS).float()
+        
+        # Center random augmentation for adsorbate positions during training
+        ref_ads_pos_centered = center_random_augmentation(feats["ref_ads_pos"], feats["ads_atom_pad_mask"], s_trans=0.0, augmentation=True, centering=True)
+        
+        ads_feats = torch.cat([ref_ads_pos_centered, feats["ads_atom_pad_mask"].unsqueeze(-1), ads_element_onehot], dim=-1)
+        c_ads = self.embed_ads_features(ads_feats).repeat_interleave(multiplicity, 0)
 
+        c = torch.cat([c_prim_slab, c_ads], dim=1)
+        
+        # Create joint mask
+        ads_mask_expanded = feats["ads_atom_pad_mask"].repeat_interleave(multiplicity, 0)
+        joint_mask = torch.cat([prim_slab_mask_for_feats, ads_mask_expanded], dim=1)
+        
         q = c
 
-        # === Add noisy positions ===
-        # Reconstruct absolute adsorbate coordinates: ads_x_t = ads_center_t + ads_rel_pos_t
-        ads_x_t = ads_center_t.unsqueeze(1) + ads_rel_pos_t  # (B*mult, M, 3)
+        # --- 2. Coordinate Handling ---
+        # Reconstruct Full Noisy Coordinates: ads_x_t = center + rel_pos
+        ads_x_t = ads_center_t.unsqueeze(1) + ads_rel_pos_t
         
-        # Concat noisy coords: prim_slab_x_t (B*mult, N, 3) + ads_x_t (B*mult, M, 3)
-        # Ensure prim_slab_x_t matches N (may need slicing if N was updated)
-        if prim_slab_x_t.shape[1] != N:
+        # Slice prim_slab_x_t if needed (for DNG)
+        if prim_slab_x_t.shape[1] != N: 
             prim_slab_x_t = prim_slab_x_t[:, :N, :]
+            
         x_t = torch.cat([prim_slab_x_t, ads_x_t], dim=1)  # (B*mult, N+M, 3)
+
+        # Coordinate Embedding
         q = q + self.x_to_q_trans(x_t)
 
-        # Add noisy lattice (l_t is (B*mult, 6): a, b, c, alpha, beta, gamma)
+        ads_coords_only = x_t[:, N:, :]
+        ads_dists = torch.cdist(ads_coords_only, ads_coords_only)
+        
+        rbf_feats_ads = self.rbf_fn(ads_dists, ads_mask_expanded)
+        rbf_embed_ads = self.rbf_to_q_trans(rbf_feats_ads)
+        
+        q[:, N:, :] = q[:, N:, :] + self.rbf_gate * rbf_embed_ads
+
+        # --- 3. Global Conditions ---
         l_embed = self.l_to_q_trans(l_t)
         q = q + rearrange(l_embed, "b d -> b 1 d")
-
-        # Add noisy supercell matrix (sm_t is (B*mult, 3, 3) -> flatten to (B*mult, 9))
-        sm_flat = rearrange(sm_t, "b i j -> b (i j)")  # (B*mult, 9)
+        
+        sm_flat = rearrange(sm_t, "b i j -> b (i j)")
         sm_embed = self.sm_to_q_trans(sm_flat)
         q = q + rearrange(sm_embed, "b d -> b 1 d")
 
-        # Add noisy scaling factor (sf_t is (B*mult,) -> expand to (B*mult, 1))
-        sf_embed = self.sf_to_q_trans(sf_t.unsqueeze(-1))  # (B*mult, atom_s)
+        sf_embed = self.sf_to_q_trans(sf_t.unsqueeze(-1))
         q = q + rearrange(sf_embed, "b d -> b 1 d")
 
-        # Get energy conditioning if enabled
+        # Explicit Supercell Lattice Embedding
+        # Calculate Supercell Lattice: S * L
+        prim_lat_matrix = lattice_params_to_matrix_torch(l_t[:, :3], l_t[:, 3:]) 
+        super_lat_matrix = torch.bmm(sm_t, prim_lat_matrix)
+        super_lat_flat = rearrange(super_lat_matrix, "b i j -> b (i j)")
+        super_lat_embed = self.super_l_to_q_trans(super_lat_flat)
+        q = q + rearrange(super_lat_embed, "b d -> b 1 d")
+
+        # --- 4. Transformer Forward ---
         energy = None
         if self.use_energy_cond and "ref_energy" in feats:
-            energy = feats["ref_energy"].repeat_interleave(multiplicity, 0)  # (B*mult,)
+            energy = feats["ref_energy"].repeat_interleave(multiplicity, 0)
 
-        # Pass through transformer (joint attention over all atoms)
-        q = self.atom_encoder(q, t, joint_mask, energy=energy)  # (B*mult, N+M, atom_s)
+        q = self.atom_encoder(q, t, joint_mask, energy=energy)
 
         return q, N, M
 
@@ -330,6 +352,14 @@ class AtomAttentionDecoder(Module):
             sm_update: (B*mult, 3, 3) supercell matrix updates (normalized)
             sf_update: (B*mult,) scaling factor updates (normalized)
         """
+
+        # print(
+        #     "[DEBUG][Decoder:in]",
+        #     "n_prim_slab:", n_prim_slab,
+        #     "prim_slab_mask:", feats["prim_slab_atom_pad_mask"].shape,
+        #     "ads_mask:", feats["ads_atom_pad_mask"].shape,
+        # )
+
         prim_slab_mask = feats["prim_slab_atom_pad_mask"]
         ads_mask = feats["ads_atom_pad_mask"]
         
@@ -344,6 +374,12 @@ class AtomAttentionDecoder(Module):
             energy = feats["ref_energy"].repeat_interleave(multiplicity, 0)  # (B*mult,)
 
         x = self.atom_decoder(x, t, joint_mask, energy=energy)
+
+        # print(
+        #     "[DEBUG][Decoder:joint_mask]",
+        #     "joint_mask:", joint_mask.shape,
+        #     "x:", x.shape,
+        # )
 
         # Split back to prim_slab and adsorbate
         x_prim_slab = x[:, :n_prim_slab, :]  # (B*mult, N, atom_s)

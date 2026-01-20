@@ -1,12 +1,14 @@
 #!/bin/bash
 
-CUDA_VISIBLE_DEVICES=5,6,7 python save_valid_samples.py \
-    --checkpoint /home/minkyu/MinCatFlow/outputs/ads_mincat_gen/last.ckpt \
-    --val_lmdb_path /home/minkyu/MinCatFlow/dataset_per_adsorbate/val_id/val_id_H-H-C-C-O-O_subset.lmdb \
-    --output_dir unrelaxed_samples/de_novo_generation/C2H2O2/1/ \
+export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6
+
+torchrun --nproc_per_node=7 scripts/save_valid_samples_direct.py \
+    --checkpoint /home/jovyan/mk-catgen-ckpts/gen_430M_final_L1_relpos/epoch=379.ckpt \
+    --val_lmdb_path /home/jovyan/mk-catgen-data/dataset/val_id/dataset.lmdb \
+    --output_dir unrelaxed_samples/dng_traj/ \
     --num_samples 1 \
     --sampling_steps 50 \
-    --batch_size 64 \
-    --num_workers 32 \
-    --use_ddp \
-    --gpus 3
+    --batch_size 128 \
+    --num_workers 128 \
+    --use_ddp
+    --save_trajectory

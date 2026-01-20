@@ -1,13 +1,21 @@
+#!/usr/bin/env python3
+"""
+모든 traj 파일에 대해 relaxation을 수행하고 ref_energy와 비교하는 스크립트
+Multi-GPU 병렬처리 지원
+"""
+
+import os
 import json
 import sys
 import warnings
 from pathlib import Path
-from typing import Dict, Tuple
-from multiprocessing import cpu_count, get_context
+from typing import Dict, Tuple, Optional
+from multiprocessing import Pool, cpu_count, get_context
 import argparse
 import contextlib
 import io
 
+import numpy as np
 from ase import Atoms
 from ase.io import read
 from ase.optimize import LBFGS
@@ -60,6 +68,16 @@ def relaxation_and_compute_adsorption_energy(
     slab: Atoms, 
     adsorbate: Atoms
 ) -> Tuple[float, float, float, float, bool, bool, int, int]:
+    """
+    Relax system and compute adsorption energy.
+    
+    Returns:
+        (e_ads, e_sys, e_slab, e_adsorbate, converged_system, converged_slab, steps_system, steps_slab)
+        converged_system: True if LBFGS optimizer converged, False otherwise
+        converged_slab: True if LBFGS optimizer converged, False otherwise
+        steps_system: Number of optimization steps for system
+        steps_slab: Number of optimization steps for slab
+    """
     try:
         system.calc = calc
         slab.calc = calc
@@ -92,6 +110,7 @@ _worker_gpu_id = None
 _worker_calculator = None
 
 def init_worker(gpu_id: int):
+    """Initialize worker process with specific GPU and shared calculator."""
     global _worker_gpu_id, _worker_calculator
     _worker_gpu_id = gpu_id
     
@@ -108,6 +127,7 @@ def init_worker(gpu_id: int):
     else:
         device_str = "cpu"
     
+    # Initialize calculator once per worker process (shared across all tasks in this worker)
     try:
         _worker_calculator = get_uma_calculator(device=device_str)
     except Exception as e:
@@ -116,36 +136,48 @@ def init_worker(gpu_id: int):
 
 
 def process_single_traj(args: Tuple[str, int]) -> Dict:
+    """
+    Process a single traj file.
+    
+    Args:
+        args: (traj_path, index)
+    
+    Returns:
+        Dict with results: {'index': int, 'success': bool, 'e_ads': float, 'ref_energy': float, 'error': str or None}
+    """
     traj_path, index = args
     
     result = {
         'index': index,
+        'success': False,
         'e_ads': None,
-        'e_sys': None,
-        'e_slab': None,
-        'e_adsorbate': None,
+        'ref_energy': None,
+        'converged': False,
         'converged_system': False,
         'converged_slab': False,
-        'steps_system': 0, 
-        'steps_slab': 0,    
+        'steps_system': 0,
+        'steps_slab': 0,
         'error': None
     }
     
     try:
+        # Use the GPU ID set during worker initialization
         gpu_id = _worker_gpu_id if _worker_gpu_id is not None else -1
         
+        # Set CUDA device for this process if using GPU
         device_str = "cpu"
         if gpu_id >= 0:
             try:
                 import torch
                 if torch.cuda.is_available():
                     torch.cuda.set_device(gpu_id)
-                    device_str = "cuda"
+                    device_str = "cuda"  # fairchem expects "cuda" or "cpu"
                 else:
                     device_str = "cuda" if torch.cuda.is_available() else "cpu"
             except ImportError:
                 device_str = "cpu"
         
+        # Load generated catalyst
         generated_catalyst = read(traj_path)
         generated_catalyst.center()
 
@@ -157,39 +189,53 @@ def process_single_traj(args: Tuple[str, int]) -> Dict:
 
         adsorbate = generated_catalyst.copy()[generated_catalyst.get_tags() == 2]
         
+        # Use shared calculator from worker initialization (reuse across all tasks in this worker)
         calc = _worker_calculator
         if calc is None:
+            # Fallback: create calculator if initialization failed
             calc = get_uma_calculator(device=device_str)
         
-        e_ads, e_sys, e_slab, e_adsorbate, converged_system, converged_slab, steps_sys, steps_slab = relaxation_and_compute_adsorption_energy(
+        # Compute adsorption energy
+        e_ads, e_sys, e_slab, e_adsorbate, converged_system, converged_slab, steps_system, steps_slab = relaxation_and_compute_adsorption_energy(
             calc, system, slab, adsorbate
         )
         
+        # Load reference energy
+        ref_json_path = traj_path.replace('.traj', '_ref_E.json')
+        with open(ref_json_path, 'r') as f:
+            ref_data = json.load(f)
+        ref_energy = ref_data['ref_energy']
+        
+        # Check if e_ads <= ref_energy
         result['e_ads'] = e_ads
-        result['e_sys'] = e_sys
-        result['e_slab'] = e_slab
-        result['e_adsorbate'] = e_adsorbate
+        result['ref_energy'] = ref_energy
+        result['success'] = abs(e_ads - ref_energy) <= 0.1
         result['converged_system'] = converged_system
         result['converged_slab'] = converged_slab
-        result['steps_system'] = steps_sys
+        result['steps_system'] = steps_system
         result['steps_slab'] = steps_slab
         
+        gpu_label = f"GPU {gpu_id}" if gpu_id >= 0 else "CPU"
+        print(f"[{gpu_label}] Index {index}: e_ads={e_ads:.6f}, ref_energy={ref_energy:.6f}, success={result['success']}, converged_system={converged_system}, converged_slab={converged_slab}", 
+              file=sys.stderr)
+        
     except Exception as e:
+        gpu_label = f"GPU {gpu_id}" if gpu_id >= 0 else "CPU"
         result['error'] = str(e)
-        print(f"Index {index}: ERROR - {e}", file=sys.stderr)
+        print(f"[{gpu_label}] Index {index}: ERROR - {e}", file=sys.stderr)
     
     return result
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Compute relaxation energies and convergence statistics"
+        description="Validate relaxation results against reference energies"
     )
     parser.add_argument(
         "--data_dir",
         type=str,
-        default="unrelaxed_samples/C2H4O",
-        help="Directory containing traj files"
+        default="unrelaxed_samples",
+        help="Directory containing traj files and ref_E.json files"
     )
     parser.add_argument(
         "--num_gpus",
@@ -208,19 +254,25 @@ def main():
         action="store_true",
         help="Force using CPU instead of GPU"
     )
+    parser.add_argument(
+        "--output_json",
+        type=str,
+        default=None,
+        help="Path to save statistics as JSON file (optional)"
+    )
     
     args = parser.parse_args()
     
     data_dir = Path(args.data_dir)
     
-    # Find all traj files recursively in subdirectories
-    traj_files = sorted(data_dir.rglob("*.traj"))
+    # Find all traj files
+    traj_files = sorted(data_dir.glob("*.traj"))
     
     if len(traj_files) == 0:
-        print(f"No .traj files found in {data_dir} or its subdirectories")
+        print(f"No .traj files found in {data_dir}")
         return
     
-    print(f"Found {len(traj_files)} traj files in {data_dir} and subdirectories")
+    print(f"Found {len(traj_files)} traj files")
     
     # Determine number of GPUs and workers
     if args.use_cpu:
@@ -244,39 +296,42 @@ def main():
             num_gpus = 0
             num_workers = args.num_workers or cpu_count()
     
+    # Prepare arguments for each traj file
     tasks = []
     for traj_file in traj_files:
-        # Get relative path from data_dir to create unique index
+        index_str = traj_file.stem  # filename without extension
         try:
-            relative_path = traj_file.relative_to(data_dir)
-            # Create unique index by combining subdirectory and filename
-            # e.g., "0/123.traj" -> "0_123", "1/123.traj" -> "1_123"
-            if relative_path.parent == Path('.'):
-                # File is directly in data_dir
-                index_str = relative_path.stem
-                # Try to parse as integer
-                try:
-                    index = int(index_str)
-                except ValueError:
-                    index = index_str
-            else:
-                # File is in a subdirectory - use string index to avoid conflicts
-                index = f"{relative_path.parent}_{relative_path.stem}"
+            index = int(index_str)
         except ValueError:
-            print(f"Warning: Could not create index from {traj_file}, skipping", file=sys.stderr)
+            print(f"Warning: Could not parse index from {traj_file.name}, skipping", file=sys.stderr)
             continue
+        
+        # Check if corresponding ref_E.json exists
+        ref_json_path = traj_file.with_name(f"{index_str}_ref_E.json")
+        if not ref_json_path.exists():
+            print(f"Warning: {ref_json_path} not found, skipping {traj_file.name}", file=sys.stderr)
+            continue
+        
+        # Add task (GPU assignment is done per-worker, not per-task)
         tasks.append((str(traj_file), index))
     
-    print(f"Processing {len(tasks)} traj files...")
+    print(f"Processing {len(tasks)} valid traj files...")
     
+    # Process tasks in parallel
     results = []
     if num_workers == 1:
+        # Single process (useful for debugging)
+        # Set worker GPU ID for single process
         init_worker(0 if num_gpus > 0 else -1)
         for task in tqdm(tasks, desc="Processing samples", unit="sample"):
             results.append(process_single_traj(task))
     else:
+        # Multi-process - use 'spawn' method for CUDA compatibility
+        # Use 'spawn' context to avoid CUDA initialization issues with fork
         ctx = get_context('spawn')
         
+        # Strategy: Create separate pools for each GPU to ensure proper GPU assignment
+        # Distribute workers evenly across GPUs
         if num_gpus > 0:
             try:
                 import torch
@@ -293,6 +348,7 @@ def main():
             workers_per_gpu = num_workers
         
         if num_gpus > 0 and actual_gpus > 0:
+            # Distribute tasks across GPUs (round-robin)
             tasks_per_gpu = [[] for _ in range(actual_gpus)]
             for i, task in enumerate(tasks):
                 gpu_idx = i % actual_gpus
@@ -300,10 +356,12 @@ def main():
             
             print(f"Tasks per GPU: {[len(t) for t in tasks_per_gpu]}")
             
+            # Process each GPU's tasks in parallel using separate pools
             all_results = []
             pools = []
             
             try:
+                # Create a pool for each GPU
                 for gpu_id in range(actual_gpus):
                     pool = ctx.Pool(
                         processes=workers_per_gpu,
@@ -312,17 +370,20 @@ def main():
                     )
                     pools.append((pool, tasks_per_gpu[gpu_id]))
                 
+                # Process tasks for each GPU pool with progress tracking
                 import threading
                 from threading import Lock
                 
                 results_list = [None] * actual_gpus
                 progress_lock = Lock()
-                completed_count = [0]
+                completed_count = [0]  # Use list to allow modification in nested functions
                 total_tasks = len(tasks)
                 
+                # Create a shared progress bar
                 pbar = tqdm(total=total_tasks, desc="Processing samples", unit="sample")
                 
                 def process_gpu_tasks(pool_idx, pool, gpu_tasks):
+                    """Process tasks for a GPU pool and update progress."""
                     gpu_results = []
                     for result in pool.imap_unordered(process_single_traj, gpu_tasks):
                         gpu_results.append(result)
@@ -337,22 +398,26 @@ def main():
                     thread.start()
                     threads.append(thread)
                 
+                # Wait for all threads to complete
                 for thread in threads:
                     thread.join()
                 
                 pbar.close()
                 
+                # Combine results from all GPUs
                 for gpu_results in results_list:
                     if gpu_results:
                         all_results.extend(gpu_results)
                 
             finally:
+                # Close all pools
                 for pool, _ in pools:
                     pool.close()
                     pool.join()
             
             results = all_results
         else:
+            # CPU mode: single pool
             with ctx.Pool(processes=num_workers, initializer=init_worker, initargs=(-1,)) as pool:
                 results = list(tqdm(
                     pool.imap_unordered(process_single_traj, tasks),
@@ -361,9 +426,13 @@ def main():
                     unit="sample"
                 ))
     
+    # Aggregate results
+    success_count = sum(1 for r in results if r['success'])
     total_count = len(results)
     error_count = sum(1 for r in results if r['error'] is not None)
+    success_rate = (success_count / total_count * 100) if total_count > 0 else 0
     
+    # Aggregate convergence results
     converged_system_count = sum(1 for r in results if r.get('converged_system', False))
     converged_slab_count = sum(1 for r in results if r.get('converged_slab', False))
     converged_all_count = sum(1 for r in results if r.get('converged_system', False) and r.get('converged_slab', False))
@@ -371,98 +440,142 @@ def main():
     converged_slab_rate = (converged_slab_count / total_count * 100) if total_count > 0 else 0
     converged_all_rate = (converged_all_count / total_count * 100) if total_count > 0 else 0
     
-    converged_all_indices = [r['index'] for r in results if r.get('converged_system', False) and r.get('converged_slab', False) and r['error'] is None]
-    converged_all_indices.sort()
-
-    system_steps = [r['steps_system'] for r in results if r.get('converged_system', False) and r['error'] is None]
-    slab_steps = [r['steps_slab'] for r in results if r.get('converged_slab', False) and r['error'] is None]
-
-    avg_system_steps = (sum(system_steps) / len(system_steps)) if system_steps else 0
-    avg_slab_steps = (sum(slab_steps) / len(slab_steps)) if slab_steps else 0
+    # Success statistics
+    success_and_converged_all_count = sum(1 for r in results if r['success'] and r.get('converged_system', False) and r.get('converged_slab', False))
+    success_and_converged_all_rate = (success_and_converged_all_count / total_count * 100) if total_count > 0 else 0
     
+    # Print summary
+    print("\n" + "="*60)
+    print("SUMMARY")
+    print("="*60)
+    print(f"Total samples processed: {total_count}")
+    print(f"Successful samples (abs(e_ads - ref_energy) <= 0.1): {success_count}")
+    print(f"Failed samples (abs(e_ads - ref_energy) > 0.1): {total_count - success_count - error_count}")
+    print(f"Error samples: {error_count}")
+    print(f"Success rate: {success_rate:.2f}%")
+    print("-"*60)
+    print(f"Converged system (LBFGS converged): {converged_system_count}")
+    print(f"Non-converged system (LBFGS not converged): {total_count - converged_system_count - error_count}")
+    print(f"System convergence rate: {converged_system_rate:.2f}%")
+    print("-"*60)
+    print(f"Converged slab (LBFGS converged): {converged_slab_count}")
+    print(f"Non-converged slab (LBFGS not converged): {total_count - converged_slab_count - error_count}")
+    print(f"Slab convergence rate: {converged_slab_rate:.2f}%")
+    print("-"*60)
+    print(f"Converged all (both system and slab): {converged_all_count}")
+    print(f"Non-converged all: {total_count - converged_all_count - error_count}")
+    print(f"Converged all rate: {converged_all_rate:.2f}%")
+    print("-"*60)
+    print(f"Success and converged all: {success_and_converged_all_count}")
+    print(f"Success and converged all rate: {success_and_converged_all_rate:.2f}%")
+    print("="*60)
+    
+    # Print detailed statistics
+    if success_count > 0:
+        success_e_ads = [r['e_ads'] for r in results if r['success'] and r['e_ads'] is not None]
+        if success_e_ads:
+            print(f"\nSuccessful samples - e_ads statistics:")
+            print(f"  Mean: {np.mean(success_e_ads):.6f}")
+            print(f"  Min: {np.min(success_e_ads):.6f}")
+            print(f"  Max: {np.max(success_e_ads):.6f}")
+    
+    failed_results = [r for r in results if not r['success'] and r['error'] is None]
+    if failed_results:
+        failed_e_ads = [r['e_ads'] for r in failed_results if r['e_ads'] is not None]
+        if failed_e_ads:
+            print(f"\nFailed samples - e_ads statistics:")
+            print(f"  Mean: {np.mean(failed_e_ads):.6f}")
+            print(f"  Min: {np.min(failed_e_ads):.6f}")
+            print(f"  Max: {np.max(failed_e_ads):.6f}")
+    
+    # Prepare statistics dictionary for JSON output
     stats_dict = {
         'total_samples': total_count,
-        'error_count': error_count,
+        'success': {
+            'count': success_count,
+            'rate_percent': success_rate,
+        },
+        'failed': {
+            'count': total_count - success_count - error_count,
+        },
+        'error': {
+            'count': error_count,
+        },
         'convergence': {
             'system': {
                 'count': converged_system_count,
                 'rate_percent': converged_system_rate,
-                'average_steps': avg_system_steps,
             },
             'slab': {
                 'count': converged_slab_count,
                 'rate_percent': converged_slab_rate,
-                'average_steps': avg_slab_steps,
             },
             'all': {
                 'count': converged_all_count,
                 'rate_percent': converged_all_rate,
-                'indices': converged_all_indices,
             },
+        },
+        'success_and_converged_all': {
+            'count': success_and_converged_all_count,
+            'rate_percent': success_and_converged_all_rate,
         },
     }
     
-    # convergence_output_path = data_dir / "convergence_stats.json"
-    # with open(convergence_output_path, 'w') as f:
-    #     json.dump(stats_dict, f, indent=2)
-    # print(f"\nConvergence statistics saved to: {convergence_output_path}")
+    # Add detailed e_ads statistics if available
+    if success_count > 0:
+        success_e_ads = [r['e_ads'] for r in results if r['success'] and r['e_ads'] is not None]
+        if success_e_ads:
+            stats_dict['success']['e_ads_statistics'] = {
+                'mean': float(np.mean(success_e_ads)),
+                'min': float(np.min(success_e_ads)),
+                'max': float(np.max(success_e_ads)),
+            }
     
-    # # Sort results: convert index to string for consistent sorting
-    # sorted_results = sorted(results, key=lambda x: str(x['index']))
+    if failed_results:
+        failed_e_ads = [r['e_ads'] for r in failed_results if r['e_ads'] is not None]
+        if failed_e_ads:
+            stats_dict['failed']['e_ads_statistics'] = {
+                'mean': float(np.mean(failed_e_ads)),
+                'min': float(np.min(failed_e_ads)),
+                'max': float(np.max(failed_e_ads)),
+            }
     
-    # energy_results = []
-    # for r in sorted_results:
-    #     result_entry = {
-    #         'index': r['index'],
-    #         'e_ads': r['e_ads'] if r['e_ads'] is not None else None,
-    #         'e_sys': r['e_sys'] if r['e_sys'] is not None else None,
-    #         'e_slab': r['e_slab'] if r['e_slab'] is not None else None,
-    #         'e_adsorbate': r['e_adsorbate'] if r['e_adsorbate'] is not None else None,
-    #         'converged_system': bool(r.get('converged_system', False)),
-    #         'converged_slab': bool(r.get('converged_slab', False)),
-    #     }
-    #     if r['error'] is not None:
-    #         result_entry['error'] = r['error']
-    #     energy_results.append(result_entry)
+    # Save to JSON file if specified
+    if args.output_json:
+        output_path = Path(args.output_json)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, 'w') as f:
+            json.dump(stats_dict, f, indent=2)
+        print(f"\nStatistics saved to: {output_path}")
+        
+    # Save all e_ads results to ads_E_results.json
+    # Sort results by index for consistent ordering
+    sorted_results = sorted(results, key=lambda x: x['index'])
     
-    # energy_output_path = data_dir / "energy_results.json"
-    # with open(energy_output_path, 'w') as f:
-    #     json.dump(energy_results, f, indent=2)
-    # print(f"All energy results saved to: {energy_output_path}")
-
-    output_base_dir = Path("energies")
-    adsorbate_name = data_dir.name
-    final_output_dir = output_base_dir / adsorbate_name
-    final_output_dir.mkdir(parents=True, exist_ok=True)
-
-    convergence_output_path = final_output_dir / "convergence_stats.json"
-    energy_output_path = final_output_dir / "energy_results.json"
-
-    with open(convergence_output_path, 'w') as f:
-        json.dump(stats_dict, f, indent=2)
-    print(f"\nConvergence statistics saved to: {convergence_output_path}")
-
-    sorted_results = sorted(results, key=lambda x: str(x['index']))
-    energy_results = []
+    # Prepare results data (all samples, regardless of success)
+    ads_e_results = []
     for r in sorted_results:
         result_entry = {
             'index': r['index'],
-            'e_ads': r['e_ads'],
-            'e_sys': r['e_sys'],
-            'e_slab': r['e_slab'],
-            'e_adsorbate': r['e_adsorbate'],
-            'converged_system': bool(r.get('converged_system', False)),
-            'converged_slab': bool(r.get('converged_slab', False)),
+            'e_ads': r['e_ads'] if r['e_ads'] is not None else None,
+            'ref_energy': r['ref_energy'] if r['ref_energy'] is not None else None,
+            'success': bool(r['success']),  # Convert to Python bool for JSON serialization
+            'converged_system': bool(r.get('converged_system', False)),  # Convert to Python bool
+            'converged_slab': bool(r.get('converged_slab', False)),  # Convert to Python bool
             'steps_system': r.get('steps_system', 0),
-            'steps_slab': r.get('steps_slab', 0)
+            'steps_slab': r.get('steps_slab', 0),
         }
-        if r.get('error'):
+        if r['error'] is not None:
             result_entry['error'] = r['error']
-        energy_results.append(result_entry)
+        ads_e_results.append(result_entry)
+    
+    # Save to ads_E_results.json in data_dir
+    ads_e_output_path = data_dir / "ads_E_results.json"
+    with open(ads_e_output_path, 'w') as f:
+        json.dump(ads_e_results, f, indent=2)
+    print(f"\nAll e_ads results saved to: {ads_e_output_path}")
 
-    with open(energy_output_path, 'w') as f:
-        json.dump(energy_results, f, indent=2)
-    print(f"All energy results saved to: {energy_output_path}")
+
 
 if __name__ == "__main__":
     main()

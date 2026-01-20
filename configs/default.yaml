@@ -12,10 +12,10 @@ core:
 # Hydra configuration
 hydra:
   run:
-    dir: ckpts/${expname}
+    dir: /home/jovyan/mk-catgen-ckpts/${expname}
 
   sweep:
-    dir: ckpts/multirun/${now:%Y-%m-%d}/${expname}
+    dir: /home/jovyan/mk-catgen-ckpts/multirun/${now:%Y-%m-%d}/${expname}
     subdir: ${hydra.job.num}_${hydra.job.id}
 
   job:

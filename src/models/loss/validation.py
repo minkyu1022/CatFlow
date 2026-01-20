@@ -21,16 +21,6 @@ import itertools
 # Suppress all warnings for JSON parsing in subprocesses
 warnings.filterwarnings('ignore')
 
-# Global calculator for reuse across processes
-_GLOBAL_CALC = None
-
-OC20_GAS_PHASE_ENERGIES = {
-    'H': -3.477,
-    'O': -7.204,
-    'C': -7.282,
-    'N': -8.083,
-}
-
 from pymatgen.io.ase import AseAtomsAdaptor
 adaptor = AseAtomsAdaptor()
 
@@ -246,38 +236,66 @@ def find_best_match_rmsd_slab(
     
     return results
 
-def _structural_validity(atoms: Atoms) -> bool:
-    """Check structural validity of an Atoms object."""
+def _structural_validity(atoms: Atoms, return_details: bool = False):
+    """Check structural validity of an Atoms object.
+    
+    Args:
+        atoms: ASE Atoms object to check
+        return_details: If True, return (is_valid, details_dict) with per-check results
+    
+    Returns:
+        If return_details=False: bool (is_valid)
+        If return_details=True: (bool, dict) where dict contains individual check results
+    """
+    details = {}
+    
     # 1. Check cell volume
     try:
         vol = float(atoms.get_volume())
         vol_ok = vol >= 0.1
     except Exception:
         vol_ok = False
+    details['vol_ok'] = vol_ok
 
     # 2. Check atom clash
     try:
         if len(atoms) > 1:
-            dists = atoms.get_all_distances()
+            dists = atoms.get_all_distances(mic=True)
             # Exclude self-distance (0)
             min_dist = np.min(dists[np.nonzero(dists)])
             dist_ok = min_dist >= 0.5
-  
+            
+            # If distance check fails, print which atoms are too close
+            if not dist_ok:
+                pass
+                # close_pairs = np.where((dists < 0.5) & (dists > 0))
+                # atomic_numbers = atoms.get_atomic_numbers()
+                # 
+                # print(f"      Distance check failed: min_dist = {min_dist:.4f} Å (threshold: 0.5 Å)")
+                # 
+                # # Print close atom pairs (avoid duplicates)
+                # seen_pairs = set()
+                # close_pair_info = []
+                # for i, j in zip(close_pairs[0], close_pairs[1]):
+                #     pair = tuple(sorted([i, j]))
+                #     if pair not in seen_pairs:
+                #         seen_pairs.add(pair)
+                #         atom1_num = atomic_numbers[i]
+                #         atom2_num = atomic_numbers[j]
+                #         distance = dists[i, j]
+                #         close_pair_info.append(f"Atom {i} (Z={atom1_num}) - Atom {j} (Z={atom2_num}): {distance:.4f} Å")
+                # 
+                # if close_pair_info:
+                #     print(f"      Close atom pairs (< 0.5 Å): {len(close_pair_info)} pair(s)")
+                #     for info in close_pair_info[:5]:  # Show first 5 pairs
+                #         print(f"        {info}")
+                #     if len(close_pair_info) > 5:
+                #         print(f"        ... and {len(close_pair_info) - 5} more")
         else:
             dist_ok = True  # Skip distance check for single atom
     except Exception:
         dist_ok = False
-    
-    # 3. Check min width of cell (a, b axes)
-    min_ab = 8.0
-    
-    a_length = np.linalg.norm(atoms.cell[0])
-    b_length = np.linalg.norm(atoms.cell[1])
-    
-    if a_length < min_ab or b_length < min_ab:
-        width_ok = False
-    else:
-        width_ok = True
+    details['dist_ok'] = dist_ok
     
     # 4. Check min height of cell (c projected onto normal of a×b plane)
     min_height = 20.0
@@ -292,17 +310,19 @@ def _structural_validity(atoms: Atoms) -> bool:
     
     if cross_ab_norm < 1e-10:
         # Degenerate case: a and b are parallel
-        print("Height check failed.")
         height_ok = False
     else:
         normal = cross_ab / cross_ab_norm
         proj_height = abs(np.dot(normal, c_vec))
         height_ok = proj_height >= min_height
+    details['height_ok'] = height_ok
 
-    # 5. Basic validity check
-    basic_valid = bool(vol_ok and dist_ok and width_ok and height_ok)
-
-    return basic_valid
+    # 5. Overall validity check (all checks must pass)
+    is_valid = bool(vol_ok and dist_ok and height_ok)
+    
+    if return_details:
+        return is_valid, details
+    return is_valid
 
 def _prim_structural_validity(atoms: Atoms) -> bool:
     """Check structural validity of an Atoms object."""
@@ -341,7 +361,8 @@ def compute_structural_validity_single(
         np.ndarray,  # atom_mask: (n_atoms,) bool
         Dict[str, Any],  # matcher_kwargs
     ],
-) -> List[bool]:
+    return_details: bool = False,
+):
     """
     Compute structural validity for sampled structures (without adsorption energy calculation).
     
@@ -361,9 +382,11 @@ def compute_structural_validity_single(
             - ads_atom_types: Atomic numbers for adsorbate atoms
             - prim_slab_atom_mask: Boolean mask for valid prim slab atoms
             - ads_atom_mask: Boolean mask for valid adsorbate atoms
+        return_details: If True, return (results, details_list) with per-check statistics
     
     Returns:
-        List of structural validity booleans for each sample.
+        If return_details=False: List of structural validity booleans for each sample
+        If return_details=True: (List[bool], List[dict]) with validity results and details
     """
     (
         sampled_prim_slab_coords,
@@ -380,6 +403,8 @@ def compute_structural_validity_single(
     n_samples = sampled_prim_slab_coords.shape[0]
     
     results = []
+    details_list = [] if return_details else None
+    
     for i in range(n_samples):
         try:
             # Use assemble function to reconstruct the system
@@ -396,13 +421,28 @@ def compute_structural_validity_single(
             )
             
             # Check structural validity
-            struct_valid = _structural_validity(recon_system)
-            results.append(struct_valid)
+            if return_details:
+                struct_valid, details = _structural_validity(recon_system, return_details=True)
+                results.append(struct_valid)
+                details_list.append(details)
+            else:
+                struct_valid = _structural_validity(recon_system, return_details=False)
+                results.append(struct_valid)
                 
         except Exception as e:
             print(f"WARNING: Failed to compute structural validity for sample {i}: {e}", file=sys.stderr)
             results.append(False)
+            if return_details:
+                # Mark all checks as failed for assembly errors
+                details_list.append({
+                    'vol_ok': False,
+                    'dist_ok': False,
+                    'height_ok': False,
+                    'assemble_failed': True
+                })
     
+    if return_details:
+        return results, details_list
     return results
 
 def compute_prim_structural_validity_single(

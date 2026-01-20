@@ -93,7 +93,7 @@ class SaveEveryEpochCheckpoint(Callback):
         self,
         dirpath: Path,
         filename_fmt: str = "epoch={epoch:03d}-train_epoch.ckpt",
-        every_n_epochs: int = 5,
+        every_n_epochs: int = 1,
     ) -> None:
         super().__init__()
         self.dirpath = Path(dirpath)

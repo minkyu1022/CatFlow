@@ -50,12 +50,15 @@ prior_sampler_args:
   # Adsorbate relative position standardization parameters - computed from train set
   ads_rel_pos_mean: [0.0, 0.0, 0.0]  # Mean is approximately zero by definition
   ads_rel_pos_std: [1.30984664, 1.36190262, 1.40467037]
+  # Adsorbate coordinate standardization parameters - computed from train set
+  # ads_coord_mean: [0.007402, -0.702398, 0.934607]
+  # ads_coord_std: [8.247430, 9.035212, 9.979235]
   # Note: scaling_factor uses raw Gaussian prior without normalization
 
 # Flow process arguments
 flow_process_args:
   num_sampling_steps: 50
-  coordinate_augmentation: true
+  coordinate_augmentation: false
   synchronize_timesteps: false
   compile_model: false
 
