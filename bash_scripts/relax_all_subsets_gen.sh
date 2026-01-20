@@ -25,7 +25,7 @@ for subdir in "$BASE_DIR"/*/; do
     echo "Path: $subdir"
     echo "========================================================"
     
-    CUDA_VISIBLE_DEVICES=$CUDA_DEVICES python scripts/val_relax_gen.py \
+    CUDA_VISIBLE_DEVICES=$CUDA_DEVICES python scripts/relax_energy/val_relax_gen.py \
         --data_dir "$subdir" \
         --num_gpus $NUM_GPUS \
         --num_workers 8  
@@ -38,6 +38,6 @@ echo "========================================================"
 echo "All subsets processed. Aggregating results..."
 echo "========================================================"
 
-python scripts/aggregate_relax_results.py --base_dir "$BASE_DIR"
+python scripts/relax_energy/aggregate_relax_results.py --base_dir "$BASE_DIR"
 
 echo "Done!"

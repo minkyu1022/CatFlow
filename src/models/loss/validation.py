@@ -13,7 +13,7 @@ import sys
 from ase.optimize import LBFGS
 import warnings
 
-from scripts.assemble import assemble
+from scripts.sampling.assemble import assemble
 import smact
 from smact.screening import pauling_test
 import itertools

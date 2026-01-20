@@ -74,7 +74,7 @@ print(formula)
 
                 echo "[GPU $GPU_ID] Processing: $composition_str -> $formula"
 
-                CUDA_VISIBLE_DEVICES=$GPU_ID python scripts/save_valid_samples.py \
+                CUDA_VISIBLE_DEVICES=$GPU_ID python scripts/sampling/save_valid_samples.py \
                     --checkpoint "$CHECKPOINT_PATH" \
                     --val_lmdb_path "$lmdb_path" \
                     --output_dir "$TARGET_OUTPUT_DIR" \
@@ -108,6 +108,6 @@ echo "========================================================"
 echo "All subsets processed. Aggregating statistics..."
 echo "========================================================"
 
-python aggregate_stats.py --base_dir "$BASE_OUTPUT_DIR"
+python scripts/sampling/aggregate_stats.py --base_dir "$BASE_OUTPUT_DIR"
 
 echo "Done!"

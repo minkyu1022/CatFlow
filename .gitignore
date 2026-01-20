@@ -42,8 +42,7 @@ outputs/
 .hydra/
 
 # Jupyter Notebook
-.ipynb_checkpoints
-*.ipynb_checkpoints/
+*.ipynb
 
 # IDE
 .vscode/
@@ -63,23 +62,9 @@ env.bak/
 venv.bak/
 *.yaml.bak
 
-# Data files
-*.lmdb
-*.lmdb-lock
-*.traj
-*.json
-*.csv
-!configs/**/*.yaml
-!configs/**/*.yml
-!*.yaml
-!*.yml
-
 # Logs
 *.log
 logs/
-
-# Generated samples
-generated_samples/
 
 # OS
 Thumbs.db
@@ -101,23 +86,3 @@ htmlcov/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
-dataset/
-dataset_per_adsorbate/
-energies/
-dummy/
-generated_samples/
-metadata/
-outputs/
-*.png
-*.pkl
-
-unrelaxed_samples/
-energies/
-*.cif
-*.traj
-*.json
-*.csv
-
-ckpts/
-dataset_per_adsorbate/

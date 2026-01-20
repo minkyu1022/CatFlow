@@ -9,76 +9,14 @@ from torch.nn import Module
 from src.models.utils import LinearNoBias, center_random_augmentation
 from src.models.transformers import DiT, PositionalEmbedder
 
+from utils import lattice_params_to_matrix_torch, GaussianRBF
+
 # Number of elements for one-hot encoding (covers most elements in periodic table)
 NUM_ELEMENTS = 100
 
 # Discrete Flow Matching constants (for dng=True mode)
 MASK_TOKEN_INDEX = 0  # Mask token index (used as prior in DFM)
 NUM_ELEMENTS_WITH_MASK = NUM_ELEMENTS + 1  # 101 (0=MASK, 1-100=elements)
-
-
-def lattice_params_to_matrix_torch(lengths, angles):
-    """
-    lengths: (B, 3) a, b, c
-    angles: (B, 3) alpha, beta, gamma (in degrees)
-    Returns: (B, 3, 3) Cell matrix (rows are lattice vectors)
-    """
-    a, b, c = lengths[:, 0], lengths[:, 1], lengths[:, 2]
-    alpha, beta, gamma = angles[:, 0], angles[:, 1], angles[:, 2]
-    
-    zeros = torch.zeros_like(a)
-    
-    # Deg to Rad
-    alpha_rad = alpha * torch.pi / 180.0
-    beta_rad = beta * torch.pi / 180.0
-    gamma_rad = gamma * torch.pi / 180.0
-    
-    val = (torch.cos(alpha_rad) * torch.cos(beta_rad) - torch.cos(gamma_rad)) / (torch.sin(alpha_rad) * torch.sin(beta_rad))
-    # Clamp val to avoid nan in sqrt
-    val = torch.clamp(val, -1.0, 1.0)
-    
-    gamma_star = torch.acos(val)
-    
-    vector_a = torch.stack([a * torch.sin(beta_rad), zeros, a * torch.cos(beta_rad)], dim=1)
-    vector_b = torch.stack([-b * torch.sin(alpha_rad) * torch.cos(gamma_star), b * torch.sin(alpha_rad) * torch.sin(gamma_star), b * torch.cos(alpha_rad)], dim=1)
-    vector_c = torch.stack([zeros, zeros, c], dim=1)
-    
-    return torch.stack([vector_a, vector_b, vector_c], dim=1)
-
-
-class GaussianRBF(nn.Module):
-    def __init__(self, n_rbf=24, cutoff=4.0, start=0.0):
-        super().__init__()
-        self.cutoff = cutoff
-        self.centers = nn.Parameter(torch.linspace(start, cutoff, n_rbf), requires_grad=False)
-        self.gamma = nn.Parameter(torch.tensor(0.5), requires_grad=False)
-
-    def forward(self, dists, mask):
-        # dists: (B, M, M)
-        # mask: (B, M)
-        
-        dists_expanded = dists.unsqueeze(-1)
-        centers = self.centers.view(1, 1, 1, -1)
-        
-        # (B, M, M, n_rbf)
-        rbf = torch.exp(-self.gamma * (dists_expanded - centers)**2)
-        
-        # Masking
-        pair_mask = mask.unsqueeze(2) * mask.unsqueeze(1) 
-        
-        # Self-interaction exclusion
-        B, M = mask.shape
-        identity = torch.eye(M, device=mask.device).unsqueeze(0).expand(B, -1, -1)
-        pair_mask = pair_mask * (1 - identity)
-        
-        rbf = rbf * pair_mask.unsqueeze(-1)
-        
-        # Mask-Normalized Mean Aggregation
-        rbf_sum = rbf.sum(dim=2)
-        neighbor_counts = pair_mask.sum(dim=2, keepdim=True)
-        rbf_mean = rbf_sum / (neighbor_counts + 1e-8)
-        
-        return rbf_mean
 
 
 class AtomAttentionEncoder(Module):
