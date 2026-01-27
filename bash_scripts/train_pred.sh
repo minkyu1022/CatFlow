@@ -8,7 +8,7 @@ HYDRA_FULL_ERROR=1 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6 python src/run.py \
     model.flow_model_args.dng=false \
     model.training_args.flow_loss_type=x1_loss \
     model.training_args.loss_type=l1 \
-    model.training_args.lr=2e-5 \
+    model.training_args.lr=1e-4 \
     model.training_args.warmup_steps=5000 \
     model.flow_model_args.use_energy_cond=false \
     model.validation_args.sample_every_n_epochs=5 \

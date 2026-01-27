@@ -1,8 +1,8 @@
 # Data configuration for LMDB dataset
 
 # LMDB file paths
-train_lmdb_path: /home/jovyan/mk-catgen-data/dataset/train/dataset.lmdb
-val_lmdb_path: /home/jovyan/mk-catgen-data/dataset/val_id/dataset.lmdb
+train_lmdb_path: data/dataset/train/dataset.lmdb
+val_lmdb_path: data/dataset/val_id/dataset.lmdb
 test_lmdb_path: null
 
 # Batch sizes

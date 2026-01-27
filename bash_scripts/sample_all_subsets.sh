@@ -1,21 +1,26 @@
 #!/bin/bash
 
 # ================= CONFIGURATION =================
-CHECKPOINT_PATH="/home/jovyan/mk-catgen-ckpts/gen_430M_final_L1_relpos/epoch=379_9728.ckpt"
-DATA_ROOT="/home/jovyan/mk-catgen-data/dataset_per_adsorbate/val_id"
-BASE_OUTPUT_DIR="unrelaxed_samples/dng_traj"
+CHECKPOINT_PATH="ckpts/pred_430M_final_L1_relpos/sp_model.ckpt"
+
+DATA_ROOT="data/dataset_per_adsorbate"
+
+BASE_OUTPUT_DIR="data/sp_results/initial_structures"
 
 CUDA_DEVICES_STR="0,1,2,3,4,5,6,7"
 # =================================================
+
+export PYTHONPATH=$PYTHONPATH:.
 
 IFS=',' read -r -a GPU_ARRAY <<< "$CUDA_DEVICES_STR"
 NUM_AVAILABLE_GPUS=${#GPU_ARRAY[@]}
 
 echo "Starting parallel generation..."
 echo "Available GPUs: ${GPU_ARRAY[*]} (Total: $NUM_AVAILABLE_GPUS)"
+echo "Target Data Directory: $DATA_ROOT"
 
 LMDB_FILES=()
-for f in "${DATA_ROOT}"/val_id_*_subset.lmdb; do
+for f in "${DATA_ROOT}"/*.lmdb; do
     [ -e "$f" ] || continue
     LMDB_FILES+=("$f")
 done
@@ -23,6 +28,11 @@ TOTAL_FILES=${#LMDB_FILES[@]}
 
 echo "Found $TOTAL_FILES lmdb files to process."
 echo "========================================================"
+
+if [ "$TOTAL_FILES" -eq 0 ]; then
+    echo "Error: No .lmdb files found! Please check DATA_ROOT path."
+    exit 1
+fi
 
 pids=()
 
@@ -40,41 +50,16 @@ for ((i=0; i<NUM_AVAILABLE_GPUS; i++)); do
                 lmdb_path="${LMDB_FILES[j]}"
                 filename=$(basename "$lmdb_path")
 
-                temp=${filename#val_id_}
-                composition_str=${temp%_subset.lmdb}
-
-                formula=$(python3 -c "
-from collections import Counter
-import sys
-
-s = '$composition_str'
-elems = s.split('-')
-counts = Counter(elems)
-
-formula = ''
-
-if 'C' in counts:
-    formula += f\"C{counts['C']}\" if counts['C'] > 1 else \"C\"
-    del counts['C']
-
-if 'H' in counts:
-    formula += f\"H{counts['H']}\" if counts['H'] > 1 else \"H\"
-    del counts['H']
-
-for k in sorted(counts.keys()):
-    formula += f\"{k}{counts[k]}\" if counts[k] > 1 else k
-
-print(formula)
-")
+                formula="${filename%.lmdb}"
                 
                 TARGET_OUTPUT_DIR="${BASE_OUTPUT_DIR}/${formula}"
                 
                 mkdir -p "$TARGET_OUTPUT_DIR"
                 LOG_FILE="$TARGET_OUTPUT_DIR/generation.log"
 
-                echo "[GPU $GPU_ID] Processing: $composition_str -> $formula"
+                echo "[GPU $GPU_ID] Processing: $filename -> Output: $TARGET_OUTPUT_DIR"
 
-                CUDA_VISIBLE_DEVICES=$GPU_ID python scripts/sampling/save_valid_samples.py \
+                CUDA_VISIBLE_DEVICES=$GPU_ID python scripts/sampling/save_samples.py \
                     --checkpoint "$CHECKPOINT_PATH" \
                     --val_lmdb_path "$lmdb_path" \
                     --output_dir "$TARGET_OUTPUT_DIR" \
@@ -82,7 +67,6 @@ print(formula)
                     --sampling_steps 50 \
                     --batch_size 128 \
                     --num_workers 128 \
-                    --save_trajectory
                     --gpus 1 > "$LOG_FILE" 2>&1
 
                 if [ $? -eq 0 ]; then

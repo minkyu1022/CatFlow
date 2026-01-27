@@ -1,5 +1,6 @@
 """
 Script to load checkpoint, generate samples via forward, and save only structurally valid samples.
+(Modified to also save distance/height invalid samples, but exclude assembly failures)
 
 Usage (single GPU or DataParallel):
     python scripts/save_valid_samples.py \
@@ -39,7 +40,7 @@ from ase.io import write as ase_write
 
 from src.module.effcat_module import EffCatModule
 from src.data.datamodule import LMDBDataModule
-from scripts.assemble import assemble
+from scripts.sampling.assemble import assemble
 from src.models.loss.validation import compute_structural_validity_single
 
 
@@ -172,6 +173,7 @@ def generate_samples_and_save_valid(
 ) -> Dict[str, Any]:
     """
     Generate samples using model forward, check structural validity, and save valid ones.
+    (Also saves dist_invalid and height_invalid samples regardless of save_invalid flag)
     
     Args:
         model: EffCatModule model
@@ -195,21 +197,26 @@ def generate_samples_and_save_valid(
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     
-    # Create subdirectories for invalid samples (if requested)
-    invalid_dirs = None
-    sample_invalid_dirs = None
-    if save_invalid:
-        invalid_dirs = {
-            'vol_invalid': output_path / 'vol_invalid',
-            'dist_invalid': output_path / 'dist_invalid',
-            'height_invalid': output_path / 'height_invalid',
-            'assemble_failed': output_path / 'assemble_failed',
-        }
-        for invalid_dir in invalid_dirs.values():
-            invalid_dir.mkdir(parents=True, exist_ok=True)
+    # [MODIFIED] Create subdirectories for invalid samples
+    # User request: Always save dist_invalid and height_invalid, ignore assemble_failed.
+    invalid_dirs = {
+        'vol_invalid': output_path / 'vol_invalid',
+        'dist_invalid': output_path / 'dist_invalid',
+        'height_invalid': output_path / 'height_invalid',
+        'assemble_failed': output_path / 'assemble_failed',
+    }
+    
+    # Always create directories for failure types we want to capture by default
+    always_save_types = ['dist_invalid', 'height_invalid']
+    
+    for key, path in invalid_dirs.items():
+        if save_invalid or key in always_save_types:
+            path.mkdir(parents=True, exist_ok=True)
     
     # For num_samples > 1, create subdirectories for each sample index
     sample_dirs = None
+    sample_invalid_dirs = None # Initialize variable
+
     if num_samples > 1:
         sample_dirs = []
         for i in range(num_samples):
@@ -217,25 +224,32 @@ def generate_samples_and_save_valid(
             sample_dir.mkdir(parents=True, exist_ok=True)
             sample_dirs.append(sample_dir)
         
-        # Also create invalid subdirectories for each sample index (if requested)
-        if save_invalid:
-            sample_invalid_dirs = {key: [] for key in invalid_dirs.keys()}
-            for i in range(num_samples):
-                for key, base_dir in invalid_dirs.items():
+        # Also create invalid subdirectories for each sample index
+        # [MODIFIED] Ensure subdirs are created for always_save_types
+        sample_invalid_dirs = {key: [] for key in invalid_dirs.keys()}
+        for i in range(num_samples):
+            for key, base_dir in invalid_dirs.items():
+                if save_invalid or key in always_save_types:
                     sample_invalid_dir = base_dir / str(i)
                     sample_invalid_dir.mkdir(parents=True, exist_ok=True)
                     sample_invalid_dirs[key].append(sample_invalid_dir)
+                else:
+                    # Append path object even if not creating dir (to keep list indices aligned)
+                    sample_invalid_dirs[key].append(base_dir / str(i))
         
         if rank == 0:
             print(f"[INFO] Output directory: {output_path}")
             print(f"[INFO] Created {num_samples} sample subdirectories: 0/ to {num_samples-1}/")
-            if save_invalid:
-                print(f"[INFO] Created invalid sample directories: {', '.join(invalid_dirs.keys())}")
+            # Only print created invalid dirs
+            created_invalids = [k for k in invalid_dirs.keys() if save_invalid or k in always_save_types]
+            if created_invalids:
+                print(f"[INFO] Created invalid sample directories: {', '.join(created_invalids)}")
     else:
         if rank == 0:
             print(f"[INFO] Output directory: {output_path}")
-            if save_invalid:
-                print(f"[INFO] Created invalid sample directories: {', '.join(invalid_dirs.keys())}")
+            created_invalids = [k for k in invalid_dirs.keys() if save_invalid or k in always_save_types]
+            if created_invalids:
+                print(f"[INFO] Created invalid sample directories: {', '.join(created_invalids)}")
     
     # Statistics
     total_processed = 0
@@ -252,9 +266,6 @@ def generate_samples_and_save_valid(
     }
     
     # Track original dataset indices
-    # For DistributedSampler: indices are rank + i * num_replicas
-    # We need to track which original dataset indices are being processed
-    
     if rank == 0:
         print(f"\n[INFO] Starting sampling and validation")
         print(f"  - num_samples: {num_samples}")
@@ -434,50 +445,80 @@ def generate_samples_and_save_valid(
                                 validity_stats['height_failed'] += 1
                                 failed_checks.append('height_invalid')
                         
-                        if save_invalid and failed_checks:
+                        # [MODIFIED] Saving logic for invalid samples
+                        if failed_checks:
                             for failed_check in failed_checks:
-                                if num_samples > 1:
-                                    invalid_traj_path = sample_invalid_dirs[failed_check][sample_in_item] / f"{original_dataset_idx}.traj"
-                                    invalid_pt_path = sample_invalid_dirs[failed_check][sample_in_item] / f"{original_dataset_idx}.pt"
-                                else:
-                                    invalid_traj_path = invalid_dirs[failed_check] / f"{original_dataset_idx}.traj"
-                                    invalid_pt_path = invalid_dirs[failed_check] / f"{original_dataset_idx}.pt"
+                                # Determine if we should save this specific invalid sample
+                                should_save = False
                                 
-                                try:
-                                    if not details.get('assemble_failed', False) and recon_system is not None:
-                                        ase_write(str(invalid_traj_path), recon_system, format="traj")
+                                # Condition 1: Always save dist_invalid and height_invalid (User request)
+                                if failed_check in ['dist_invalid', 'height_invalid']:
+                                    should_save = True
+                                # Condition 2: Save others if --save_invalid flag is on, BUT exclude assemble_failed
+                                elif save_invalid:
+                                    if failed_check != 'assemble_failed':
+                                        should_save = True
+
+                                if should_save:
+                                    if num_samples > 1:
+                                        # Use indices to get the correct subdirectory object
+                                        if sample_invalid_dirs and failed_check in sample_invalid_dirs:
+                                            invalid_traj_path = sample_invalid_dirs[failed_check][sample_in_item] / f"{original_dataset_idx}.traj"
+                                            invalid_pt_path = sample_invalid_dirs[failed_check][sample_in_item] / f"{original_dataset_idx}.pt"
+                                    else:
+                                        invalid_traj_path = invalid_dirs[failed_check] / f"{original_dataset_idx}.traj"
+                                        invalid_pt_path = invalid_dirs[failed_check] / f"{original_dataset_idx}.pt"
                                     
-                                    validity_details_clean = {
-                                        k: bool(v) if isinstance(v, (np.bool_, bool)) else v
-                                        for k, v in details.items()
-                                    }
-                                    
-                                    invalid_sample_data = {
-                                        "prim_slab_coords": torch.from_numpy(sample_prim_slab_coords).cpu(),
-                                        "ads_coords": torch.from_numpy(sample_ads_coords).cpu(),
-                                        "lattice": torch.from_numpy(sample_lattice).cpu(),
-                                        "supercell_matrix": torch.from_numpy(sample_supercell_matrix.reshape(3, 3)).cpu(),
-                                        "scaling_factor": torch.tensor(float(sample_scaling_factor)).cpu(),
-                                        "prim_slab_atom_types": torch.from_numpy(prim_slab_types).cpu() if isinstance(prim_slab_types, np.ndarray) else prim_slab_types.cpu() if isinstance(prim_slab_types, torch.Tensor) else torch.tensor(prim_slab_types).cpu(),
-                                        "ads_atom_types": torch.from_numpy(ads_types).cpu() if isinstance(ads_types, np.ndarray) else ads_types.cpu() if isinstance(ads_types, torch.Tensor) else torch.tensor(ads_types).cpu(),
-                                        "prim_slab_atom_mask": torch.from_numpy(prim_slab_mask).cpu() if isinstance(prim_slab_mask, np.ndarray) else prim_slab_mask.cpu() if isinstance(prim_slab_mask, torch.Tensor) else torch.tensor(prim_slab_mask).cpu(),
-                                        "ads_atom_mask": torch.from_numpy(ads_mask).cpu() if isinstance(ads_mask, np.ndarray) else ads_mask.cpu() if isinstance(ads_mask, torch.Tensor) else torch.tensor(ads_mask).cpu(),
-                                        "original_dataset_idx": int(original_dataset_idx),
-                                        "sample_in_item": int(sample_in_item),
-                                        "batch_idx": int(batch_idx),
-                                        "validity_details": validity_details_clean,
-                                        "failed_check": str(failed_check),
-                                    }
-                                    torch.save(invalid_sample_data, invalid_pt_path, _use_new_zipfile_serialization=True)
-                                except Exception as e:
-                                    if rank == 0:
-                                        print(f"\n[WARNING] Failed to save invalid sample {original_dataset_idx} to {failed_check}: {e}")
+                                    try:
+                                        # Save trajectory if system was assembled (not assemble_failed)
+                                        if not details.get('assemble_failed', False) and recon_system is not None:
+                                            ase_write(str(invalid_traj_path), recon_system, format="traj")
+                                        
+                                        validity_details_clean = {
+                                            k: bool(v) if isinstance(v, (np.bool_, bool)) else v
+                                            for k, v in details.items()
+                                        }
+                                        
+                                        invalid_sample_data = {
+                                            "prim_slab_coords": torch.from_numpy(sample_prim_slab_coords).cpu(),
+                                            "ads_coords": torch.from_numpy(sample_ads_coords).cpu(),
+                                            "lattice": torch.from_numpy(sample_lattice).cpu(),
+                                            "supercell_matrix": torch.from_numpy(sample_supercell_matrix.reshape(3, 3)).cpu(),
+                                            "scaling_factor": torch.tensor(float(sample_scaling_factor)).cpu(),
+                                            "prim_slab_atom_types": torch.from_numpy(prim_slab_types).cpu() if isinstance(prim_slab_types, np.ndarray) else prim_slab_types.cpu() if isinstance(prim_slab_types, torch.Tensor) else torch.tensor(prim_slab_types).cpu(),
+                                            "ads_atom_types": torch.from_numpy(ads_types).cpu() if isinstance(ads_types, np.ndarray) else ads_types.cpu() if isinstance(ads_types, torch.Tensor) else torch.tensor(ads_types).cpu(),
+                                            "prim_slab_atom_mask": torch.from_numpy(prim_slab_mask).cpu() if isinstance(prim_slab_mask, np.ndarray) else prim_slab_mask.cpu() if isinstance(prim_slab_mask, torch.Tensor) else torch.tensor(prim_slab_mask).cpu(),
+                                            "ads_atom_mask": torch.from_numpy(ads_mask).cpu() if isinstance(ads_mask, np.ndarray) else ads_mask.cpu() if isinstance(ads_mask, torch.Tensor) else torch.tensor(ads_mask).cpu(),
+                                            "original_dataset_idx": int(original_dataset_idx),
+                                            "sample_in_item": int(sample_in_item),
+                                            "batch_idx": int(batch_idx),
+                                            "validity_details": validity_details_clean,
+                                            "failed_check": str(failed_check),
+                                        }
+                                        torch.save(invalid_sample_data, invalid_pt_path, _use_new_zipfile_serialization=True)
+                                    except Exception as e:
+                                        if rank == 0:
+                                            print(f"\n[WARNING] Failed to save invalid sample {original_dataset_idx} to {failed_check}: {e}")
                     
                     if is_valid:
                         if num_samples > 1:
                             traj_path = sample_dirs[sample_in_item] / f"{original_dataset_idx}.traj"
                         else:
                             traj_path = output_path / f"{original_dataset_idx}.traj"
+                        
+                        # Gather assemble components to save as a dictionary
+                        assemble_components = {
+                            "generated_prim_slab_coords": torch.from_numpy(sample_prim_slab_coords).cpu(),
+                            "generated_ads_coords": torch.from_numpy(sample_ads_coords).cpu(),
+                            "generated_lattice": torch.from_numpy(sample_lattice).cpu(),
+                            "generated_supercell_matrix": torch.from_numpy(sample_supercell_matrix.reshape(3, 3)).cpu(),
+                            "generated_scaling_factor": torch.tensor(float(sample_scaling_factor)).cpu(),
+                            "prim_slab_atom_types": torch.from_numpy(prim_slab_types).cpu() if isinstance(prim_slab_types, np.ndarray) else prim_slab_types.cpu(),
+                            "ads_atom_types": torch.from_numpy(ads_types).cpu() if isinstance(ads_types, np.ndarray) else ads_types.cpu(),
+                            "prim_slab_atom_mask": torch.from_numpy(prim_slab_mask).cpu() if isinstance(prim_slab_mask, np.ndarray) else prim_slab_mask.cpu(),
+                            "ads_atom_mask": torch.from_numpy(ads_mask).cpu() if isinstance(ads_mask, np.ndarray) else ads_mask.cpu(),
+                            "original_dataset_idx": int(original_dataset_idx),
+                        }
                         
                         if save_trajectory and "prim_slab_coord_trajectory" in out:
                             traj_prim_slab_coords_tensor = out["prim_slab_coord_trajectory"]
@@ -547,10 +588,17 @@ def generate_samples_and_save_valid(
                             if traj_prim_slab_element_tensor is not None:
                                 sample_trajectory["prim_slab_element_trajectory"] = traj_prim_slab_element_tensor[:, sample_idx, :].cpu()
                             
+                            # Add assemble components to trajectory dict to ensure they are available
+                            sample_trajectory.update(assemble_components)
+                            
                             pt_path = traj_path.with_suffix('.pt')
                             torch.save(sample_trajectory, pt_path)
                         else:
                             ase_write(str(traj_path), recon_system, format="traj")
+                            
+                            # # Save assemble components as .pt file
+                            # pt_path = traj_path.with_suffix('.pt')
+                            # torch.save(assemble_components, pt_path)
                         
                         total_valid += 1
                     else:
@@ -607,16 +655,11 @@ def generate_samples_and_save_valid(
         if total_invalid > 0:
             print(f"\n[VALIDITY CHECK BREAKDOWN]")
             print(f"  Total invalid samples: {total_invalid}")
-            if save_invalid:
-                print(f"  - Volume check failed: {validity_stats['vol_failed']} ({validity_stats['vol_failed']/total_invalid*100:.2f}%) → saved to vol_invalid/ (.traj + .pt)")
-                print(f"  - Distance check failed: {validity_stats['dist_failed']} ({validity_stats['dist_failed']/total_invalid*100:.2f}%) → saved to dist_invalid/ (.traj + .pt)")
-                print(f"  - Height check failed: {validity_stats['height_failed']} ({validity_stats['height_failed']/total_invalid*100:.2f}%) → saved to height_invalid/ (.traj + .pt)")
-                print(f"  - Assembly failed: {validity_stats['assemble_failed']} ({validity_stats['assemble_failed']/total_invalid*100:.2f}%) → saved to assemble_failed/ (.pt only)")
-            else:
-                print(f"  - Volume check failed: {validity_stats['vol_failed']} ({validity_stats['vol_failed']/total_invalid*100:.2f}%)")
-                print(f"  - Distance check failed: {validity_stats['dist_failed']} ({validity_stats['dist_failed']/total_invalid*100:.2f}%)")
-                print(f"  - Height check failed: {validity_stats['height_failed']} ({validity_stats['height_failed']/total_invalid*100:.2f}%)")
-                print(f"  - Assembly failed: {validity_stats['assemble_failed']} ({validity_stats['assemble_failed']/total_invalid*100:.2f}%)")
+            # [MODIFIED] Update logging to reflect always saving dist/height
+            print(f"  - Volume check failed: {validity_stats['vol_failed']} ({validity_stats['vol_failed']/total_invalid*100:.2f}%)" + (" → saved" if save_invalid else ""))
+            print(f"  - Distance check failed: {validity_stats['dist_failed']} ({validity_stats['dist_failed']/total_invalid*100:.2f}%) → saved to dist_invalid/ (.traj + .pt)")
+            print(f"  - Height check failed: {validity_stats['height_failed']} ({validity_stats['height_failed']/total_invalid*100:.2f}%) → saved to height_invalid/ (.traj + .pt)")
+            print(f"  - Assembly failed: {validity_stats['assemble_failed']} ({validity_stats['assemble_failed']/total_invalid*100:.2f}%) → not saved")
         
         print(f"\n[OUTPUT]")
         print(f"  - Output directory: {output_path}")

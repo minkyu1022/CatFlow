@@ -1,15 +1,15 @@
 #!/bin/bash
 
-HYDRA_FULL_ERROR=1 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6 python src/run.py \
+HYDRA_FULL_ERROR=1 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python src/run.py \
     expname=gen_430M_final_L1_relpos \
-    train.pl_trainer.devices=7 \
+    train.pl_trainer.devices=8 \
     train.pl_trainer.strategy=ddp \
     train.pl_trainer.strategy=ddp_find_unused_parameters_true \
     model.flow_model_args.dng=true \
     model.training_args.flow_loss_type=x1_loss \
     model.training_args.loss_type=l1 \
     model.training_args.warmup_steps=5000 \
-    model.training_args.lr=2e-5 \
+    model.training_args.lr=1e-4 \
     model.flow_model_args.use_energy_cond=false \
     model.validation_args.sample_every_n_epochs=5 \
     model.atom_s=768 \

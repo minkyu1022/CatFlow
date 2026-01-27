@@ -10,7 +10,7 @@ lr_monitor:
 
 # Weights & Biases configuration
 wandb:
-  project: "CatGen"
+  project: "CatFlow"
   name: ${expname}
   mode: "online" # "online", "offline", "disabled"
   save_dir: ${hydra:run.dir}
