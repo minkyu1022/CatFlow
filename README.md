@@ -35,6 +35,8 @@ The main dependencies include:
 
 CatFlow uses the Open Catalyst 2020 (OC20) IS2RES dataset. The data processing pipeline transforms raw OC20 structures into a factorized representation.
 
+The processed datasets with generated samples and computed energy values are available at [Zenodo](https://zenodo.org/records/18382309).
+
 ### Data Processing
 
 The factorized representation consists of four components:
