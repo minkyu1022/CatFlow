@@ -43,11 +43,11 @@ To perform the data processing pipeline manually from raw OC20 structures, follo
 
 ```bash
 # Download and extract OC20 IS2RES set
-wget [https://dl.fbaipublicfiles.com/opencatalystproject/data/is2res_train_val_test_lmdbs.tar.gz](https://dl.fbaipublicfiles.com/opencatalystproject/data/is2res_train_val_test_lmdbs.tar.gz)
+wget https://dl.fbaipublicfiles.com/opencatalystproject/data/is2res_train_val_test_lmdbs.tar.gz
 tar -zxvf is2res_train_val_test_lmdbs.tar.gz
 
 # Download OC20 data mapping file
-wget [https://dl.fbaipublicfiles.com/opencatalystproject/data/oc20_data_mapping.pkl](https://dl.fbaipublicfiles.com/opencatalystproject/data/oc20_data_mapping.pkl)
+wget https://dl.fbaipublicfiles.com/opencatalystproject/data/oc20_data_mapping.pkl
 
 # Extract metadata and process into factorized representation
 python scripts/data_processing/extract_metadata.py
