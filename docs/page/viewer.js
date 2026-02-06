@@ -1,35 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
   var stage = new NGL.Stage("viewport-sample", { backgroundColor: "white" });
 
-  var reps = {
-    base: null,
-    unitcell: null,
-    supercell: null
-  };
+  var mainComp = null;
+  var supercellComps = [];
+  var isSupercellVisible = false;
+
+  var vecA = new NGL.Vector3(-8.94147, 0.0, -0.00871);
+  var vecB = new NGL.Vector3(0.0, -10.32218, 0.05818);
 
   stage.loadFile("data/relaxed_sample.pdb", {
     defaultRepresentation: false,
     ext: "pdb",
   }).then(function (comp) {
+    mainComp = comp;
     comp.setName("catalyst-sample");
 
-    reps.base = comp.addRepresentation("spacefill", {
+    comp.addRepresentation("spacefill", {
       colorScheme: "element",
       radiusScale: 0.5,
-      visible: true
-    });
-
-    reps.unitcell = comp.addRepresentation("unitcell", {
-      colorValue: "gray",
-      radiusScale: 1.0,
-      visible: false
-    });
-
-    reps.supercell = comp.addRepresentation("spacefill", {
-      colorScheme: "element",
-      radiusScale: 0.5,
-      assembly: "supercell",
-      visible: false
     });
 
     comp.autoView();
@@ -53,29 +41,58 @@ document.addEventListener("DOMContentLoaded", function () {
     var toggleCellBtn = document.getElementById("toggleCell-sample");
     if (toggleCellBtn) {
       toggleCellBtn.addEventListener("click", function () {
-        if (reps.unitcell) {
-          var isVisible = !reps.unitcell.visible;
-          reps.unitcell.setVisibility(isVisible);
-
-          toggleCellBtn.style.fontWeight = isVisible ? "bold" : "normal";
-          toggleCellBtn.style.color = isVisible ? "blue" : "black";
-        }
+        alert("현재 데이터의 격자 벡터가 회전되어 있어, 표준 Unit Cell 박스와 겹치지 않습니다. Supercell 기능을 이용해 전체 구조를 확인하세요.");
       });
     }
 
     var toggleSupercellBtn = document.getElementById("toggleSupercell-sample");
     if (toggleSupercellBtn) {
       toggleSupercellBtn.addEventListener("click", function () {
-        if (reps.supercell && reps.base) {
-          var isSupercellOn = !reps.supercell.visible;
+        if (!isSupercellVisible) {
+          if (supercellComps.length === 0) {
+            for (var i = -1; i <= 1; i++) {
+              for (var j = -1; j <= 1; j++) {
+                if (i === 0 && j === 0) continue;
 
-          reps.supercell.setVisibility(isSupercellOn);
-          reps.base.setVisibility(!isSupercellOn);
+                var shift = new NGL.Vector3()
+                  .copy(vecA).multiplyScalar(i)
+                  .add(new NGL.Vector3().copy(vecB).multiplyScalar(j));
 
-          toggleSupercellBtn.style.fontWeight = isSupercellOn ? "bold" : "normal";
-          toggleSupercellBtn.style.color = isSupercellOn ? "blue" : "black";
+                stage.loadFile("data/relaxed_sample.pdb", {
+                  defaultRepresentation: false,
+                  ext: "pdb"
+                }).then(function (cloneComp) {
+                  cloneComp.setPosition([shift.x, shift.y, shift.z]);
 
-          if (isSupercellOn) comp.autoView(500);
+                  cloneComp.addRepresentation("spacefill", {
+                    colorScheme: "element",
+                    radiusScale: 0.5,
+                    opacity: 1.0
+                  });
+
+                  supercellComps.push(cloneComp);
+                });
+              }
+            }
+          } else {
+            supercellComps.forEach(function (c) { c.setVisibility(true); });
+          }
+
+          isSupercellVisible = true;
+          toggleSupercellBtn.textContent = "Hide Supercell";
+          toggleSupercellBtn.style.color = "blue";
+          toggleSupercellBtn.style.fontWeight = "bold";
+
+          setTimeout(function () { mainComp.autoView(1000); }, 500);
+
+        } else {
+          supercellComps.forEach(function (c) { c.setVisibility(false); });
+          isSupercellVisible = false;
+          toggleSupercellBtn.textContent = "Supercell";
+          toggleSupercellBtn.style.color = "black";
+          toggleSupercellBtn.style.fontWeight = "normal";
+
+          mainComp.autoView(500);
         }
       });
     }
@@ -83,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var resetViewBtn = document.getElementById("resetView-sample");
     if (resetViewBtn) {
       resetViewBtn.addEventListener("click", function () {
-        comp.autoView(500);
+        mainComp.autoView(500);
       });
     }
 
