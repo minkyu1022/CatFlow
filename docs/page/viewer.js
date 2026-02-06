@@ -2,24 +2,21 @@ document.addEventListener("DOMContentLoaded", function () {
   var stage = new NGL.Stage("viewport-sample", { backgroundColor: "white" });
 
   stage.loadFile("data/relaxed_sample.pdb", {
-    defaultRepresentation: false, // 1차 방어
+    defaultRepresentation: false,
     ext: "pdb",
   }).then(function (comp) {
     comp.setName("catalyst-sample");
 
-    // [핵심 추가] 혹시 모를 기본 그림(큰 공, 본드)을 강제로 싹 지웁니다.
     comp.removeAllRepresentations();
 
-    // 이제 우리가 원하는 작은 공만 새로 그립니다.
     comp.addRepresentation("spacefill", {
       colorScheme: "element",
-      radiusScale: 0.4  // 0.4 정도면 확실히 작아집니다.
+      radiusScale: 0.5
     });
 
     comp.autoView();
   });
 
-  // --- 버튼 이벤트 (기존과 동일) ---
   var toggleSpinBtn = document.getElementById("toggleSpin-sample");
   var isSpinning = false;
   if (toggleSpinBtn) {
