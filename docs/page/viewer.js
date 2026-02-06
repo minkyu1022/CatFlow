@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       viewer.addModel(cifData, "cif");
       viewer.setStyle({}, {
-        sphere: { scale: 0.3 },
-        stick: { radius: 0.15 },
+        sphere: { scale: 1.0 },
       });
       viewer.zoomTo();
       viewer.render();
