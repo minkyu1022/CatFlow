@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // var stage = new NGL.Stage("viewport-sample", { backgroundColor: "white" });
-  var stage = new NGL.Stage("viewport-sample", { backgroundColor: "#f0f0f0" });
+  var stage = new NGL.Stage("viewport-sample", { backgroundColor: "white" });
 
   stage.loadFile("data/relaxed_sample.pdb", {
     defaultRepresentation: false,
@@ -8,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }).then(function (comp) {
     comp.setName("catalyst-sample");
     comp.addRepresentation("spacefill", {
-      radiusSize: 0.3,
+      radiusScale: 0.3,
     });
     comp.autoView();
   }).catch(function (err) {
