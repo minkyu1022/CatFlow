@@ -4,16 +4,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>CatFlow</title>
-  <link rel="stylesheet" type="text/css" href="page/style.css" />
+  <link rel="stylesheet" type="text/css" href="page/style.css?v=6" />
 </head>
 
 <body>
-  <script src="./page/ngl.js"></script>
+  <script src="./page/ngl.js?v=6"></script>
   <script>
   document.addEventListener("DOMContentLoaded", function () {
     var stage = new NGL.Stage("viewport-sample", { backgroundColor: "white" });
-    stage.loadFile("data/relaxed_sample.pdb", {
+    stage.loadFile("data/relaxed_sample.pdb?v=6", {
       defaultRepresentation: false,
       ext: "pdb",
     }).then(function (comp) {
@@ -68,7 +71,7 @@
   <!-- Abstract -->
   <div class="section">
     <h2>Overview</h2>
-    <p class="caption">Last updated: 2026-02-07 v5 (inline script, radiusSize=0.4)</p>
+    <p class="caption">Last updated: 2026-02-07 v6 (full cache bust, radiusSize=0.4)</p>
     <p class="intro">
       Discovering heterogeneous catalysts tailored for specific reaction intermediates remains a fundamental bottleneck
       in materials science. While traditional trial-and-error methods and recent generative models have shown promise,
