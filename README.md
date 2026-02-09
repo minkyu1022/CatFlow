@@ -1,6 +1,7 @@
 # CatFlow: Co-generation of Slab-Adsorbate Systems via Flow Matching
 
 [![arXiv](https://img.shields.io/badge/arXiv-2602.05372-b31b1b.svg)](https://arxiv.org/abs/2602.05372)
+[![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://minkyu1022.github.io/CatFlow/)
 
 A flow matching framework for de novo generation and structure prediction of heterogeneous catalysts. CatFlow jointly generates slab structures and adsorbate coordinates within a unified objective, directly capturing surface-adsorbate interactions.
 
