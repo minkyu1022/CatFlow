@@ -1,7 +1,6 @@
 <div>
 <img src="assets/catcat.png" width="120" alt="">
-
-# CatFlow: Co-generation of Slab-Adsorbate Systems via Flow Matching
+<h1>CatFlow: Co-generation of Slab-Adsorbate Systems via Flow Matching</h1>
 </div>
 
 [![arXiv](https://img.shields.io/badge/arXiv-2602.05372-b31b1b.svg)](https://arxiv.org/abs/2602.05372)
