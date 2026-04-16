@@ -1,8 +1,4 @@
-<table border="0" cellspacing="0" cellpadding="0">
-<tr><td>
-  <img src="assets/catcat.png" width="180" alt="CatFlow mascot">
-</td></tr>
-</table>
+<img src="assets/catcat.png" width="180" alt="CatFlow mascot">
 
 # CatFlow: Co-generation of Slab-Adsorbate Systems via Flow Matching
 
