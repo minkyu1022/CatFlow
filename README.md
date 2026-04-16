@@ -1,5 +1,5 @@
 <h1>
-  <img src="assets/mascot.png" width="100" align="top" alt="">
+  <img src="assets/catcat.png" width="100" align="top" alt="">
   CatFlow: Co-generation of Slab-Adsorbate Systems via Flow Matching
 </h1>
 
