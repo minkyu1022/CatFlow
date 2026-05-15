@@ -4,7 +4,7 @@
 /* Backend base URL. The UI is served from GitHub Pages while the model runs
  * on a GPU server exposed through a cloudflared HTTPS tunnel. Update this to
  * the current tunnel URL whenever it changes (no trailing slash). */
-const API = "https://average-concrete-contents-fotos.trycloudflare.com";
+const API = "https://phase-nicole-highlighted-noted.trycloudflare.com";
 const state = {
   mode: "denovo",
   adsorbates: [],
