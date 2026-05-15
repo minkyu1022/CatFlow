@@ -485,19 +485,20 @@ function drawVolcano(box, v, adsName) {
 const ELEM_COLOR = "element";
 
 function structureRepresentations(comp, tags, supercellGhost) {
-  comp.addRepresentation("ball+stick", {
-    colorScheme: ELEM_COLOR, radiusScale: supercellGhost ? 0.32 : 0.42,
-    bondScale: 0.3, multipleBond: false,
-    opacity: supercellGhost ? 0.45 : 1.0,
+  // base: element-coloured spacefill spheres, matching the project-page viewer
+  comp.addRepresentation("spacefill", {
+    colorScheme: ELEM_COLOR,
+    radiusScale: supercellGhost ? 0.42 : 0.5,
+    opacity: supercellGhost ? 0.4 : 1.0,
   });
-  // highlight adsorbate atoms (tag 2)
+  // highlight adsorbate atoms (tag 2) in red, slightly larger so they read
   if (tags && !supercellGhost) {
     const adsIdx = [];
     tags.forEach((t, i) => { if (t === 2) adsIdx.push(i); });
     if (adsIdx.length) {
       comp.addRepresentation("spacefill", {
         sele: "@" + adsIdx.join(","),
-        color: "#e0533d", radiusScale: 0.5,
+        color: "#e0533d", radiusScale: 0.54,
       });
     }
   }
