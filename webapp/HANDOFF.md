@@ -183,29 +183,37 @@ compositions (300, deduped by reduced formula) from
 
 ---
 
-## 7. Pending work — public deployment via GitHub Pages
+## 7. Public deployment via GitHub Pages — DONE
 
-Goal: make the app reachable at **`https://minkyu1022.github.io/CatFlow/app`**.
+The app is live at **`https://minkyu1022.github.io/CatFlow/app`** (permanent
+URL — safe to print on a QR code; see `webapp/catflow_demo_qr.png`).
 
-GitHub Pages serves **static files only** — it cannot run the model/UMA. The
-plan is a hybrid: **UI on Pages, backend on this GPU server.**
+Hybrid setup: **UI on GitHub Pages, backend on this GPU server.**
 
-1. **Backend public HTTPS URL.** Pages is HTTPS, so the backend must be HTTPS
-   too (mixed-content is blocked). Run a tunnel, e.g. a free cloudflared quick
-   tunnel: `cloudflared tunnel --url http://localhost:8000` → gives
-   `https://<random>.trycloudflare.com`. (Quick-tunnel URLs are ephemeral; a
-   named tunnel needs a Cloudflare account for a stable URL.)
-2. **Enable CORS** in `server.py` (add `fastapi.middleware.cors.CORSMiddleware`,
-   allow the Pages origin).
-3. **Static frontend on Pages.** Copy `static/` into the repo's `docs/app/`
-   (the CatFlow project page is already served from `docs/`). In the copied
-   `app.js` set `const API = "<the cloudflared HTTPS URL>"` and make asset
-   paths relative (`./style.css`, `./app.js`) instead of `/static/...`.
-4. Commit `docs/app/` and push → Pages serves `…/CatFlow/app`.
+- `docs/app/` — static frontend (copy of `static/` with relative asset paths
+  and `const API = "<tunnel URL>"` in `app.js`). Served at `…/CatFlow/app`.
+- `server.py` — CORS enabled for the `https://minkyu1022.github.io` origin
+  (override with `CATFLOW_CORS_ORIGINS`).
+- `tunnel.sh` — starts a cloudflared quick tunnel, patches `docs/app/app.js`
+  with the new tunnel URL, and commits + pushes it (`--no-push` to skip).
+- `docs/index.html` — has a "Demo" badge linking to `./app`.
 
-Caveat: the Pages page is only a shell — the GPU server **and** the tunnel must
-stay up for generation/eval to work, and the Pages `API` URL must be updated
-whenever an ephemeral tunnel URL changes.
+**Operating it (e.g. for a poster session):**
+
+```bash
+cd webapp
+PORT=8200 ./run.sh          # backend — keep running (port 8000 was taken)
+./tunnel.sh                 # tunnel + auto-patch/push app.js — keep running
+```
+
+Run both inside `tmux`/`screen` so they survive disconnects. The QR/link
+target never changes; only the backend tunnel URL does, and `tunnel.sh`
+re-syncs it on every run. Pages picks up a pushed URL in ~1 min.
+
+Caveat: the Pages page is only a shell — the GPU server **and** the cloudflared
+tunnel must stay up for generation/eval to work. Quick-tunnel URLs are
+ephemeral (change on every cloudflared restart); a stable URL needs a named
+tunnel, which requires a Cloudflare-managed domain.
 
 ---
 
