@@ -2,9 +2,19 @@
 "use strict";
 
 /* Backend base URL. The UI is served from GitHub Pages while the model runs
- * on a GPU server exposed through a cloudflared HTTPS tunnel. Update this to
- * the current tunnel URL whenever it changes (no trailing slash). */
-const API = "https://phase-nicole-highlighted-noted.trycloudflare.com";
+ * on a GPU server behind a cloudflared HTTPS tunnel. The tunnel URL is read at
+ * startup from ./api_url.txt with a cache-buster, so a changed URL reaches
+ * returning visitors even though Pages caches app.js for ~10 min. */
+let API = "";
+async function resolveAPI() {
+  try {
+    const r = await fetch("./api_url.txt?t=" + Date.now(), { cache: "no-store" });
+    if (r.ok) {
+      const u = (await r.text()).trim().replace(/\/+$/, "");
+      if (u) API = u;
+    }
+  } catch (e) { /* keep API empty — loadMenus will surface the error */ }
+}
 const state = {
   mode: "denovo",
   adsorbates: [],
@@ -601,7 +611,7 @@ $("comp-custom").oninput = (e) => {
 };
 $("gen-btn").onclick = generate;
 
-loadMenus().catch((e) => {
+resolveAPI().then(loadMenus).catch((e) => {
   $("gen-error").textContent = "Failed to load menus: " + e.message;
   $("gen-error").classList.remove("hidden");
 });

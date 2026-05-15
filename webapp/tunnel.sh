@@ -1,15 +1,16 @@
 #!/bin/bash
-# Expose the local CatFlow server through a cloudflared quick tunnel, wire the
-# GitHub Pages frontend (docs/app/app.js) to the tunnel URL, and push so Pages
-# serves it. One command takes the public demo fully live.
+# Expose the local CatFlow server through a cloudflared quick tunnel, write the
+# tunnel URL into docs/app/api_url.txt, and push so GitHub Pages serves it.
+# One command takes the public demo fully live.
 #
-#   ./tunnel.sh                  # tunnel localhost:$PORT, patch app.js, push
-#   ./tunnel.sh --no-push        # patch app.js but do not commit/push
+#   ./tunnel.sh                  # tunnel localhost:$PORT, update api_url.txt, push
+#   ./tunnel.sh --no-push        # update api_url.txt but do not commit/push
 #
 # Quick-tunnel URLs are ephemeral: they change whenever cloudflared restarts.
-# This script re-patches and re-pushes docs/app/app.js every run, so the
+# The frontend reads api_url.txt at startup with a cache-buster, so the
 # permanent QR/link target https://minkyu1022.github.io/CatFlow/app keeps
-# working — only the backend URL behind it changes.
+# working — only the backend URL behind it changes, and re-running this script
+# is enough to re-point it.
 #
 # Env overrides: PORT, CLOUDFLARED (path to the cloudflared binary).
 set -e
@@ -17,13 +18,13 @@ cd "$(dirname "$0")"
 
 PORT="${PORT:-8000}"
 CF="${CLOUDFLARED:-$HOME/bin/cloudflared}"
-APP_JS="../docs/app/app.js"
+API_FILE="../docs/app/api_url.txt"
 LOG=/tmp/catflow_tunnel.log
 PUSH=1
 [ "$1" = "--no-push" ] && PUSH=0
 
 [ -x "$CF" ] || { echo "[tunnel] cloudflared not found at $CF" >&2; exit 1; }
-[ -f "$APP_JS" ] || { echo "[tunnel] $APP_JS missing" >&2; exit 1; }
+[ -d "$(dirname "$API_FILE")" ] || { echo "[tunnel] docs/app missing" >&2; exit 1; }
 
 # fail fast if the local server is not up
 if ! curl -fsS "http://localhost:$PORT/api/adsorbates" >/dev/null 2>&1; then
@@ -49,20 +50,20 @@ if [ -z "$URL" ]; then
 fi
 echo "[tunnel] public backend URL: $URL"
 
-sed -i -E "s|^const API = \".*\";|const API = \"$URL\";|" "$APP_JS"
-echo "[tunnel] patched $APP_JS"
+printf '%s\n' "$URL" > "$API_FILE"
+echo "[tunnel] wrote $API_FILE"
 
 if [ "$PUSH" = 1 ]; then
-    if git -C .. diff --quiet -- docs/app/app.js; then
-        echo "[tunnel] app.js unchanged — nothing to push."
+    if git -C .. diff --quiet -- docs/app/api_url.txt; then
+        echo "[tunnel] api_url.txt unchanged — nothing to push."
     else
-        git -C .. add docs/app/app.js
+        git -C .. add docs/app/api_url.txt
         git -C .. commit -q -m "webapp: point demo backend at new tunnel URL"
         git -C .. push -q
         echo "[tunnel] pushed — GitHub Pages will serve the new URL in ~1 min."
     fi
 else
-    echo "[tunnel] --no-push: commit docs/app/app.js yourself when ready."
+    echo "[tunnel] --no-push: commit docs/app/api_url.txt yourself when ready."
 fi
 
 echo

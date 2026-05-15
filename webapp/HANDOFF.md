@@ -190,12 +190,14 @@ URL — safe to print on a QR code; see `webapp/catflow_demo_qr.png`).
 
 Hybrid setup: **UI on GitHub Pages, backend on this GPU server.**
 
-- `docs/app/` — static frontend (copy of `static/` with relative asset paths
-  and `const API = "<tunnel URL>"` in `app.js`). Served at `…/CatFlow/app`.
+- `docs/app/` — static frontend (copy of `static/` with relative asset paths).
+  Served at `…/CatFlow/app`. The backend URL is NOT baked into `app.js`; it is
+  read at startup from `docs/app/api_url.txt` with a cache-buster, so a changed
+  tunnel URL reaches returning visitors despite Pages' ~10 min asset cache.
 - `server.py` — CORS enabled for the `https://minkyu1022.github.io` origin
   (override with `CATFLOW_CORS_ORIGINS`).
-- `tunnel.sh` — starts a cloudflared quick tunnel, patches `docs/app/app.js`
-  with the new tunnel URL, and commits + pushes it (`--no-push` to skip).
+- `tunnel.sh` — starts a cloudflared quick tunnel, writes the tunnel URL into
+  `docs/app/api_url.txt`, and commits + pushes it (`--no-push` to skip).
 - `docs/index.html` — has a "Demo" badge linking to `./app`.
 
 **Operating it (e.g. for a poster session):**
