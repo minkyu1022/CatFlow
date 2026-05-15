@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0b0d12" />
+  <title>CatFlow · Catalyst Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://unpkg.com/ngl@2.0.0-dev.37/dist/ngl.js"></script>
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="40" height="40">
+            <path d="M4 28 C 12 28, 12 12, 20 12 S 28 28, 36 28" />
+            <circle cx="20" cy="12" r="3.2" class="m-node" />
+            <circle cx="4" cy="28" r="2.1" />
+            <circle cx="36" cy="28" r="2.1" />
+          </svg>
+        </span>
+        <h1><span class="t-cat">Cat</span><span class="t-flow">Flow</span></h1>
+      </div>
+      <p class="tagline">Flow-matching generator for slab&ndash;adsorbate catalysts</p>
+      <div class="seam" aria-hidden="true"></div>
+      <span class="beta">beta release</span>
+    </header>
+
+    <!-- 1. mode -->
+    <section class="card" style="--i:1">
+      <h2><span class="num">01</span> Choose a task</h2>
+      <div class="tabs">
+        <div class="tab active" data-mode="denovo">
+          <div class="t-title">De novo generation</div>
+          <div class="t-sub">pick an adsorbate</div>
+        </div>
+        <div class="tab" data-mode="structure">
+          <div class="t-title">Structure prediction</div>
+          <div class="t-sub">adsorbate + composition</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. adsorbate -->
+    <section class="card" style="--i:2">
+      <h2><span class="num">02</span> Adsorbate</h2>
+      <div class="field">
+        <input class="search" id="ads-search" placeholder="Search adsorbate — *OH, CO, NH3 …" />
+        <div class="options" id="ads-options"></div>
+      </div>
+    </section>
+
+    <!-- 3. composition (structure prediction only) -->
+    <section class="card hidden" id="comp-card" style="--i:3">
+      <h2><span class="num">03</span> Slab composition</h2>
+      <p class="hint">Primitive-cell composition that conditions the predicted structure.</p>
+      <div class="subtabs" id="comp-source">
+        <div class="subtab active" data-src="dataset">From dataset</div>
+        <div class="subtab" data-src="custom">Custom formula</div>
+      </div>
+      <div class="field" id="comp-dataset-panel">
+        <input class="search" id="comp-search" placeholder="Search composition — Pt, Cu, PdAg …" />
+        <div class="options" id="comp-options"></div>
+      </div>
+      <div class="field hidden" id="comp-custom-panel">
+        <label for="comp-custom">Specify any composition</label>
+        <input class="search mono" id="comp-custom" autocapitalize="off" autocomplete="off" spellcheck="false"
+               placeholder="e.g.  Pt3Ni   ·   PdAg   ·   Cu4" />
+        <div class="custom-preview" id="comp-custom-preview"></div>
+        <p class="hint">Element symbols with optional counts · 1–48 atoms.</p>
+      </div>
+    </section>
+
+    <!-- 4. generate -->
+    <section class="card" style="--i:4">
+      <button class="primary" id="gen-btn" disabled>
+        <span class="btn-label">Generate</span>
+        <span class="btn-arrow" aria-hidden="true">&rarr;</span>
+      </button>
+      <p class="hint center">50 inference steps · 10 samples · invalid structures filtered out</p>
+      <div class="status hidden" id="gen-status">
+        <div class="spinner"></div><span id="gen-status-text">Working…</span>
+      </div>
+      <div class="err hidden" id="gen-error"></div>
+    </section>
+
+    <!-- results -->
+    <section class="card result hidden" id="result-card" style="--i:5">
+      <h2><span class="num star">✦</span> Generated catalysts</h2>
+      <div class="summary" id="result-summary"></div>
+      <div class="sample-strip" id="sample-strip"></div>
+      <div id="sample-view"></div>
+    </section>
+
+    <footer>
+      <span class="f-line"></span>
+      CatFlow — co-generation of slab&ndash;adsorbate systems via flow matching.<br/>
+      Structure relaxation &amp; energies by UMA <span class="mono">(uma-s-1p1)</span>.
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

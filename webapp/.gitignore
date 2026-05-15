@@ -1,0 +1,9 @@
+# large binaries — re-download per webapp/HANDOFF.md
+ckpts/
+_newdata/
+
+# generated / local artifacts
+__pycache__/
+*.pyc
+test_screenshot.png
+*.log
