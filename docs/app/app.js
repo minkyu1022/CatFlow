@@ -275,7 +275,7 @@ function renderSample(idx) {
   b1.appendChild(ctrl1);
   b1.appendChild(el("div", "legend",
     "Drag to rotate · pinch / scroll to zoom · " +
-    "<b>adsorbate</b> highlighted in red."));
+    "atoms coloured by element."));
   host.appendChild(b1);
 
   /* ---- window 2 : trajectory ---- */
@@ -498,23 +498,13 @@ function drawVolcano(box, v, adsName) {
 const ELEM_COLOR = "element";
 
 function structureRepresentations(comp, tags, supercellGhost) {
-  // base: element-coloured spacefill spheres, matching the project-page viewer
+  // element-coloured spacefill spheres, matching the project-page viewer.
+  // every atom keeps its true element colour — the adsorbate is not recoloured.
   comp.addRepresentation("spacefill", {
     colorScheme: ELEM_COLOR,
     radiusScale: supercellGhost ? 0.42 : 0.5,
     opacity: supercellGhost ? 0.4 : 1.0,
   });
-  // highlight adsorbate atoms (tag 2) in red, slightly larger so they read
-  if (tags && !supercellGhost) {
-    const adsIdx = [];
-    tags.forEach((t, i) => { if (t === 2) adsIdx.push(i); });
-    if (adsIdx.length) {
-      comp.addRepresentation("spacefill", {
-        sele: "@" + adsIdx.join(","),
-        color: "#e0533d", radiusScale: 0.54,
-      });
-    }
-  }
 }
 
 function makeViewer(elemId, payload) {
