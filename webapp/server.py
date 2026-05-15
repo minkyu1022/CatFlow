@@ -19,6 +19,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -52,6 +53,20 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="CatFlow Demo", lifespan=lifespan)
+
+# CORS — the static UI is served from GitHub Pages while this backend runs on
+# the GPU server behind a tunnel, so cross-origin requests must be allowed.
+# Override the allowed origins with CATFLOW_CORS_ORIGINS (comma-separated).
+_cors = os.environ.get(
+    "CATFLOW_CORS_ORIGINS",
+    "https://minkyu1022.github.io,http://localhost:8000,http://127.0.0.1:8000",
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[o.strip() for o in _cors.split(",") if o.strip()],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 
 def _ads_by_id(ads_id: int) -> dict:

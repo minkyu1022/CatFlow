@@ -1,12 +1,12 @@
 #!/bin/bash
 # Launch the CatFlow web demo.
 #   ./run.sh            -> serves on 0.0.0.0:8000
-# Env overrides: PORT, CATFLOW_DEVICE (default cuda:0)
+# Env overrides: PORT, CATFLOW_DEVICE (default cuda:0), CATFLOW_PY (interpreter)
 set -e
 cd "$(dirname "$0")"
 
-export MAMBA_ROOT_PREFIX=/home/irteam/micromamba
-PY=/home/irteam/micromamba/envs/adsorbgen/bin/python
+export MAMBA_ROOT_PREFIX=/home/minkyu/micromamba
+PY="${CATFLOW_PY:-/home/minkyu/micromamba/envs/catflow2/bin/python}"
 
 # build the adsorbate / composition menus once
 if [ ! -f data/adsorbates.json ] || [ ! -f data/compositions.json ]; then
