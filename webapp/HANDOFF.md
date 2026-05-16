@@ -198,19 +198,21 @@ Hybrid setup: **UI on GitHub Pages, backend on this GPU server.**
   (override with `CATFLOW_CORS_ORIGINS`).
 - `tunnel.sh` — starts a cloudflared quick tunnel, writes the tunnel URL into
   `docs/app/api_url.txt`, and commits + pushes it (`--no-push` to skip).
+- `serve.sh` — runs the backend and `tunnel.sh` together in one terminal.
 - `docs/index.html` — has a "Demo" badge linking to `./app`.
 
 **Operating it (e.g. for a poster session):**
 
 ```bash
 cd webapp
-PORT=8200 ./run.sh          # backend — keep running (port 8000 was taken)
-./tunnel.sh                 # tunnel + auto-patch/push app.js — keep running
+PORT=8200 ./serve.sh        # backend + tunnel in one command; Ctrl-C stops both
 ```
 
-Run both inside `tmux`/`screen` so they survive disconnects. The QR/link
-target never changes; only the backend tunnel URL does, and `tunnel.sh`
-re-syncs it on every run. Pages picks up a pushed URL in ~1 min.
+Run it inside `tmux`/`screen` so it survives disconnects. (To watch the two
+processes separately, run `PORT=8200 ./run.sh` and `./tunnel.sh` in two
+windows instead.) The QR/link target never changes; only the backend tunnel
+URL does, and `tunnel.sh` re-syncs it on every run. Pages picks up a pushed
+URL in ~1 min. Port 8000 is used by another service on this host — hence 8200.
 
 Caveat: the Pages page is only a shell — the GPU server **and** the cloudflared
 tunnel must stay up for generation/eval to work. Quick-tunnel URLs are
