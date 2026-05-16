@@ -142,12 +142,17 @@ def build_compositions(max_keep: int = 300) -> list[dict]:
             "n_atoms": len(rep),
             "numbers": rep,
             "elements": sorted(cnt.keys()),
+            "count": len(cells),   # val_id entries with this reduced formula
         })
-    # elemental metals first, then alloys; alphabetical within each group
-    out.sort(key=lambda c: (len(c["elements"]), c["formula"]))
+    # keep the max_keep MOST FREQUENT compositions — truncating alphabetically
+    # would drop everything past the Ag/Al/As/Au alloys.
+    out.sort(key=lambda c: -c["count"])
+    kept = out[:max_keep]
+    # display order: elemental metals first, then alloys; alphabetical within
+    kept.sort(key=lambda c: (len(c["elements"]), c["formula"]))
     print(f"  scanned {scanned} val_id entries -> {len(out)} unique reduced "
-          f"compositions (keeping {min(len(out), max_keep)})")
-    return out[:max_keep]
+          f"compositions (keeping {len(kept)} most frequent)")
+    return kept
 
 
 def main():

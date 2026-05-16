@@ -19,7 +19,8 @@
   ],
   "elements": [
    "Ag"
-  ]
+  ],
+  "count": 13
  },
  {
   "id": "Al4",
@@ -35,7 +36,8 @@
   ],
   "elements": [
    "Al"
-  ]
+  ],
+  "count": 17
  },
  {
   "id": "As4",
@@ -51,59 +53,8 @@
   ],
   "elements": [
    "As"
-  ]
- },
- {
-  "id": "Au16",
-  "formula": "Au",
-  "raw": "Au16",
-  "display": "Au\u2081\u2086",
-  "n_atoms": 16,
-  "numbers": [
-   79,
-   79,
-   79,
-   79,
-   79,
-   79,
-   79,
-   79,
-   79,
-   79,
-   79,
-   79,
-   79,
-   79,
-   79,
-   79
   ],
-  "elements": [
-   "Au"
-  ]
- },
- {
-  "id": "B12",
-  "formula": "B",
-  "raw": "B12",
-  "display": "B\u2081\u2082",
-  "n_atoms": 12,
-  "numbers": [
-   5,
-   5,
-   5,
-   5,
-   5,
-   5,
-   5,
-   5,
-   5,
-   5,
-   5,
-   5
-  ],
-  "elements": [
-   "B"
-  ]
+  "count": 14
  },
  {
   "id": "Bi4",
@@ -119,23 +70,8 @@
   ],
   "elements": [
    "Bi"
-  ]
- },
- {
-  "id": "C4",
-  "formula": "C",
-  "raw": "C4",
-  "display": "C\u2084",
-  "n_atoms": 4,
-  "numbers": [
-   6,
-   6,
-   6,
-   6
   ],
-  "elements": [
-   "C"
-  ]
+  "count": 24
  },
  {
   "id": "Ca4",
@@ -151,39 +87,8 @@
   ],
   "elements": [
    "Ca"
-  ]
- },
- {
-  "id": "Cd4",
-  "formula": "Cd",
-  "raw": "Cd4",
-  "display": "Cd\u2084",
-  "n_atoms": 4,
-  "numbers": [
-   48,
-   48,
-   48,
-   48
   ],
-  "elements": [
-   "Cd"
-  ]
- },
- {
-  "id": "Co4",
-  "formula": "Co",
-  "raw": "Co4",
-  "display": "Co\u2084",
-  "n_atoms": 4,
-  "numbers": [
-   27,
-   27,
-   27,
-   27
-  ],
-  "elements": [
-   "Co"
-  ]
+  "count": 61
  },
  {
   "id": "Cr8",
@@ -203,7 +108,8 @@
   ],
   "elements": [
    "Cr"
-  ]
+  ],
+  "count": 21
  },
  {
   "id": "Cs4",
@@ -219,7 +125,8 @@
   ],
   "elements": [
    "Cs"
-  ]
+  ],
+  "count": 53
  },
  {
   "id": "Cu4",
@@ -235,7 +142,8 @@
   ],
   "elements": [
    "Cu"
-  ]
+  ],
+  "count": 33
  },
  {
   "id": "Fe12",
@@ -259,7 +167,8 @@
   ],
   "elements": [
    "Fe"
-  ]
+  ],
+  "count": 15
  },
  {
   "id": "Ga4",
@@ -275,7 +184,8 @@
   ],
   "elements": [
    "Ga"
-  ]
+  ],
+  "count": 23
  },
  {
   "id": "Ge4",
@@ -291,7 +201,8 @@
   ],
   "elements": [
    "Ge"
-  ]
+  ],
+  "count": 18
  },
  {
   "id": "Hf8",
@@ -311,7 +222,8 @@
   ],
   "elements": [
    "Hf"
-  ]
+  ],
+  "count": 26
  },
  {
   "id": "Hg4",
@@ -327,7 +239,8 @@
   ],
   "elements": [
    "Hg"
-  ]
+  ],
+  "count": 40
  },
  {
   "id": "In4",
@@ -343,31 +256,8 @@
   ],
   "elements": [
    "In"
-  ]
- },
- {
-  "id": "Ir12",
-  "formula": "Ir",
-  "raw": "Ir12",
-  "display": "Ir\u2081\u2082",
-  "n_atoms": 12,
-  "numbers": [
-   77,
-   77,
-   77,
-   77,
-   77,
-   77,
-   77,
-   77,
-   77,
-   77,
-   77,
-   77
   ],
-  "elements": [
-   "Ir"
-  ]
+  "count": 31
  },
  {
   "id": "K4",
@@ -383,51 +273,8 @@
   ],
   "elements": [
    "K"
-  ]
- },
- {
-  "id": "Mn12",
-  "formula": "Mn",
-  "raw": "Mn12",
-  "display": "Mn\u2081\u2082",
-  "n_atoms": 12,
-  "numbers": [
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25
   ],
-  "elements": [
-   "Mn"
-  ]
- },
- {
-  "id": "Mo8",
-  "formula": "Mo",
-  "raw": "Mo8",
-  "display": "Mo\u2088",
-  "n_atoms": 8,
-  "numbers": [
-   42,
-   42,
-   42,
-   42,
-   42,
-   42,
-   42,
-   42
-  ],
-  "elements": [
-   "Mo"
-  ]
+  "count": 51
  },
  {
   "id": "Na4",
@@ -443,7 +290,8 @@
   ],
   "elements": [
    "Na"
-  ]
+  ],
+  "count": 46
  },
  {
   "id": "Nb6",
@@ -461,7 +309,8 @@
   ],
   "elements": [
    "Nb"
-  ]
+  ],
+  "count": 14
  },
  {
   "id": "Ni12",
@@ -485,7 +334,8 @@
   ],
   "elements": [
    "Ni"
-  ]
+  ],
+  "count": 23
  },
  {
   "id": "Os18",
@@ -515,7 +365,8 @@
   ],
   "elements": [
    "Os"
-  ]
+  ],
+  "count": 13
  },
  {
   "id": "Pb4",
@@ -531,7 +382,8 @@
   ],
   "elements": [
    "Pb"
-  ]
+  ],
+  "count": 25
  },
  {
   "id": "Pd4",
@@ -547,31 +399,8 @@
   ],
   "elements": [
    "Pd"
-  ]
- },
- {
-  "id": "Pt12",
-  "formula": "Pt",
-  "raw": "Pt12",
-  "display": "Pt\u2081\u2082",
-  "n_atoms": 12,
-  "numbers": [
-   78,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78
   ],
-  "elements": [
-   "Pt"
-  ]
+  "count": 18
  },
  {
   "id": "Rb4",
@@ -587,7 +416,8 @@
   ],
   "elements": [
    "Rb"
-  ]
+  ],
+  "count": 57
  },
  {
   "id": "Re4",
@@ -603,7 +433,8 @@
   ],
   "elements": [
    "Re"
-  ]
+  ],
+  "count": 25
  },
  {
   "id": "Rh4",
@@ -619,7 +450,8 @@
   ],
   "elements": [
    "Rh"
-  ]
+  ],
+  "count": 16
  },
  {
   "id": "Ru12",
@@ -643,7 +475,8 @@
   ],
   "elements": [
    "Ru"
-  ]
+  ],
+  "count": 35
  },
  {
   "id": "Sb4",
@@ -659,7 +492,8 @@
   ],
   "elements": [
    "Sb"
-  ]
+  ],
+  "count": 37
  },
  {
   "id": "Sc8",
@@ -679,7 +513,8 @@
   ],
   "elements": [
    "Sc"
-  ]
+  ],
+  "count": 16
  },
  {
   "id": "Si4",
@@ -695,7 +530,8 @@
   ],
   "elements": [
    "Si"
-  ]
+  ],
+  "count": 48
  },
  {
   "id": "Sn8",
@@ -715,7 +551,8 @@
   ],
   "elements": [
    "Sn"
-  ]
+  ],
+  "count": 32
  },
  {
   "id": "Sr4",
@@ -731,7 +568,8 @@
   ],
   "elements": [
    "Sr"
-  ]
+  ],
+  "count": 31
  },
  {
   "id": "Ta8",
@@ -751,7 +589,8 @@
   ],
   "elements": [
    "Ta"
-  ]
+  ],
+  "count": 28
  },
  {
   "id": "Tc4",
@@ -767,7 +606,8 @@
   ],
   "elements": [
    "Tc"
-  ]
+  ],
+  "count": 23
  },
  {
   "id": "Te4",
@@ -783,7 +623,8 @@
   ],
   "elements": [
    "Te"
-  ]
+  ],
+  "count": 23
  },
  {
   "id": "Ti16",
@@ -811,7 +652,8 @@
   ],
   "elements": [
    "Ti"
-  ]
+  ],
+  "count": 26
  },
  {
   "id": "Tl4",
@@ -827,7 +669,8 @@
   ],
   "elements": [
    "Tl"
-  ]
+  ],
+  "count": 28
  },
  {
   "id": "V8",
@@ -847,7 +690,8 @@
   ],
   "elements": [
    "V"
-  ]
+  ],
+  "count": 17
  },
  {
   "id": "W8",
@@ -867,7 +711,8 @@
   ],
   "elements": [
    "W"
-  ]
+  ],
+  "count": 16
  },
  {
   "id": "Y4",
@@ -883,31 +728,8 @@
   ],
   "elements": [
    "Y"
-  ]
- },
- {
-  "id": "Zn12",
-  "formula": "Zn",
-  "raw": "Zn12",
-  "display": "Zn\u2081\u2082",
-  "n_atoms": 12,
-  "numbers": [
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30
   ],
-  "elements": [
-   "Zn"
-  ]
+  "count": 31
  },
  {
   "id": "Zr6",
@@ -925,70 +747,8 @@
   ],
   "elements": [
    "Zr"
-  ]
- },
- {
-  "id": "Ag4Ca2",
-  "formula": "Ag2Ca",
-  "raw": "Ag4Ca2",
-  "display": "Ag\u2084Ca\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   20,
-   20,
-   47,
-   47,
-   47,
-   47
   ],
-  "elements": [
-   "Ag",
-   "Ca"
-  ]
- },
- {
-  "id": "Ag8K4",
-  "formula": "Ag2K",
-  "raw": "Ag8K4",
-  "display": "Ag\u2088K\u2084",
-  "n_atoms": 12,
-  "numbers": [
-   19,
-   19,
-   19,
-   19,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "K"
-  ]
- },
- {
-  "id": "Ag4Na2",
-  "formula": "Ag2Na",
-  "raw": "Ag4Na2",
-  "display": "Ag\u2084Na\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   11,
-   11,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Na"
-  ]
+  "count": 31
  },
  {
   "id": "Ag4S2",
@@ -1007,48 +767,8 @@
   "elements": [
    "Ag",
    "S"
-  ]
- },
- {
-  "id": "Ag2Sc1",
-  "formula": "Ag2Sc",
-  "raw": "Ag2Sc1",
-  "display": "Ag\u2082Sc\u2081",
-  "n_atoms": 3,
-  "numbers": [
-   21,
-   47,
-   47
   ],
-  "elements": [
-   "Ag",
-   "Sc"
-  ]
- },
- {
-  "id": "Ag8Se4",
-  "formula": "Ag2Se",
-  "raw": "Ag8Se4",
-  "display": "Ag\u2088Se\u2084",
-  "n_atoms": 12,
-  "numbers": [
-   34,
-   34,
-   34,
-   34,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Se"
-  ]
+  "count": 29
  },
  {
   "id": "Ag4Te2",
@@ -1067,90 +787,8 @@
   "elements": [
    "Ag",
    "Te"
-  ]
- },
- {
-  "id": "Ag4Y2",
-  "formula": "Ag2Y",
-  "raw": "Ag4Y2",
-  "display": "Ag\u2084Y\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   39,
-   39,
-   47,
-   47,
-   47,
-   47
   ],
-  "elements": [
-   "Ag",
-   "Y"
-  ]
- },
- {
-  "id": "Ag12Zr6",
-  "formula": "Ag2Zr",
-  "raw": "Ag12Zr6",
-  "display": "Ag\u2081\u2082Zr\u2086",
-  "n_atoms": 18,
-  "numbers": [
-   40,
-   40,
-   40,
-   40,
-   40,
-   40,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Zr"
-  ]
- },
- {
-  "id": "Ag15Al5",
-  "formula": "Ag3Al",
-  "raw": "Ag15Al5",
-  "display": "Ag\u2081\u2085Al\u2085",
-  "n_atoms": 20,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Al"
-  ]
+  "count": 20
  },
  {
   "id": "Ag3Au1",
@@ -1167,53 +805,8 @@
   "elements": [
    "Ag",
    "Au"
-  ]
- },
- {
-  "id": "Ag3Ca1",
-  "formula": "Ag3Ca",
-  "raw": "Ag3Ca1",
-  "display": "Ag\u2083Ca\u2081",
-  "n_atoms": 4,
-  "numbers": [
-   20,
-   47,
-   47,
-   47
   ],
-  "elements": [
-   "Ag",
-   "Ca"
-  ]
- },
- {
-  "id": "Ag6Ca10",
-  "formula": "Ag3Ca5",
-  "raw": "Ag6Ca10",
-  "display": "Ag\u2086Ca\u2081\u2080",
-  "n_atoms": 16,
-  "numbers": [
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Ca"
-  ]
+  "count": 15
  },
  {
   "id": "Ag3Cd1",
@@ -1230,106 +823,8 @@
   "elements": [
    "Ag",
    "Cd"
-  ]
- },
- {
-  "id": "Ag3In1",
-  "formula": "Ag3In",
-  "raw": "Ag3In1",
-  "display": "Ag\u2083In\u2081",
-  "n_atoms": 4,
-  "numbers": [
-   47,
-   47,
-   47,
-   49
   ],
-  "elements": [
-   "Ag",
-   "In"
-  ]
- },
- {
-  "id": "Ag3Na1",
-  "formula": "Ag3Na",
-  "raw": "Ag3Na1",
-  "display": "Ag\u2083Na\u2081",
-  "n_atoms": 4,
-  "numbers": [
-   11,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Na"
-  ]
- },
- {
-  "id": "Ag3P11",
-  "formula": "Ag3P11",
-  "raw": "Ag3P11",
-  "display": "Ag\u2083P\u2081\u2081",
-  "n_atoms": 14,
-  "numbers": [
-   15,
-   15,
-   15,
-   15,
-   15,
-   15,
-   15,
-   15,
-   15,
-   15,
-   15,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "P"
-  ]
- },
- {
-  "id": "Ag6Pd2",
-  "formula": "Ag3Pd",
-  "raw": "Ag6Pd2",
-  "display": "Ag\u2086Pd\u2082",
-  "n_atoms": 8,
-  "numbers": [
-   46,
-   46,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Pd"
-  ]
- },
- {
-  "id": "Ag3Sc1",
-  "formula": "Ag3Sc",
-  "raw": "Ag3Sc1",
-  "display": "Ag\u2083Sc\u2081",
-  "n_atoms": 4,
-  "numbers": [
-   21,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Sc"
-  ]
+  "count": 29
  },
  {
   "id": "Ag3Y1",
@@ -1346,7 +841,8 @@
   "elements": [
    "Ag",
    "Y"
-  ]
+  ],
+  "count": 15
  },
  {
   "id": "Ag3Zn1",
@@ -1363,140 +859,8 @@
   "elements": [
    "Ag",
    "Zn"
-  ]
- },
- {
-  "id": "Ag4Al1",
-  "formula": "Ag4Al",
-  "raw": "Ag4Al1",
-  "display": "Ag\u2084Al\u2081",
-  "n_atoms": 5,
-  "numbers": [
-   13,
-   47,
-   47,
-   47,
-   47
   ],
-  "elements": [
-   "Ag",
-   "Al"
-  ]
- },
- {
-  "id": "Ag4Sc1",
-  "formula": "Ag4Sc",
-  "raw": "Ag4Sc1",
-  "display": "Ag\u2084Sc\u2081",
-  "n_atoms": 5,
-  "numbers": [
-   21,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Sc"
-  ]
- },
- {
-  "id": "Ag14Ca4",
-  "formula": "Ag7Ca2",
-  "raw": "Ag14Ca4",
-  "display": "Ag\u2081\u2084Ca\u2084",
-  "n_atoms": 18,
-  "numbers": [
-   20,
-   20,
-   20,
-   20,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Ca"
-  ]
- },
- {
-  "id": "Ag16Ca6",
-  "formula": "Ag8Ca3",
-  "raw": "Ag16Ca6",
-  "display": "Ag\u2081\u2086Ca\u2086",
-  "n_atoms": 22,
-  "numbers": [
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Ca"
-  ]
- },
- {
-  "id": "Ag9Al9",
-  "formula": "AgAl",
-  "raw": "Ag9Al9",
-  "display": "Ag\u2089Al\u2089",
-  "n_atoms": 18,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Al"
-  ]
+  "count": 18
  },
  {
   "id": "Ag3Au3",
@@ -1515,7 +879,8 @@
   "elements": [
    "Ag",
    "Au"
-  ]
+  ],
+  "count": 13
  },
  {
   "id": "Ag1Au3",
@@ -1532,24 +897,8 @@
   "elements": [
    "Ag",
    "Au"
-  ]
- },
- {
-  "id": "Ag2Ca2",
-  "formula": "AgCa",
-  "raw": "Ag2Ca2",
-  "display": "Ag\u2082Ca\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   20,
-   20,
-   47,
-   47
   ],
-  "elements": [
-   "Ag",
-   "Ca"
-  ]
+  "count": 23
  },
  {
   "id": "Ag3Cd3",
@@ -1568,97 +917,8 @@
   "elements": [
    "Ag",
    "Cd"
-  ]
- },
- {
-  "id": "Ag1Cd3",
-  "formula": "AgCd3",
-  "raw": "Ag1Cd3",
-  "display": "Ag\u2081Cd\u2083",
-  "n_atoms": 4,
-  "numbers": [
-   47,
-   48,
-   48,
-   48
   ],
-  "elements": [
-   "Ag",
-   "Cd"
-  ]
- },
- {
-  "id": "Ag2Cl2",
-  "formula": "AgCl",
-  "raw": "Ag2Cl2",
-  "display": "Ag\u2082Cl\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   17,
-   17,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Cl"
-  ]
- },
- {
-  "id": "Ag1Cu3",
-  "formula": "AgCu3",
-  "raw": "Ag1Cu3",
-  "display": "Ag\u2081Cu\u2083",
-  "n_atoms": 4,
-  "numbers": [
-   29,
-   29,
-   29,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Cu"
-  ]
- },
- {
-  "id": "Ag2Hf2",
-  "formula": "AgHf",
-  "raw": "Ag2Hf2",
-  "display": "Ag\u2082Hf\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   47,
-   47,
-   72,
-   72
-  ],
-  "elements": [
-   "Ag",
-   "Hf"
-  ]
- },
- {
-  "id": "Ag3Hf6",
-  "formula": "AgHf2",
-  "raw": "Ag3Hf6",
-  "display": "Ag\u2083Hf\u2086",
-  "n_atoms": 9,
-  "numbers": [
-   47,
-   47,
-   47,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72
-  ],
-  "elements": [
-   "Ag",
-   "Hf"
-  ]
+  "count": 14
  },
  {
   "id": "Ag1Na3",
@@ -1675,32 +935,8 @@
   "elements": [
    "Ag",
    "Na"
-  ]
- },
- {
-  "id": "Ag4P8",
-  "formula": "AgP2",
-  "raw": "Ag4P8",
-  "display": "Ag\u2084P\u2088",
-  "n_atoms": 12,
-  "numbers": [
-   15,
-   15,
-   15,
-   15,
-   15,
-   15,
-   15,
-   15,
-   47,
-   47,
-   47,
-   47
   ],
-  "elements": [
-   "Ag",
-   "P"
-  ]
+  "count": 12
  },
  {
   "id": "Ag1Pd1",
@@ -1715,7 +951,8 @@
   "elements": [
    "Ag",
    "Pd"
-  ]
+  ],
+  "count": 15
  },
  {
   "id": "Ag9Pt9",
@@ -1746,110 +983,8 @@
   "elements": [
    "Ag",
    "Pt"
-  ]
- },
- {
-  "id": "Ag1Pt4",
-  "formula": "AgPt4",
-  "raw": "Ag1Pt4",
-  "display": "Ag\u2081Pt\u2084",
-  "n_atoms": 5,
-  "numbers": [
-   47,
-   78,
-   78,
-   78,
-   78
   ],
-  "elements": [
-   "Ag",
-   "Pt"
-  ]
- },
- {
-  "id": "Ag8Sc8",
-  "formula": "AgSc",
-  "raw": "Ag8Sc8",
-  "display": "Ag\u2088Sc\u2088",
-  "n_atoms": 16,
-  "numbers": [
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Sc"
-  ]
- },
- {
-  "id": "Ag1Te3",
-  "formula": "AgTe3",
-  "raw": "Ag1Te3",
-  "display": "Ag\u2081Te\u2083",
-  "n_atoms": 4,
-  "numbers": [
-   47,
-   52,
-   52,
-   52
-  ],
-  "elements": [
-   "Ag",
-   "Te"
-  ]
- },
- {
-  "id": "Ag2Ti2",
-  "formula": "AgTi",
-  "raw": "Ag2Ti2",
-  "display": "Ag\u2082Ti\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   22,
-   22,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Ti"
-  ]
- },
- {
-  "id": "Ag3Ti6",
-  "formula": "AgTi2",
-  "raw": "Ag3Ti6",
-  "display": "Ag\u2083Ti\u2086",
-  "n_atoms": 9,
-  "numbers": [
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Ti"
-  ]
+  "count": 14
  },
  {
   "id": "Ag4Zn4",
@@ -1870,556 +1005,8 @@
   "elements": [
    "Ag",
    "Zn"
-  ]
- },
- {
-  "id": "Ag4Zn8",
-  "formula": "AgZn2",
-  "raw": "Ag4Zn8",
-  "display": "Ag\u2084Zn\u2088",
-  "n_atoms": 12,
-  "numbers": [
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   47,
-   47,
-   47,
-   47
   ],
-  "elements": [
-   "Ag",
-   "Zn"
-  ]
- },
- {
-  "id": "Ag1Zn3",
-  "formula": "AgZn3",
-  "raw": "Ag1Zn3",
-  "display": "Ag\u2081Zn\u2083",
-  "n_atoms": 4,
-  "numbers": [
-   30,
-   30,
-   30,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Zn"
-  ]
- },
- {
-  "id": "Ag2Zr2",
-  "formula": "AgZr",
-  "raw": "Ag2Zr2",
-  "display": "Ag\u2082Zr\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   40,
-   40,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Zr"
-  ]
- },
- {
-  "id": "Ag3Zr6",
-  "formula": "AgZr2",
-  "raw": "Ag3Zr6",
-  "display": "Ag\u2083Zr\u2086",
-  "n_atoms": 9,
-  "numbers": [
-   40,
-   40,
-   40,
-   40,
-   40,
-   40,
-   47,
-   47,
-   47
-  ],
-  "elements": [
-   "Ag",
-   "Zr"
-  ]
- },
- {
-  "id": "Al20Mn6",
-  "formula": "Al10Mn3",
-  "raw": "Al20Mn6",
-  "display": "Al\u2082\u2080Mn\u2086",
-  "n_atoms": 26,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25
-  ],
-  "elements": [
-   "Al",
-   "Mn"
-  ]
- },
- {
-  "id": "Al11Cr4",
-  "formula": "Al11Cr4",
-  "raw": "Al11Cr4",
-  "display": "Al\u2081\u2081Cr\u2084",
-  "n_atoms": 15,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   24,
-   24,
-   24,
-   24
-  ],
-  "elements": [
-   "Al",
-   "Cr"
-  ]
- },
- {
-  "id": "Al11Mn4",
-  "formula": "Al11Mn4",
-  "raw": "Al11Mn4",
-  "display": "Al\u2081\u2081Mn\u2084",
-  "n_atoms": 15,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   25,
-   25,
-   25,
-   25
-  ],
-  "elements": [
-   "Al",
-   "Mn"
-  ]
- },
- {
-  "id": "Al11Re4",
-  "formula": "Al11Re4",
-  "raw": "Al11Re4",
-  "display": "Al\u2081\u2081Re\u2084",
-  "n_atoms": 15,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   75,
-   75,
-   75,
-   75
-  ],
-  "elements": [
-   "Al",
-   "Re"
-  ]
- },
- {
-  "id": "Al11Ti5",
-  "formula": "Al11Ti5",
-  "raw": "Al11Ti5",
-  "display": "Al\u2081\u2081Ti\u2085",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   22,
-   22,
-   22,
-   22,
-   22
-  ],
-  "elements": [
-   "Al",
-   "Ti"
-  ]
- },
- {
-  "id": "Al12Mn1",
-  "formula": "Al12Mn",
-  "raw": "Al12Mn1",
-  "display": "Al\u2081\u2082Mn\u2081",
-  "n_atoms": 13,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   25
-  ],
-  "elements": [
-   "Al",
-   "Mn"
-  ]
- },
- {
-  "id": "Al12Mo1",
-  "formula": "Al12Mo",
-  "raw": "Al12Mo1",
-  "display": "Al\u2081\u2082Mo\u2081",
-  "n_atoms": 13,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   42
-  ],
-  "elements": [
-   "Al",
-   "Mo"
-  ]
- },
- {
-  "id": "Al12Re1",
-  "formula": "Al12Re",
-  "raw": "Al12Re1",
-  "display": "Al\u2081\u2082Re\u2081",
-  "n_atoms": 13,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   75
-  ],
-  "elements": [
-   "Al",
-   "Re"
-  ]
- },
- {
-  "id": "Al12Ta17",
-  "formula": "Al12Ta17",
-  "raw": "Al12Ta17",
-  "display": "Al\u2081\u2082Ta\u2081\u2087",
-  "n_atoms": 29,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73
-  ],
-  "elements": [
-   "Al",
-   "Ta"
-  ]
- },
- {
-  "id": "Al12Tc1",
-  "formula": "Al12Tc",
-  "raw": "Al12Tc1",
-  "display": "Al\u2081\u2082Tc\u2081",
-  "n_atoms": 13,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   43
-  ],
-  "elements": [
-   "Al",
-   "Tc"
-  ]
- },
- {
-  "id": "Al12W1",
-  "formula": "Al12W",
-  "raw": "Al12W1",
-  "display": "Al\u2081\u2082W\u2081",
-  "n_atoms": 13,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   74
-  ],
-  "elements": [
-   "Al",
-   "W"
-  ]
- },
- {
-  "id": "Al13Os4",
-  "formula": "Al13Os4",
-  "raw": "Al13Os4",
-  "display": "Al\u2081\u2083Os\u2084",
-  "n_atoms": 17,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   76,
-   76,
-   76,
-   76
-  ],
-  "elements": [
-   "Al",
-   "Os"
-  ]
- },
- {
-  "id": "Al14Ca13",
-  "formula": "Al14Ca13",
-  "raw": "Al14Ca13",
-  "display": "Al\u2081\u2084Ca\u2081\u2083",
-  "n_atoms": 27,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20
-  ],
-  "elements": [
-   "Al",
-   "Ca"
-  ]
- },
- {
-  "id": "Al34Mo8",
-  "formula": "Al17Mo4",
-  "raw": "Al34Mo8",
-  "display": "Al\u2083\u2084Mo\u2088",
-  "n_atoms": 42,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   42,
-   42,
-   42,
-   42,
-   42,
-   42,
-   42,
-   42
-  ],
-  "elements": [
-   "Al",
-   "Mo"
-  ]
- },
- {
-  "id": "Al4Ca2",
-  "formula": "Al2Ca",
-  "raw": "Al4Ca2",
-  "display": "Al\u2084Ca\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   20,
-   20
-  ],
-  "elements": [
-   "Al",
-   "Ca"
-  ]
+  "count": 20
  },
  {
   "id": "Al4Cu2",
@@ -2438,119 +1025,8 @@
   "elements": [
    "Al",
    "Cu"
-  ]
- },
- {
-  "id": "Al8Hf4",
-  "formula": "Al2Hf",
-  "raw": "Al8Hf4",
-  "display": "Al\u2088Hf\u2084",
-  "n_atoms": 12,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   72,
-   72,
-   72,
-   72
   ],
-  "elements": [
-   "Al",
-   "Hf"
-  ]
- },
- {
-  "id": "Al8Hf12",
-  "formula": "Al2Hf3",
-  "raw": "Al8Hf12",
-  "display": "Al\u2088Hf\u2081\u2082",
-  "n_atoms": 20,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72
-  ],
-  "elements": [
-   "Al",
-   "Hf"
-  ]
- },
- {
-  "id": "Al4Ni6",
-  "formula": "Al2Ni3",
-  "raw": "Al4Ni6",
-  "display": "Al\u2084Ni\u2086",
-  "n_atoms": 10,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28
-  ],
-  "elements": [
-   "Al",
-   "Ni"
-  ]
- },
- {
-  "id": "Al12Pd6",
-  "formula": "Al2Pd",
-  "raw": "Al12Pd6",
-  "display": "Al\u2081\u2082Pd\u2086",
-  "n_atoms": 18,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46
-  ],
-  "elements": [
-   "Al",
-   "Pd"
-  ]
+  "count": 17
  },
  {
   "id": "Al12Pt6",
@@ -2581,7 +1057,8 @@
   "elements": [
    "Al",
    "Pt"
-  ]
+  ],
+  "count": 17
  },
  {
   "id": "Al4Ru2",
@@ -2600,49 +1077,8 @@
   "elements": [
    "Al",
    "Ru"
-  ]
- },
- {
-  "id": "Al4S6",
-  "formula": "Al2S3",
-  "raw": "Al4S6",
-  "display": "Al\u2084S\u2086",
-  "n_atoms": 10,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   16,
-   16,
-   16,
-   16,
-   16,
-   16
   ],
-  "elements": [
-   "Al",
-   "S"
-  ]
- },
- {
-  "id": "Al4Sc2",
-  "formula": "Al2Sc",
-  "raw": "Al4Sc2",
-  "display": "Al\u2084Sc\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   21,
-   21
-  ],
-  "elements": [
-   "Al",
-   "Sc"
-  ]
+  "count": 18
  },
  {
   "id": "Al4Sr2",
@@ -2661,50 +1097,8 @@
   "elements": [
    "Al",
    "Sr"
-  ]
- },
- {
-  "id": "Al4Te6",
-  "formula": "Al2Te3",
-  "raw": "Al4Te6",
-  "display": "Al\u2084Te\u2086",
-  "n_atoms": 10,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   52,
-   52,
-   52,
-   52,
-   52,
-   52
   ],
-  "elements": [
-   "Al",
-   "Te"
-  ]
- },
- {
-  "id": "Al2Te5",
-  "formula": "Al2Te5",
-  "raw": "Al2Te5",
-  "display": "Al\u2082Te\u2085",
-  "n_atoms": 7,
-  "numbers": [
-   13,
-   13,
-   52,
-   52,
-   52,
-   52,
-   52
-  ],
-  "elements": [
-   "Al",
-   "Te"
-  ]
+  "count": 19
  },
  {
   "id": "Al4Ti2",
@@ -2723,162 +1117,8 @@
   "elements": [
    "Al",
    "Ti"
-  ]
- },
- {
-  "id": "Al6W3",
-  "formula": "Al2W",
-  "raw": "Al6W3",
-  "display": "Al\u2086W\u2083",
-  "n_atoms": 9,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   74,
-   74,
-   74
   ],
-  "elements": [
-   "Al",
-   "W"
-  ]
- },
- {
-  "id": "Al4Y2",
-  "formula": "Al2Y",
-  "raw": "Al4Y2",
-  "display": "Al\u2084Y\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   39,
-   39
-  ],
-  "elements": [
-   "Al",
-   "Y"
-  ]
- },
- {
-  "id": "Al8Y12",
-  "formula": "Al2Y3",
-  "raw": "Al8Y12",
-  "display": "Al\u2088Y\u2081\u2082",
-  "n_atoms": 20,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39
-  ],
-  "elements": [
-   "Al",
-   "Y"
-  ]
- },
- {
-  "id": "Al6Ca16",
-  "formula": "Al3Ca8",
-  "raw": "Al6Ca16",
-  "display": "Al\u2086Ca\u2081\u2086",
-  "n_atoms": 22,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20
-  ],
-  "elements": [
-   "Al",
-   "Ca"
-  ]
- },
- {
-  "id": "Al12Co4",
-  "formula": "Al3Co",
-  "raw": "Al12Co4",
-  "display": "Al\u2081\u2082Co\u2084",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   27,
-   27,
-   27,
-   27
-  ],
-  "elements": [
-   "Al",
-   "Co"
-  ]
- },
- {
-  "id": "Al3Cr1",
-  "formula": "Al3Cr",
-  "raw": "Al3Cr1",
-  "display": "Al\u2083Cr\u2081",
-  "n_atoms": 4,
-  "numbers": [
-   13,
-   13,
-   13,
-   24
-  ],
-  "elements": [
-   "Al",
-   "Cr"
-  ]
+  "count": 13
  },
  {
   "id": "Al3Cu1",
@@ -2895,25 +1135,8 @@
   "elements": [
    "Al",
    "Cu"
-  ]
- },
- {
-  "id": "Al3Cu2",
-  "formula": "Al3Cu2",
-  "raw": "Al3Cu2",
-  "display": "Al\u2083Cu\u2082",
-  "n_atoms": 5,
-  "numbers": [
-   13,
-   13,
-   13,
-   29,
-   29
   ],
-  "elements": [
-   "Al",
-   "Cu"
-  ]
+  "count": 18
  },
  {
   "id": "Al3Hf1",
@@ -2930,79 +1153,8 @@
   "elements": [
    "Al",
    "Hf"
-  ]
- },
- {
-  "id": "Al6Hf4",
-  "formula": "Al3Hf2",
-  "raw": "Al6Hf4",
-  "display": "Al\u2086Hf\u2084",
-  "n_atoms": 10,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   72,
-   72,
-   72,
-   72
   ],
-  "elements": [
-   "Al",
-   "Hf"
-  ]
- },
- {
-  "id": "Al3Hf4",
-  "formula": "Al3Hf4",
-  "raw": "Al3Hf4",
-  "display": "Al\u2083Hf\u2084",
-  "n_atoms": 7,
-  "numbers": [
-   13,
-   13,
-   13,
-   72,
-   72,
-   72,
-   72
-  ],
-  "elements": [
-   "Al",
-   "Hf"
-  ]
- },
- {
-  "id": "Al6Hf10",
-  "formula": "Al3Hf5",
-  "raw": "Al6Hf10",
-  "display": "Al\u2086Hf\u2081\u2080",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72
-  ],
-  "elements": [
-   "Al",
-   "Hf"
-  ]
+  "count": 30
  },
  {
   "id": "Al6Ir2",
@@ -3023,40 +1175,8 @@
   "elements": [
    "Al",
    "Ir"
-  ]
- },
- {
-  "id": "Al12Mn8",
-  "formula": "Al3Mn2",
-  "raw": "Al12Mn8",
-  "display": "Al\u2081\u2082Mn\u2088",
-  "n_atoms": 20,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25
   ],
-  "elements": [
-   "Al",
-   "Mn"
-  ]
+  "count": 13
  },
  {
   "id": "Al12Mo4",
@@ -3085,205 +1205,8 @@
   "elements": [
    "Al",
    "Mo"
-  ]
- },
- {
-  "id": "Al12Ni4",
-  "formula": "Al3Ni",
-  "raw": "Al12Ni4",
-  "display": "Al\u2081\u2082Ni\u2084",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   28,
-   28,
-   28,
-   28
   ],
-  "elements": [
-   "Al",
-   "Ni"
-  ]
- },
- {
-  "id": "Al3Ni2",
-  "formula": "Al3Ni2",
-  "raw": "Al3Ni2",
-  "display": "Al\u2083Ni\u2082",
-  "n_atoms": 5,
-  "numbers": [
-   13,
-   13,
-   13,
-   28,
-   28
-  ],
-  "elements": [
-   "Al",
-   "Ni"
-  ]
- },
- {
-  "id": "Al3Ni5",
-  "formula": "Al3Ni5",
-  "raw": "Al3Ni5",
-  "display": "Al\u2083Ni\u2085",
-  "n_atoms": 8,
-  "numbers": [
-   13,
-   13,
-   13,
-   28,
-   28,
-   28,
-   28,
-   28
-  ],
-  "elements": [
-   "Al",
-   "Ni"
-  ]
- },
- {
-  "id": "Al3Os2",
-  "formula": "Al3Os2",
-  "raw": "Al3Os2",
-  "display": "Al\u2083Os\u2082",
-  "n_atoms": 5,
-  "numbers": [
-   13,
-   13,
-   13,
-   76,
-   76
-  ],
-  "elements": [
-   "Al",
-   "Os"
-  ]
- },
- {
-  "id": "Al3Pd2",
-  "formula": "Al3Pd2",
-  "raw": "Al3Pd2",
-  "display": "Al\u2083Pd\u2082",
-  "n_atoms": 5,
-  "numbers": [
-   13,
-   13,
-   13,
-   46,
-   46
-  ],
-  "elements": [
-   "Al",
-   "Pd"
-  ]
- },
- {
-  "id": "Al6Pd10",
-  "formula": "Al3Pd5",
-  "raw": "Al6Pd10",
-  "display": "Al\u2086Pd\u2081\u2080",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46
-  ],
-  "elements": [
-   "Al",
-   "Pd"
-  ]
- },
- {
-  "id": "Al3Pt2",
-  "formula": "Al3Pt2",
-  "raw": "Al3Pt2",
-  "display": "Al\u2083Pt\u2082",
-  "n_atoms": 5,
-  "numbers": [
-   13,
-   13,
-   13,
-   78,
-   78
-  ],
-  "elements": [
-   "Al",
-   "Pt"
-  ]
- },
- {
-  "id": "Al6Pt10",
-  "formula": "Al3Pt5",
-  "raw": "Al6Pt10",
-  "display": "Al\u2086Pt\u2081\u2080",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78,
-   78
-  ],
-  "elements": [
-   "Al",
-   "Pt"
-  ]
- },
- {
-  "id": "Al3Ru2",
-  "formula": "Al3Ru2",
-  "raw": "Al3Ru2",
-  "display": "Al\u2083Ru\u2082",
-  "n_atoms": 5,
-  "numbers": [
-   13,
-   13,
-   13,
-   44,
-   44
-  ],
-  "elements": [
-   "Al",
-   "Ru"
-  ]
+  "count": 14
  },
  {
   "id": "Al3Sc1",
@@ -3300,7 +1223,8 @@
   "elements": [
    "Al",
    "Sc"
-  ]
+  ],
+  "count": 22
  },
  {
   "id": "Al3Ta1",
@@ -3317,70 +1241,8 @@
   "elements": [
    "Al",
    "Ta"
-  ]
- },
- {
-  "id": "Al6Ta10",
-  "formula": "Al3Ta5",
-  "raw": "Al6Ta10",
-  "display": "Al\u2086Ta\u2081\u2080",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73
   ],
-  "elements": [
-   "Al",
-   "Ta"
-  ]
- },
- {
-  "id": "Al3Tc1",
-  "formula": "Al3Tc",
-  "raw": "Al3Tc1",
-  "display": "Al\u2083Tc\u2081",
-  "n_atoms": 4,
-  "numbers": [
-   13,
-   13,
-   13,
-   43
-  ],
-  "elements": [
-   "Al",
-   "Tc"
-  ]
- },
- {
-  "id": "Al3Ti1",
-  "formula": "Al3Ti",
-  "raw": "Al3Ti1",
-  "display": "Al\u2083Ti\u2081",
-  "n_atoms": 4,
-  "numbers": [
-   13,
-   13,
-   13,
-   22
-  ],
-  "elements": [
-   "Al",
-   "Ti"
-  ]
+  "count": 14
  },
  {
   "id": "Al3Y1",
@@ -3397,426 +1259,8 @@
   "elements": [
    "Al",
    "Y"
-  ]
- },
- {
-  "id": "Al6Y10",
-  "formula": "Al3Y5",
-  "raw": "Al6Y10",
-  "display": "Al\u2086Y\u2081\u2080",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39
   ],
-  "elements": [
-   "Al",
-   "Y"
-  ]
- },
- {
-  "id": "Al4C3",
-  "formula": "Al4C3",
-  "raw": "Al4C3",
-  "display": "Al\u2084C\u2083",
-  "n_atoms": 7,
-  "numbers": [
-   6,
-   6,
-   6,
-   13,
-   13,
-   13,
-   13
-  ],
-  "elements": [
-   "Al",
-   "C"
-  ]
- },
- {
-  "id": "Al4Ca1",
-  "formula": "Al4Ca",
-  "raw": "Al4Ca1",
-  "display": "Al\u2084Ca\u2081",
-  "n_atoms": 5,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   20
-  ],
-  "elements": [
-   "Al",
-   "Ca"
-  ]
- },
- {
-  "id": "Al4Cu15",
-  "formula": "Al4Cu15",
-  "raw": "Al4Cu15",
-  "display": "Al\u2084Cu\u2081\u2085",
-  "n_atoms": 19,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29
-  ],
-  "elements": [
-   "Al",
-   "Cu"
-  ]
- },
- {
-  "id": "Al12Mo3",
-  "formula": "Al4Mo",
-  "raw": "Al12Mo3",
-  "display": "Al\u2081\u2082Mo\u2083",
-  "n_atoms": 15,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   42,
-   42,
-   42
-  ],
-  "elements": [
-   "Al",
-   "Mo"
-  ]
- },
- {
-  "id": "Al4Sr1",
-  "formula": "Al4Sr",
-  "raw": "Al4Sr1",
-  "display": "Al\u2084Sr\u2081",
-  "n_atoms": 5,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   38
-  ],
-  "elements": [
-   "Al",
-   "Sr"
-  ]
- },
- {
-  "id": "Al8Ta22",
-  "formula": "Al4Ta11",
-  "raw": "Al8Ta22",
-  "display": "Al\u2088Ta\u2082\u2082",
-  "n_atoms": 30,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73
-  ],
-  "elements": [
-   "Al",
-   "Ta"
-  ]
- },
- {
-  "id": "Al12Tc3",
-  "formula": "Al4Tc",
-  "raw": "Al12Tc3",
-  "display": "Al\u2081\u2082Tc\u2083",
-  "n_atoms": 15,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   43,
-   43,
-   43
-  ],
-  "elements": [
-   "Al",
-   "Tc"
-  ]
- },
- {
-  "id": "Al12W3",
-  "formula": "Al4W",
-  "raw": "Al12W3",
-  "display": "Al\u2081\u2082W\u2083",
-  "n_atoms": 15,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   74,
-   74,
-   74
-  ],
-  "elements": [
-   "Al",
-   "W"
-  ]
- },
- {
-  "id": "Al20Co8",
-  "formula": "Al5Co2",
-  "raw": "Al20Co8",
-  "display": "Al\u2082\u2080Co\u2088",
-  "n_atoms": 28,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   27,
-   27,
-   27,
-   27,
-   27,
-   27,
-   27,
-   27
-  ],
-  "elements": [
-   "Al",
-   "Co"
-  ]
- },
- {
-  "id": "Al10Mo2",
-  "formula": "Al5Mo",
-  "raw": "Al10Mo2",
-  "display": "Al\u2081\u2080Mo\u2082",
-  "n_atoms": 12,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   42,
-   42
-  ],
-  "elements": [
-   "Al",
-   "Mo"
-  ]
- },
- {
-  "id": "Al5Re24",
-  "formula": "Al5Re24",
-  "raw": "Al5Re24",
-  "display": "Al\u2085Re\u2082\u2084",
-  "n_atoms": 29,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75,
-   75
-  ],
-  "elements": [
-   "Al",
-   "Re"
-  ]
- },
- {
-  "id": "Al20Rh8",
-  "formula": "Al5Rh2",
-  "raw": "Al20Rh8",
-  "display": "Al\u2082\u2080Rh\u2088",
-  "n_atoms": 28,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45
-  ],
-  "elements": [
-   "Al",
-   "Rh"
-  ]
- },
- {
-  "id": "Al5S8",
-  "formula": "Al5S8",
-  "raw": "Al5S8",
-  "display": "Al\u2085S\u2088",
-  "n_atoms": 13,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   16,
-   16,
-   16,
-   16,
-   16,
-   16,
-   16,
-   16
-  ],
-  "elements": [
-   "Al",
-   "S"
-  ]
+  "count": 22
  },
  {
   "id": "Al5Ti3",
@@ -3837,416 +1281,8 @@
   "elements": [
    "Al",
    "Ti"
-  ]
- },
- {
-  "id": "Al10W2",
-  "formula": "Al5W",
-  "raw": "Al10W2",
-  "display": "Al\u2081\u2080W\u2082",
-  "n_atoms": 12,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   74,
-   74
   ],
-  "elements": [
-   "Al",
-   "W"
-  ]
- },
- {
-  "id": "Al12Mn2",
-  "formula": "Al6Mn",
-  "raw": "Al12Mn2",
-  "display": "Al\u2081\u2082Mn\u2082",
-  "n_atoms": 14,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   25,
-   25
-  ],
-  "elements": [
-   "Al",
-   "Mn"
-  ]
- },
- {
-  "id": "Al12Re2",
-  "formula": "Al6Re",
-  "raw": "Al12Re2",
-  "display": "Al\u2081\u2082Re\u2082",
-  "n_atoms": 14,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   75,
-   75
-  ],
-  "elements": [
-   "Al",
-   "Re"
-  ]
- },
- {
-  "id": "Al12Ru2",
-  "formula": "Al6Ru",
-  "raw": "Al12Ru2",
-  "display": "Al\u2081\u2082Ru\u2082",
-  "n_atoms": 14,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   44,
-   44
-  ],
-  "elements": [
-   "Al",
-   "Ru"
-  ]
- },
- {
-  "id": "Al12Tc2",
-  "formula": "Al6Tc",
-  "raw": "Al12Tc2",
-  "display": "Al\u2081\u2082Tc\u2082",
-  "n_atoms": 14,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   43,
-   43
-  ],
-  "elements": [
-   "Al",
-   "Tc"
-  ]
- },
- {
-  "id": "Al16Cr10",
-  "formula": "Al8Cr5",
-  "raw": "Al16Cr10",
-  "display": "Al\u2081\u2086Cr\u2081\u2080",
-  "n_atoms": 26,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24
-  ],
-  "elements": [
-   "Al",
-   "Cr"
-  ]
- },
- {
-  "id": "Al16Mn10",
-  "formula": "Al8Mn5",
-  "raw": "Al16Mn10",
-  "display": "Al\u2081\u2086Mn\u2081\u2080",
-  "n_atoms": 26,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25
-  ],
-  "elements": [
-   "Al",
-   "Mn"
-  ]
- },
- {
-  "id": "Al8Mo3",
-  "formula": "Al8Mo3",
-  "raw": "Al8Mo3",
-  "display": "Al\u2088Mo\u2083",
-  "n_atoms": 11,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   42,
-   42,
-   42
-  ],
-  "elements": [
-   "Al",
-   "Mo"
-  ]
- },
- {
-  "id": "Al18Co4",
-  "formula": "Al9Co2",
-  "raw": "Al18Co4",
-  "display": "Al\u2081\u2088Co\u2084",
-  "n_atoms": 22,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   27,
-   27,
-   27,
-   27
-  ],
-  "elements": [
-   "Al",
-   "Co"
-  ]
- },
- {
-  "id": "Al9Sr5",
-  "formula": "Al9Sr5",
-  "raw": "Al9Sr5",
-  "display": "Al\u2089Sr\u2085",
-  "n_atoms": 14,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   38,
-   38,
-   38,
-   38,
-   38
-  ],
-  "elements": [
-   "Al",
-   "Sr"
-  ]
- },
- {
-  "id": "Al2As2",
-  "formula": "AlAs",
-  "raw": "Al2As2",
-  "display": "Al\u2082As\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   13,
-   13,
-   33,
-   33
-  ],
-  "elements": [
-   "Al",
-   "As"
-  ]
- },
- {
-  "id": "Al2Cl6",
-  "formula": "AlCl3",
-  "raw": "Al2Cl6",
-  "display": "Al\u2082Cl\u2086",
-  "n_atoms": 8,
-  "numbers": [
-   13,
-   13,
-   17,
-   17,
-   17,
-   17,
-   17,
-   17
-  ],
-  "elements": [
-   "Al",
-   "Cl"
-  ]
- },
- {
-  "id": "Al8Co8",
-  "formula": "AlCo",
-  "raw": "Al8Co8",
-  "display": "Al\u2088Co\u2088",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   27,
-   27,
-   27,
-   27,
-   27,
-   27,
-   27,
-   27
-  ],
-  "elements": [
-   "Al",
-   "Co"
-  ]
- },
- {
-  "id": "Al3Cr6",
-  "formula": "AlCr2",
-  "raw": "Al3Cr6",
-  "display": "Al\u2083Cr\u2086",
-  "n_atoms": 9,
-  "numbers": [
-   13,
-   13,
-   13,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24
-  ],
-  "elements": [
-   "Al",
-   "Cr"
-  ]
- },
- {
-  "id": "Al5Cu5",
-  "formula": "AlCu",
-  "raw": "Al5Cu5",
-  "display": "Al\u2085Cu\u2085",
-  "n_atoms": 10,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   29,
-   29,
-   29,
-   29,
-   29
-  ],
-  "elements": [
-   "Al",
-   "Cu"
-  ]
+  "count": 17
  },
  {
   "id": "Al1Cu3",
@@ -4263,61 +1299,8 @@
   "elements": [
    "Al",
    "Cu"
-  ]
- },
- {
-  "id": "Al4Cu16",
-  "formula": "AlCu4",
-  "raw": "Al4Cu16",
-  "display": "Al\u2084Cu\u2081\u2086",
-  "n_atoms": 20,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29,
-   29
   ],
-  "elements": [
-   "Al",
-   "Cu"
-  ]
- },
- {
-  "id": "Al2H6",
-  "formula": "AlH3",
-  "raw": "Al2H6",
-  "display": "Al\u2082H\u2086",
-  "n_atoms": 8,
-  "numbers": [
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   13,
-   13
-  ],
-  "elements": [
-   "Al",
-   "H"
-  ]
+  "count": 26
  },
  {
   "id": "Al2Hf2",
@@ -4334,79 +1317,8 @@
   "elements": [
    "Al",
    "Hf"
-  ]
- },
- {
-  "id": "Al2Hf4",
-  "formula": "AlHf2",
-  "raw": "Al2Hf4",
-  "display": "Al\u2082Hf\u2084",
-  "n_atoms": 6,
-  "numbers": [
-   13,
-   13,
-   72,
-   72,
-   72,
-   72
   ],
-  "elements": [
-   "Al",
-   "Hf"
-  ]
- },
- {
-  "id": "Al2Hf6",
-  "formula": "AlHf3",
-  "raw": "Al2Hf6",
-  "display": "Al\u2082Hf\u2086",
-  "n_atoms": 8,
-  "numbers": [
-   13,
-   13,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72
-  ],
-  "elements": [
-   "Al",
-   "Hf"
-  ]
- },
- {
-  "id": "Al1Mn1",
-  "formula": "AlMn",
-  "raw": "Al1Mn1",
-  "display": "Al\u2081Mn\u2081",
-  "n_atoms": 2,
-  "numbers": [
-   13,
-   25
-  ],
-  "elements": [
-   "Al",
-   "Mn"
-  ]
- },
- {
-  "id": "Al1Mn3",
-  "formula": "AlMn3",
-  "raw": "Al1Mn3",
-  "display": "Al\u2081Mn\u2083",
-  "n_atoms": 4,
-  "numbers": [
-   13,
-   25,
-   25,
-   25
-  ],
-  "elements": [
-   "Al",
-   "Mn"
-  ]
+  "count": 15
  },
  {
   "id": "Al2Mo6",
@@ -4427,7 +1339,8 @@
   "elements": [
    "Al",
    "Mo"
-  ]
+  ],
+  "count": 16
  },
  {
   "id": "Al2N2",
@@ -4444,7 +1357,8 @@
   "elements": [
    "Al",
    "N"
-  ]
+  ],
+  "count": 13
  },
  {
   "id": "Al8Ni8",
@@ -4473,26 +1387,8 @@
   "elements": [
    "Al",
    "Ni"
-  ]
- },
- {
-  "id": "Al2Ni4",
-  "formula": "AlNi2",
-  "raw": "Al2Ni4",
-  "display": "Al\u2082Ni\u2084",
-  "n_atoms": 6,
-  "numbers": [
-   13,
-   13,
-   28,
-   28,
-   28,
-   28
   ],
-  "elements": [
-   "Al",
-   "Ni"
-  ]
+  "count": 16
  },
  {
   "id": "Al1Ni3",
@@ -4509,161 +1405,8 @@
   "elements": [
    "Al",
    "Ni"
-  ]
- },
- {
-  "id": "Al8Os8",
-  "formula": "AlOs",
-  "raw": "Al8Os8",
-  "display": "Al\u2088Os\u2088",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   76,
-   76,
-   76,
-   76,
-   76,
-   76,
-   76,
-   76
   ],
-  "elements": [
-   "Al",
-   "Os"
-  ]
- },
- {
-  "id": "Al2P2",
-  "formula": "AlP",
-  "raw": "Al2P2",
-  "display": "Al\u2082P\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   13,
-   13,
-   15,
-   15
-  ],
-  "elements": [
-   "Al",
-   "P"
-  ]
- },
- {
-  "id": "Al8Pd8",
-  "formula": "AlPd",
-  "raw": "Al8Pd8",
-  "display": "Al\u2088Pd\u2088",
-  "n_atoms": 16,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46
-  ],
-  "elements": [
-   "Al",
-   "Pd"
-  ]
- },
- {
-  "id": "Al4Pd8",
-  "formula": "AlPd2",
-  "raw": "Al4Pd8",
-  "display": "Al\u2084Pd\u2088",
-  "n_atoms": 12,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46
-  ],
-  "elements": [
-   "Al",
-   "Pd"
-  ]
- },
- {
-  "id": "Al1Pd3",
-  "formula": "AlPd3",
-  "raw": "Al1Pd3",
-  "display": "Al\u2081Pd\u2083",
-  "n_atoms": 4,
-  "numbers": [
-   13,
-   46,
-   46,
-   46
-  ],
-  "elements": [
-   "Al",
-   "Pd"
-  ]
- },
- {
-  "id": "Al4Pd20",
-  "formula": "AlPd5",
-  "raw": "Al4Pd20",
-  "display": "Al\u2084Pd\u2082\u2080",
-  "n_atoms": 24,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46,
-   46
-  ],
-  "elements": [
-   "Al",
-   "Pd"
-  ]
+  "count": 15
  },
  {
   "id": "Al4Pt8",
@@ -4688,7 +1431,8 @@
   "elements": [
    "Al",
    "Pt"
-  ]
+  ],
+  "count": 13
  },
  {
   "id": "Al1Pt3",
@@ -4705,24 +1449,8 @@
   "elements": [
    "Al",
    "Pt"
-  ]
- },
- {
-  "id": "Al2Re2",
-  "formula": "AlRe",
-  "raw": "Al2Re2",
-  "display": "Al\u2082Re\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   13,
-   13,
-   75,
-   75
   ],
-  "elements": [
-   "Al",
-   "Re"
-  ]
+  "count": 35
  },
  {
   "id": "Al3Re6",
@@ -4744,94 +1472,8 @@
   "elements": [
    "Al",
    "Re"
-  ]
- },
- {
-  "id": "Al2Rh6",
-  "formula": "AlRh3",
-  "raw": "Al2Rh6",
-  "display": "Al\u2082Rh\u2086",
-  "n_atoms": 8,
-  "numbers": [
-   13,
-   13,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45
   ],
-  "elements": [
-   "Al",
-   "Rh"
-  ]
- },
- {
-  "id": "Al1Ru1",
-  "formula": "AlRu",
-  "raw": "Al1Ru1",
-  "display": "Al\u2081Ru\u2081",
-  "n_atoms": 2,
-  "numbers": [
-   13,
-   44
-  ],
-  "elements": [
-   "Al",
-   "Ru"
-  ]
- },
- {
-  "id": "Al2Sb2",
-  "formula": "AlSb",
-  "raw": "Al2Sb2",
-  "display": "Al\u2082Sb\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   13,
-   13,
-   51,
-   51
-  ],
-  "elements": [
-   "Al",
-   "Sb"
-  ]
- },
- {
-  "id": "Al1Sc1",
-  "formula": "AlSc",
-  "raw": "Al1Sc1",
-  "display": "Al\u2081Sc\u2081",
-  "n_atoms": 2,
-  "numbers": [
-   13,
-   21
-  ],
-  "elements": [
-   "Al",
-   "Sc"
-  ]
- },
- {
-  "id": "Al2Sc4",
-  "formula": "AlSc2",
-  "raw": "Al2Sc4",
-  "display": "Al\u2082Sc\u2084",
-  "n_atoms": 6,
-  "numbers": [
-   13,
-   13,
-   21,
-   21,
-   21,
-   21
-  ],
-  "elements": [
-   "Al",
-   "Sc"
-  ]
+  "count": 14
  },
  {
   "id": "Al1Sc3",
@@ -4848,118 +1490,8 @@
   "elements": [
    "Al",
    "Sc"
-  ]
- },
- {
-  "id": "Al10Ta20",
-  "formula": "AlTa2",
-  "raw": "Al10Ta20",
-  "display": "Al\u2081\u2080Ta\u2082\u2080",
-  "n_atoms": 30,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73,
-   73
   ],
-  "elements": [
-   "Al",
-   "Ta"
-  ]
- },
- {
-  "id": "Al3Tc6",
-  "formula": "AlTc2",
-  "raw": "Al3Tc6",
-  "display": "Al\u2083Tc\u2086",
-  "n_atoms": 9,
-  "numbers": [
-   13,
-   13,
-   13,
-   43,
-   43,
-   43,
-   43,
-   43,
-   43
-  ],
-  "elements": [
-   "Al",
-   "Tc"
-  ]
- },
- {
-  "id": "Al6Ti6",
-  "formula": "AlTi",
-  "raw": "Al6Ti6",
-  "display": "Al\u2086Ti\u2086",
-  "n_atoms": 12,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   13,
-   13,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22
-  ],
-  "elements": [
-   "Al",
-   "Ti"
-  ]
- },
- {
-  "id": "Al2Ti6",
-  "formula": "AlTi3",
-  "raw": "Al2Ti6",
-  "display": "Al\u2082Ti\u2086",
-  "n_atoms": 8,
-  "numbers": [
-   13,
-   13,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22
-  ],
-  "elements": [
-   "Al",
-   "Ti"
-  ]
+  "count": 19
  },
  {
   "id": "Al2Y2",
@@ -4976,68 +1508,8 @@
   "elements": [
    "Al",
    "Y"
-  ]
- },
- {
-  "id": "Al4Y8",
-  "formula": "AlY2",
-  "raw": "Al4Y8",
-  "display": "Al\u2084Y\u2088",
-  "n_atoms": 12,
-  "numbers": [
-   13,
-   13,
-   13,
-   13,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39,
-   39
   ],
-  "elements": [
-   "Al",
-   "Y"
-  ]
- },
- {
-  "id": "Al1Y3",
-  "formula": "AlY3",
-  "raw": "Al1Y3",
-  "display": "Al\u2081Y\u2083",
-  "n_atoms": 4,
-  "numbers": [
-   13,
-   39,
-   39,
-   39
-  ],
-  "elements": [
-   "Al",
-   "Y"
-  ]
- },
- {
-  "id": "As4Cd2",
-  "formula": "As2Cd",
-  "raw": "As4Cd2",
-  "display": "As\u2084Cd\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   48,
-   48
-  ],
-  "elements": [
-   "As",
-   "Cd"
-  ]
+  "count": 14
  },
  {
   "id": "As4Co2",
@@ -5056,132 +1528,8 @@
   "elements": [
    "As",
    "Co"
-  ]
- },
- {
-  "id": "As4Cr2",
-  "formula": "As2Cr",
-  "raw": "As4Cr2",
-  "display": "As\u2084Cr\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   24,
-   24,
-   33,
-   33,
-   33,
-   33
   ],
-  "elements": [
-   "As",
-   "Cr"
-  ]
- },
- {
-  "id": "As8Hf4",
-  "formula": "As2Hf",
-  "raw": "As8Hf4",
-  "display": "As\u2088Hf\u2084",
-  "n_atoms": 12,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   72,
-   72,
-   72,
-   72
-  ],
-  "elements": [
-   "As",
-   "Hf"
-  ]
- },
- {
-  "id": "As8Hf12",
-  "formula": "As2Hf3",
-  "raw": "As8Hf12",
-  "display": "As\u2088Hf\u2081\u2082",
-  "n_atoms": 20,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72
-  ],
-  "elements": [
-   "As",
-   "Hf"
-  ]
- },
- {
-  "id": "As8Ir4",
-  "formula": "As2Ir",
-  "raw": "As8Ir4",
-  "display": "As\u2088Ir\u2084",
-  "n_atoms": 12,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   77,
-   77,
-   77,
-   77
-  ],
-  "elements": [
-   "As",
-   "Ir"
-  ]
- },
- {
-  "id": "As4Mn6",
-  "formula": "As2Mn3",
-  "raw": "As4Mn6",
-  "display": "As\u2084Mn\u2086",
-  "n_atoms": 10,
-  "numbers": [
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Mn"
-  ]
+  "count": 17
  },
  {
   "id": "As4Mo2",
@@ -5200,26 +1548,8 @@
   "elements": [
    "As",
    "Mo"
-  ]
- },
- {
-  "id": "As4Nb2",
-  "formula": "As2Nb",
-  "raw": "As4Nb2",
-  "display": "As\u2084Nb\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   41,
-   41
   ],
-  "elements": [
-   "As",
-   "Nb"
-  ]
+  "count": 21
  },
  {
   "id": "As4Ni2",
@@ -5238,95 +1568,8 @@
   "elements": [
    "As",
    "Ni"
-  ]
- },
- {
-  "id": "As4Os2",
-  "formula": "As2Os",
-  "raw": "As4Os2",
-  "display": "As\u2084Os\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   76,
-   76
   ],
-  "elements": [
-   "As",
-   "Os"
-  ]
- },
- {
-  "id": "As8Pd4",
-  "formula": "As2Pd",
-  "raw": "As8Pd4",
-  "display": "As\u2088Pd\u2084",
-  "n_atoms": 12,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   46,
-   46,
-   46,
-   46
-  ],
-  "elements": [
-   "As",
-   "Pd"
-  ]
- },
- {
-  "id": "As8Rh4",
-  "formula": "As2Rh",
-  "raw": "As8Rh4",
-  "display": "As\u2088Rh\u2084",
-  "n_atoms": 12,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   45,
-   45,
-   45,
-   45
-  ],
-  "elements": [
-   "As",
-   "Rh"
-  ]
- },
- {
-  "id": "As4Ru2",
-  "formula": "As2Ru",
-  "raw": "As4Ru2",
-  "display": "As\u2084Ru\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   44,
-   44
-  ],
-  "elements": [
-   "As",
-   "Ru"
-  ]
+  "count": 19
  },
  {
   "id": "As8Sc12",
@@ -5359,104 +1602,8 @@
   "elements": [
    "As",
    "Sc"
-  ]
- },
- {
-  "id": "As4Se6",
-  "formula": "As2Se3",
-  "raw": "As4Se6",
-  "display": "As\u2084Se\u2086",
-  "n_atoms": 10,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   34,
-   34,
-   34,
-   34,
-   34,
-   34
   ],
-  "elements": [
-   "As",
-   "Se"
-  ]
- },
- {
-  "id": "As16Si8",
-  "formula": "As2Si",
-  "raw": "As16Si8",
-  "display": "As\u2081\u2086Si\u2088",
-  "n_atoms": 24,
-  "numbers": [
-   14,
-   14,
-   14,
-   14,
-   14,
-   14,
-   14,
-   14,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Si"
-  ]
- },
- {
-  "id": "As4Ta2",
-  "formula": "As2Ta",
-  "raw": "As4Ta2",
-  "display": "As\u2084Ta\u2082",
-  "n_atoms": 6,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   73,
-   73
-  ],
-  "elements": [
-   "As",
-   "Ta"
-  ]
- },
- {
-  "id": "As2Te3",
-  "formula": "As2Te3",
-  "raw": "As2Te3",
-  "display": "As\u2082Te\u2083",
-  "n_atoms": 5,
-  "numbers": [
-   33,
-   33,
-   52,
-   52,
-   52
-  ],
-  "elements": [
-   "As",
-   "Te"
-  ]
+  "count": 16
  },
  {
   "id": "As16Ti8",
@@ -5493,1281 +1640,8 @@
   "elements": [
    "As",
    "Ti"
-  ]
- },
- {
-  "id": "As16Zn8",
-  "formula": "As2Zn",
-  "raw": "As16Zn8",
-  "display": "As\u2081\u2086Zn\u2088",
-  "n_atoms": 24,
-  "numbers": [
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
   ],
-  "elements": [
-   "As",
-   "Zn"
-  ]
- },
- {
-  "id": "As16Zn24",
-  "formula": "As2Zn3",
-  "raw": "As16Zn24",
-  "display": "As\u2081\u2086Zn\u2082\u2084",
-  "n_atoms": 40,
-  "numbers": [
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   30,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Zn"
-  ]
- },
- {
-  "id": "As8Zr4",
-  "formula": "As2Zr",
-  "raw": "As8Zr4",
-  "display": "As\u2088Zr\u2084",
-  "n_atoms": 12,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   40,
-   40,
-   40,
-   40
-  ],
-  "elements": [
-   "As",
-   "Zr"
-  ]
- },
- {
-  "id": "As8Zr12",
-  "formula": "As2Zr3",
-  "raw": "As8Zr12",
-  "display": "As\u2088Zr\u2081\u2082",
-  "n_atoms": 20,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   40,
-   40,
-   40,
-   40,
-   40,
-   40,
-   40,
-   40,
-   40,
-   40,
-   40,
-   40
-  ],
-  "elements": [
-   "As",
-   "Zr"
-  ]
- },
- {
-  "id": "As6Ca2",
-  "formula": "As3Ca",
-  "raw": "As6Ca2",
-  "display": "As\u2086Ca\u2082",
-  "n_atoms": 8,
-  "numbers": [
-   20,
-   20,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ca"
-  ]
- },
- {
-  "id": "As24Ca16",
-  "formula": "As3Ca2",
-  "raw": "As24Ca16",
-  "display": "As\u2082\u2084Ca\u2081\u2086",
-  "n_atoms": 40,
-  "numbers": [
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ca"
-  ]
- },
- {
-  "id": "As6Ca10",
-  "formula": "As3Ca5",
-  "raw": "As6Ca10",
-  "display": "As\u2086Ca\u2081\u2080",
-  "n_atoms": 16,
-  "numbers": [
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ca"
-  ]
- },
- {
-  "id": "As12Co4",
-  "formula": "As3Co",
-  "raw": "As12Co4",
-  "display": "As\u2081\u2082Co\u2084",
-  "n_atoms": 16,
-  "numbers": [
-   27,
-   27,
-   27,
-   27,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Co"
-  ]
- },
- {
-  "id": "As18Cr24",
-  "formula": "As3Cr4",
-  "raw": "As18Cr24",
-  "display": "As\u2081\u2088Cr\u2082\u2084",
-  "n_atoms": 42,
-  "numbers": [
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Cr"
-  ]
- },
- {
-  "id": "As12Ir4",
-  "formula": "As3Ir",
-  "raw": "As12Ir4",
-  "display": "As\u2081\u2082Ir\u2084",
-  "n_atoms": 16,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   77,
-   77,
-   77,
-   77
-  ],
-  "elements": [
-   "As",
-   "Ir"
-  ]
- },
- {
-  "id": "As6Mn8",
-  "formula": "As3Mn4",
-  "raw": "As6Mn8",
-  "display": "As\u2086Mn\u2088",
-  "n_atoms": 14,
-  "numbers": [
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Mn"
-  ]
- },
- {
-  "id": "As6Mo4",
-  "formula": "As3Mo2",
-  "raw": "As6Mo4",
-  "display": "As\u2086Mo\u2084",
-  "n_atoms": 10,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   42,
-   42,
-   42,
-   42
-  ],
-  "elements": [
-   "As",
-   "Mo"
-  ]
- },
- {
-  "id": "As24Rb16",
-  "formula": "As3Rb2",
-  "raw": "As24Rb16",
-  "display": "As\u2082\u2084Rb\u2081\u2086",
-  "n_atoms": 40,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37,
-   37
-  ],
-  "elements": [
-   "As",
-   "Rb"
-  ]
- },
- {
-  "id": "As12Rh4",
-  "formula": "As3Rh",
-  "raw": "As12Rh4",
-  "display": "As\u2081\u2082Rh\u2084",
-  "n_atoms": 16,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   45,
-   45,
-   45,
-   45
-  ],
-  "elements": [
-   "As",
-   "Rh"
-  ]
- },
- {
-  "id": "As12Sc20",
-  "formula": "As3Sc5",
-  "raw": "As12Sc20",
-  "display": "As\u2081\u2082Sc\u2082\u2080",
-  "n_atoms": 32,
-  "numbers": [
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   21,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Sc"
-  ]
- },
- {
-  "id": "As6Sr2",
-  "formula": "As3Sr",
-  "raw": "As6Sr2",
-  "display": "As\u2086Sr\u2082",
-  "n_atoms": 8,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   38,
-   38
-  ],
-  "elements": [
-   "As",
-   "Sr"
-  ]
- },
- {
-  "id": "As6Sr10",
-  "formula": "As3Sr5",
-  "raw": "As6Sr10",
-  "display": "As\u2086Sr\u2081\u2080",
-  "n_atoms": 16,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38
-  ],
-  "elements": [
-   "As",
-   "Sr"
-  ]
- },
- {
-  "id": "As12Tc8",
-  "formula": "As3Tc2",
-  "raw": "As12Tc8",
-  "display": "As\u2081\u2082Tc\u2088",
-  "n_atoms": 20,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   43,
-   43,
-   43,
-   43,
-   43,
-   43,
-   43,
-   43
-  ],
-  "elements": [
-   "As",
-   "Tc"
-  ]
- },
- {
-  "id": "As6Ti8",
-  "formula": "As3Ti4",
-  "raw": "As6Ti8",
-  "display": "As\u2086Ti\u2088",
-  "n_atoms": 14,
-  "numbers": [
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ti"
-  ]
- },
- {
-  "id": "As12Ti20",
-  "formula": "As3Ti5",
-  "raw": "As12Ti20",
-  "display": "As\u2081\u2082Ti\u2082\u2080",
-  "n_atoms": 32,
-  "numbers": [
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   22,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ti"
-  ]
- },
- {
-  "id": "As8Hf14",
-  "formula": "As4Hf7",
-  "raw": "As8Hf14",
-  "display": "As\u2088Hf\u2081\u2084",
-  "n_atoms": 22,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72
-  ],
-  "elements": [
-   "As",
-   "Hf"
-  ]
- },
- {
-  "id": "As4K5",
-  "formula": "As4K5",
-  "raw": "As4K5",
-  "display": "As\u2084K\u2085",
-  "n_atoms": 9,
-  "numbers": [
-   19,
-   19,
-   19,
-   19,
-   19,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "K"
-  ]
- },
- {
-  "id": "As8Mn10",
-  "formula": "As4Mn5",
-  "raw": "As8Mn10",
-  "display": "As\u2088Mn\u2081\u2080",
-  "n_atoms": 18,
-  "numbers": [
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Mn"
-  ]
- },
- {
-  "id": "As4Mo5",
-  "formula": "As4Mo5",
-  "raw": "As4Mo5",
-  "display": "As\u2084Mo\u2085",
-  "n_atoms": 9,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   42,
-   42,
-   42,
-   42,
-   42
-  ],
-  "elements": [
-   "As",
-   "Mo"
-  ]
- },
- {
-  "id": "As4Na5",
-  "formula": "As4Na5",
-  "raw": "As4Na5",
-  "display": "As\u2084Na\u2085",
-  "n_atoms": 9,
-  "numbers": [
-   11,
-   11,
-   11,
-   11,
-   11,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Na"
-  ]
- },
- {
-  "id": "As16Se12",
-  "formula": "As4Se3",
-  "raw": "As16Se12",
-  "display": "As\u2081\u2086Se\u2081\u2082",
-  "n_atoms": 28,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   34,
-   34,
-   34,
-   34,
-   34,
-   34,
-   34,
-   34,
-   34,
-   34,
-   34,
-   34
-  ],
-  "elements": [
-   "As",
-   "Se"
-  ]
- },
- {
-  "id": "As4Si3",
-  "formula": "As4Si3",
-  "raw": "As4Si3",
-  "display": "As\u2084Si\u2083",
-  "n_atoms": 7,
-  "numbers": [
-   14,
-   14,
-   14,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Si"
-  ]
- },
- {
-  "id": "As4Sn3",
-  "formula": "As4Sn3",
-  "raw": "As4Sn3",
-  "display": "As\u2084Sn\u2083",
-  "n_atoms": 7,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   50,
-   50,
-   50
-  ],
-  "elements": [
-   "As",
-   "Sn"
-  ]
- },
- {
-  "id": "As16Sr12",
-  "formula": "As4Sr3",
-  "raw": "As16Sr12",
-  "display": "As\u2081\u2086Sr\u2081\u2082",
-  "n_atoms": 28,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38,
-   38
-  ],
-  "elements": [
-   "As",
-   "Sr"
-  ]
- },
- {
-  "id": "As4Ta5",
-  "formula": "As4Ta5",
-  "raw": "As4Ta5",
-  "display": "As\u2084Ta\u2085",
-  "n_atoms": 9,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   73,
-   73,
-   73,
-   73,
-   73
-  ],
-  "elements": [
-   "As",
-   "Ta"
-  ]
- },
- {
-  "id": "As7Rh12",
-  "formula": "As7Rh12",
-  "raw": "As7Rh12",
-  "display": "As\u2087Rh\u2081\u2082",
-  "n_atoms": 19,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45,
-   45
-  ],
-  "elements": [
-   "As",
-   "Rh"
-  ]
- },
- {
-  "id": "As16Ni22",
-  "formula": "As8Ni11",
-  "raw": "As16Ni22",
-  "display": "As\u2081\u2086Ni\u2082\u2082",
-  "n_atoms": 38,
-  "numbers": [
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ni"
-  ]
- },
- {
-  "id": "As6Ca6",
-  "formula": "AsCa",
-  "raw": "As6Ca6",
-  "display": "As\u2086Ca\u2086",
-  "n_atoms": 12,
-  "numbers": [
-   20,
-   20,
-   20,
-   20,
-   20,
-   20,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ca"
-  ]
- },
- {
-  "id": "As2Ca4",
-  "formula": "AsCa2",
-  "raw": "As2Ca4",
-  "display": "As\u2082Ca\u2084",
-  "n_atoms": 6,
-  "numbers": [
-   20,
-   20,
-   20,
-   20,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ca"
-  ]
- },
- {
-  "id": "As8Cd8",
-  "formula": "AsCd",
-  "raw": "As8Cd8",
-  "display": "As\u2088Cd\u2088",
-  "n_atoms": 16,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   48,
-   48,
-   48,
-   48,
-   48,
-   48,
-   48,
-   48
-  ],
-  "elements": [
-   "As",
-   "Cd"
-  ]
- },
- {
-  "id": "As2Co2",
-  "formula": "AsCo",
-  "raw": "As2Co2",
-  "display": "As\u2082Co\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   27,
-   27,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Co"
-  ]
- },
- {
-  "id": "As3Co6",
-  "formula": "AsCo2",
-  "raw": "As3Co6",
-  "display": "As\u2083Co\u2086",
-  "n_atoms": 9,
-  "numbers": [
-   27,
-   27,
-   27,
-   27,
-   27,
-   27,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Co"
-  ]
- },
- {
-  "id": "As2Cr2",
-  "formula": "AsCr",
-  "raw": "As2Cr2",
-  "display": "As\u2082Cr\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   24,
-   24,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Cr"
-  ]
- },
- {
-  "id": "As2Cr4",
-  "formula": "AsCr2",
-  "raw": "As2Cr4",
-  "display": "As\u2082Cr\u2084",
-  "n_atoms": 6,
-  "numbers": [
-   24,
-   24,
-   24,
-   24,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Cr"
-  ]
- },
- {
-  "id": "As2Cr6",
-  "formula": "AsCr3",
-  "raw": "As2Cr6",
-  "display": "As\u2082Cr\u2086",
-  "n_atoms": 8,
-  "numbers": [
-   24,
-   24,
-   24,
-   24,
-   24,
-   24,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Cr"
-  ]
- },
- {
-  "id": "As8Ga8",
-  "formula": "AsGa",
-  "raw": "As8Ga8",
-  "display": "As\u2088Ga\u2088",
-  "n_atoms": 16,
-  "numbers": [
-   31,
-   31,
-   31,
-   31,
-   31,
-   31,
-   31,
-   31,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ga"
-  ]
- },
- {
-  "id": "As4Hf4",
-  "formula": "AsHf",
-  "raw": "As4Hf4",
-  "display": "As\u2084Hf\u2084",
-  "n_atoms": 8,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   72,
-   72,
-   72,
-   72
-  ],
-  "elements": [
-   "As",
-   "Hf"
-  ]
+  "count": 14
  },
  {
   "id": "As12Hf24",
@@ -6816,102 +1690,8 @@
   "elements": [
    "As",
    "Hf"
-  ]
- },
- {
-  "id": "As8Hf24",
-  "formula": "AsHf3",
-  "raw": "As8Hf24",
-  "display": "As\u2088Hf\u2082\u2084",
-  "n_atoms": 32,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72,
-   72
   ],
-  "elements": [
-   "As",
-   "Hf"
-  ]
- },
- {
-  "id": "As8K8",
-  "formula": "AsK",
-  "raw": "As8K8",
-  "display": "As\u2088K\u2088",
-  "n_atoms": 16,
-  "numbers": [
-   19,
-   19,
-   19,
-   19,
-   19,
-   19,
-   19,
-   19,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "K"
-  ]
- },
- {
-  "id": "As2K6",
-  "formula": "AsK3",
-  "raw": "As2K6",
-  "display": "As\u2082K\u2086",
-  "n_atoms": 8,
-  "numbers": [
-   19,
-   19,
-   19,
-   19,
-   19,
-   19,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "K"
-  ]
+  "count": 13
  },
  {
   "id": "As2Mn2",
@@ -6928,254 +1708,8 @@
   "elements": [
    "As",
    "Mn"
-  ]
- },
- {
-  "id": "As2Mn4",
-  "formula": "AsMn2",
-  "raw": "As2Mn4",
-  "display": "As\u2082Mn\u2084",
-  "n_atoms": 6,
-  "numbers": [
-   25,
-   25,
-   25,
-   25,
-   33,
-   33
   ],
-  "elements": [
-   "As",
-   "Mn"
-  ]
- },
- {
-  "id": "As12Mn36",
-  "formula": "AsMn3",
-  "raw": "As12Mn36",
-  "display": "As\u2081\u2082Mn\u2083\u2086",
-  "n_atoms": 48,
-  "numbers": [
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   25,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Mn"
-  ]
- },
- {
-  "id": "As4Mo4",
-  "formula": "AsMo",
-  "raw": "As4Mo4",
-  "display": "As\u2084Mo\u2084",
-  "n_atoms": 8,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   42,
-   42,
-   42,
-   42
-  ],
-  "elements": [
-   "As",
-   "Mo"
-  ]
- },
- {
-  "id": "As8Na8",
-  "formula": "AsNa",
-  "raw": "As8Na8",
-  "display": "As\u2088Na\u2088",
-  "n_atoms": 16,
-  "numbers": [
-   11,
-   11,
-   11,
-   11,
-   11,
-   11,
-   11,
-   11,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Na"
-  ]
- },
- {
-  "id": "As1Na3",
-  "formula": "AsNa3",
-  "raw": "As1Na3",
-  "display": "As\u2081Na\u2083",
-  "n_atoms": 4,
-  "numbers": [
-   11,
-   11,
-   11,
-   33
-  ],
-  "elements": [
-   "As",
-   "Na"
-  ]
- },
- {
-  "id": "As2Nb2",
-  "formula": "AsNb",
-  "raw": "As2Nb2",
-  "display": "As\u2082Nb\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   33,
-   33,
-   41,
-   41
-  ],
-  "elements": [
-   "As",
-   "Nb"
-  ]
- },
- {
-  "id": "As8Nb24",
-  "formula": "AsNb3",
-  "raw": "As8Nb24",
-  "display": "As\u2088Nb\u2082\u2084",
-  "n_atoms": 32,
-  "numbers": [
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   33,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41,
-   41
-  ],
-  "elements": [
-   "As",
-   "Nb"
-  ]
- },
- {
-  "id": "As2Ni2",
-  "formula": "AsNi",
-  "raw": "As2Ni2",
-  "display": "As\u2082Ni\u2082",
-  "n_atoms": 4,
-  "numbers": [
-   28,
-   28,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ni"
-  ]
- },
- {
-  "id": "As2Ni6",
-  "formula": "AsNi3",
-  "raw": "As2Ni6",
-  "display": "As\u2082Ni\u2086",
-  "n_atoms": 8,
-  "numbers": [
-   28,
-   28,
-   28,
-   28,
-   28,
-   28,
-   33,
-   33
-  ],
-  "elements": [
-   "As",
-   "Ni"
-  ]
+  "count": 15
  },
  {
   "id": "As3Pd6",
@@ -7197,25 +1731,2820 @@
   "elements": [
    "As",
    "Pd"
-  ]
+  ],
+  "count": 17
  },
  {
-  "id": "As4Pd12",
-  "formula": "AsPd3",
-  "raw": "As4Pd12",
-  "display": "As\u2084Pd\u2081\u2082",
-  "n_atoms": 16,
+  "id": "As4Rh8",
+  "formula": "AsRh2",
+  "raw": "As4Rh8",
+  "display": "As\u2084Rh\u2088",
+  "n_atoms": 12,
   "numbers": [
    33,
    33,
    33,
    33,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45
+  ],
+  "elements": [
+   "As",
+   "Rh"
+  ],
+  "count": 19
+ },
+ {
+  "id": "As2Ti2",
+  "formula": "AsTi",
+  "raw": "As2Ti2",
+  "display": "As\u2082Ti\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   22,
+   22,
+   33,
+   33
+  ],
+  "elements": [
+   "As",
+   "Ti"
+  ],
+  "count": 17
+ },
+ {
+  "id": "As2Ti6",
+  "formula": "AsTi3",
+  "raw": "As2Ti6",
+  "display": "As\u2082Ti\u2086",
+  "n_atoms": 8,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   33,
+   33
+  ],
+  "elements": [
+   "As",
+   "Ti"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Au6Ti3",
+  "formula": "Au2Ti",
+  "raw": "Au6Ti3",
+  "display": "Au\u2086Ti\u2083",
+  "n_atoms": 9,
+  "numbers": [
+   22,
+   22,
+   22,
+   79,
+   79,
+   79,
+   79,
+   79,
+   79
+  ],
+  "elements": [
+   "Au",
+   "Ti"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Au3Cd1",
+  "formula": "Au3Cd",
+  "raw": "Au3Cd1",
+  "display": "Au\u2083Cd\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   48,
+   79,
+   79,
+   79
+  ],
+  "elements": [
+   "Au",
+   "Cd"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Au3Cu1",
+  "formula": "Au3Cu",
+  "raw": "Au3Cu1",
+  "display": "Au\u2083Cu\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   29,
+   79,
+   79,
+   79
+  ],
+  "elements": [
+   "Au",
+   "Cu"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Au2Ca2",
+  "formula": "AuCa",
+  "raw": "Au2Ca2",
+  "display": "Au\u2082Ca\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   20,
+   20,
+   79,
+   79
+  ],
+  "elements": [
+   "Au",
+   "Ca"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Au3Hf6",
+  "formula": "AuHf2",
+  "raw": "Au3Hf6",
+  "display": "Au\u2083Hf\u2086",
+  "n_atoms": 9,
+  "numbers": [
+   72,
+   72,
+   72,
+   72,
+   72,
+   72,
+   79,
+   79,
+   79
+  ],
+  "elements": [
+   "Au",
+   "Hf"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Au1Nb3",
+  "formula": "AuNb3",
+  "raw": "Au1Nb3",
+  "display": "Au\u2081Nb\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   41,
+   41,
+   41,
+   79
+  ],
+  "elements": [
+   "Au",
+   "Nb"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Au4Te8",
+  "formula": "AuTe2",
+  "raw": "Au4Te8",
+  "display": "Au\u2084Te\u2088",
+  "n_atoms": 12,
+  "numbers": [
+   52,
+   52,
+   52,
+   52,
+   52,
+   52,
+   52,
+   52,
+   79,
+   79,
+   79,
+   79
+  ],
+  "elements": [
+   "Au",
+   "Te"
+  ],
+  "count": 20
+ },
+ {
+  "id": "Au2Y2",
+  "formula": "AuY",
+  "raw": "Au2Y2",
+  "display": "Au\u2082Y\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   39,
+   39,
+   79,
+   79
+  ],
+  "elements": [
+   "Au",
+   "Y"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Bi4Pd2",
+  "formula": "Bi2Pd",
+  "raw": "Bi4Pd2",
+  "display": "Bi\u2084Pd\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   46,
+   46,
+   83,
+   83,
+   83,
+   83
+  ],
+  "elements": [
+   "Bi",
+   "Pd"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Bi4Pd10",
+  "formula": "Bi2Pd5",
+  "raw": "Bi4Pd10",
+  "display": "Bi\u2084Pd\u2081\u2080",
+  "n_atoms": 14,
+  "numbers": [
    46,
    46,
    46,
    46,
    46,
    46,
+   46,
+   46,
+   46,
+   46,
+   83,
+   83,
+   83,
+   83
+  ],
+  "elements": [
+   "Bi",
+   "Pd"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Bi4K5",
+  "formula": "Bi4K5",
+  "raw": "Bi4K5",
+  "display": "Bi\u2084K\u2085",
+  "n_atoms": 9,
+  "numbers": [
+   19,
+   19,
+   19,
+   19,
+   19,
+   83,
+   83,
+   83,
+   83
+  ],
+  "elements": [
+   "Bi",
+   "K"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Bi1Hf3",
+  "formula": "BiHf3",
+  "raw": "Bi1Hf3",
+  "display": "Bi\u2081Hf\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   72,
+   72,
+   72,
+   83
+  ],
+  "elements": [
+   "Bi",
+   "Hf"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Bi1Pd3",
+  "formula": "BiPd3",
+  "raw": "Bi1Pd3",
+  "display": "Bi\u2081Pd\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   46,
+   46,
+   46,
+   83
+  ],
+  "elements": [
+   "Bi",
+   "Pd"
+  ],
+  "count": 24
+ },
+ {
+  "id": "Bi2Sc6",
+  "formula": "BiSc3",
+  "raw": "Bi2Sc6",
+  "display": "Bi\u2082Sc\u2086",
+  "n_atoms": 8,
+  "numbers": [
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   83,
+   83
+  ],
+  "elements": [
+   "Bi",
+   "Sc"
+  ],
+  "count": 14
+ },
+ {
+  "id": "C4Mo8",
+  "formula": "CMo2",
+  "raw": "C4Mo8",
+  "display": "C\u2084Mo\u2088",
+  "n_atoms": 12,
+  "numbers": [
+   6,
+   6,
+   6,
+   6,
+   42,
+   42,
+   42,
+   42,
+   42,
+   42,
+   42,
+   42
+  ],
+  "elements": [
+   "C",
+   "Mo"
+  ],
+  "count": 17
+ },
+ {
+  "id": "C4Nb8",
+  "formula": "CNb2",
+  "raw": "C4Nb8",
+  "display": "C\u2084Nb\u2088",
+  "n_atoms": 12,
+  "numbers": [
+   6,
+   6,
+   6,
+   6,
+   41,
+   41,
+   41,
+   41,
+   41,
+   41,
+   41,
+   41
+  ],
+  "elements": [
+   "C",
+   "Nb"
+  ],
+  "count": 13
+ },
+ {
+  "id": "C2Si2",
+  "formula": "CSi",
+  "raw": "C2Si2",
+  "display": "C\u2082Si\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   6,
+   6,
+   14,
+   14
+  ],
+  "elements": [
+   "C",
+   "Si"
+  ],
+  "count": 29
+ },
+ {
+  "id": "C4V8",
+  "formula": "CV2",
+  "raw": "C4V8",
+  "display": "C\u2084V\u2088",
+  "n_atoms": 12,
+  "numbers": [
+   6,
+   6,
+   6,
+   6,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23
+  ],
+  "elements": [
+   "C",
+   "V"
+  ],
+  "count": 19
+ },
+ {
+  "id": "C2W4",
+  "formula": "CW2",
+  "raw": "C2W4",
+  "display": "C\u2082W\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   6,
+   6,
+   74,
+   74,
+   74,
+   74
+  ],
+  "elements": [
+   "C",
+   "W"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Ca3N2",
+  "formula": "Ca3N2",
+  "raw": "Ca3N2",
+  "display": "Ca\u2083N\u2082",
+  "n_atoms": 5,
+  "numbers": [
+   7,
+   7,
+   20,
+   20,
+   20
+  ],
+  "elements": [
+   "Ca",
+   "N"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Ca3Pb1",
+  "formula": "Ca3Pb",
+  "raw": "Ca3Pb1",
+  "display": "Ca\u2083Pb\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   20,
+   20,
+   20,
+   82
+  ],
+  "elements": [
+   "Ca",
+   "Pb"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Ca6Zn2",
+  "formula": "Ca3Zn",
+  "raw": "Ca6Zn2",
+  "display": "Ca\u2086Zn\u2082",
+  "n_atoms": 8,
+  "numbers": [
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   30,
+   30
+  ],
+  "elements": [
+   "Ca",
+   "Zn"
+  ],
+  "count": 25
+ },
+ {
+  "id": "Ca10Sb6",
+  "formula": "Ca5Sb3",
+  "raw": "Ca10Sb6",
+  "display": "Ca\u2081\u2080Sb\u2086",
+  "n_atoms": 16,
+  "numbers": [
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51
+  ],
+  "elements": [
+   "Ca",
+   "Sb"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Ca16In6",
+  "formula": "Ca8In3",
+  "raw": "Ca16In6",
+  "display": "Ca\u2081\u2086In\u2086",
+  "n_atoms": 22,
+  "numbers": [
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   20,
+   49,
+   49,
+   49,
+   49,
+   49,
+   49
+  ],
+  "elements": [
+   "Ca",
+   "In"
+  ],
+  "count": 20
+ },
+ {
+  "id": "Ca2Cd4",
+  "formula": "CaCd2",
+  "raw": "Ca2Cd4",
+  "display": "Ca\u2082Cd\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   20,
+   20,
+   48,
+   48,
+   48,
+   48
+  ],
+  "elements": [
+   "Ca",
+   "Cd"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Ca2Hg6",
+  "formula": "CaHg3",
+  "raw": "Ca2Hg6",
+  "display": "Ca\u2082Hg\u2086",
+  "n_atoms": 8,
+  "numbers": [
+   20,
+   20,
+   80,
+   80,
+   80,
+   80,
+   80,
+   80
+  ],
+  "elements": [
+   "Ca",
+   "Hg"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Ca4In4",
+  "formula": "CaIn",
+  "raw": "Ca4In4",
+  "display": "Ca\u2084In\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   20,
+   20,
+   20,
+   20,
+   49,
+   49,
+   49,
+   49
+  ],
+  "elements": [
+   "Ca",
+   "In"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Ca2Pt4",
+  "formula": "CaPt2",
+  "raw": "Ca2Pt4",
+  "display": "Ca\u2082Pt\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   20,
+   20,
+   78,
+   78,
+   78,
+   78
+  ],
+  "elements": [
+   "Ca",
+   "Pt"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Ca2Si4",
+  "formula": "CaSi2",
+  "raw": "Ca2Si4",
+  "display": "Ca\u2082Si\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   20,
+   20
+  ],
+  "elements": [
+   "Ca",
+   "Si"
+  ],
+  "count": 32
+ },
+ {
+  "id": "Ca2Zn2",
+  "formula": "CaZn",
+  "raw": "Ca2Zn2",
+  "display": "Ca\u2082Zn\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   20,
+   20,
+   30,
+   30
+  ],
+  "elements": [
+   "Ca",
+   "Zn"
+  ],
+  "count": 19
+ },
+ {
+  "id": "Ca2Zn4",
+  "formula": "CaZn2",
+  "raw": "Ca2Zn4",
+  "display": "Ca\u2082Zn\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   20,
+   20,
+   30,
+   30,
+   30,
+   30
+  ],
+  "elements": [
+   "Ca",
+   "Zn"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Cd3Cl6",
+  "formula": "CdCl2",
+  "raw": "Cd3Cl6",
+  "display": "Cd\u2083Cl\u2086",
+  "n_atoms": 9,
+  "numbers": [
+   17,
+   17,
+   17,
+   17,
+   17,
+   17,
+   48,
+   48,
+   48
+  ],
+  "elements": [
+   "Cd",
+   "Cl"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Cd1Na3",
+  "formula": "CdNa3",
+  "raw": "Cd1Na3",
+  "display": "Cd\u2081Na\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   11,
+   11,
+   11,
+   48
+  ],
+  "elements": [
+   "Cd",
+   "Na"
+  ],
+  "count": 22
+ },
+ {
+  "id": "Cd1Pt3",
+  "formula": "CdPt3",
+  "raw": "Cd1Pt3",
+  "display": "Cd\u2081Pt\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   48,
+   78,
+   78,
+   78
+  ],
+  "elements": [
+   "Cd",
+   "Pt"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Cd2Ti2",
+  "formula": "CdTi",
+  "raw": "Cd2Ti2",
+  "display": "Cd\u2082Ti\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   22,
+   22,
+   48,
+   48
+  ],
+  "elements": [
+   "Cd",
+   "Ti"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Cl6Zr2",
+  "formula": "Cl3Zr",
+  "raw": "Cl6Zr2",
+  "display": "Cl\u2086Zr\u2082",
+  "n_atoms": 8,
+  "numbers": [
+   17,
+   17,
+   17,
+   17,
+   17,
+   17,
+   40,
+   40
+  ],
+  "elements": [
+   "Cl",
+   "Zr"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Co4Ge4",
+  "formula": "CoGe",
+  "raw": "Co4Ge4",
+  "display": "Co\u2084Ge\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   27,
+   27,
+   27,
+   27,
+   32,
+   32,
+   32,
+   32
+  ],
+  "elements": [
+   "Co",
+   "Ge"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Co2Hf2",
+  "formula": "CoHf",
+  "raw": "Co2Hf2",
+  "display": "Co\u2082Hf\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   27,
+   27,
+   72,
+   72
+  ],
+  "elements": [
+   "Co",
+   "Hf"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Co2Te4",
+  "formula": "CoTe2",
+  "raw": "Co2Te4",
+  "display": "Co\u2082Te\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   27,
+   27,
+   52,
+   52,
+   52,
+   52
+  ],
+  "elements": [
+   "Co",
+   "Te"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Co8Ti8",
+  "formula": "CoTi",
+  "raw": "Co8Ti8",
+  "display": "Co\u2088Ti\u2088",
+  "n_atoms": 16,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27
+  ],
+  "elements": [
+   "Co",
+   "Ti"
+  ],
+  "count": 23
+ },
+ {
+  "id": "Cr4Hf2",
+  "formula": "Cr2Hf",
+  "raw": "Cr4Hf2",
+  "display": "Cr\u2084Hf\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   24,
+   24,
+   24,
+   24,
+   72,
+   72
+  ],
+  "elements": [
+   "Cr",
+   "Hf"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Cr4Se6",
+  "formula": "Cr2Se3",
+  "raw": "Cr4Se6",
+  "display": "Cr\u2084Se\u2086",
+  "n_atoms": 10,
+  "numbers": [
+   24,
+   24,
+   24,
+   24,
+   34,
+   34,
+   34,
+   34,
+   34,
+   34
+  ],
+  "elements": [
+   "Cr",
+   "Se"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Cr4Ti2",
+  "formula": "Cr2Ti",
+  "raw": "Cr4Ti2",
+  "display": "Cr\u2084Ti\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   22,
+   22,
+   24,
+   24,
+   24,
+   24
+  ],
+  "elements": [
+   "Cr",
+   "Ti"
+  ],
+  "count": 20
+ },
+ {
+  "id": "Cr9Rh9",
+  "formula": "CrRh",
+  "raw": "Cr9Rh9",
+  "display": "Cr\u2089Rh\u2089",
+  "n_atoms": 18,
+  "numbers": [
+   24,
+   24,
+   24,
+   24,
+   24,
+   24,
+   24,
+   24,
+   24,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45
+  ],
+  "elements": [
+   "Cr",
+   "Rh"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Cr3S6",
+  "formula": "CrS2",
+  "raw": "Cr3S6",
+  "display": "Cr\u2083S\u2086",
+  "n_atoms": 9,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   24,
+   24,
+   24
+  ],
+  "elements": [
+   "Cr",
+   "S"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Cr3Si6",
+  "formula": "CrSi2",
+  "raw": "Cr3Si6",
+  "display": "Cr\u2083Si\u2086",
+  "n_atoms": 9,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   24,
+   24,
+   24
+  ],
+  "elements": [
+   "Cr",
+   "Si"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Cu4Sb2",
+  "formula": "Cu2Sb",
+  "raw": "Cu4Sb2",
+  "display": "Cu\u2084Sb\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   29,
+   29,
+   29,
+   29,
+   51,
+   51
+  ],
+  "elements": [
+   "Cu",
+   "Sb"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Cu4Y2",
+  "formula": "Cu2Y",
+  "raw": "Cu4Y2",
+  "display": "Cu\u2084Y\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   29,
+   29,
+   29,
+   29,
+   39,
+   39
+  ],
+  "elements": [
+   "Cu",
+   "Y"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Cu6Ge2",
+  "formula": "Cu3Ge",
+  "raw": "Cu6Ge2",
+  "display": "Cu\u2086Ge\u2082",
+  "n_atoms": 8,
+  "numbers": [
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   32,
+   32
+  ],
+  "elements": [
+   "Cu",
+   "Ge"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Cu3Sb1",
+  "formula": "Cu3Sb",
+  "raw": "Cu3Sb1",
+  "display": "Cu\u2083Sb\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   29,
+   29,
+   29,
+   51
+  ],
+  "elements": [
+   "Cu",
+   "Sb"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Cu3Si1",
+  "formula": "Cu3Si",
+  "raw": "Cu3Si1",
+  "display": "Cu\u2083Si\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   14,
+   29,
+   29,
+   29
+  ],
+  "elements": [
+   "Cu",
+   "Si"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Cu3Zn1",
+  "formula": "Cu3Zn",
+  "raw": "Cu3Zn1",
+  "display": "Cu\u2083Zn\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   29,
+   29,
+   29,
+   30
+  ],
+  "elements": [
+   "Cu",
+   "Zn"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Cu3Pd3",
+  "formula": "CuPd",
+  "raw": "Cu3Pd3",
+  "display": "Cu\u2083Pd\u2083",
+  "n_atoms": 6,
+  "numbers": [
+   29,
+   29,
+   29,
+   46,
+   46,
+   46
+  ],
+  "elements": [
+   "Cu",
+   "Pd"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Cu4Y4",
+  "formula": "CuY",
+  "raw": "Cu4Y4",
+  "display": "Cu\u2084Y\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   29,
+   29,
+   29,
+   29,
+   39,
+   39,
+   39,
+   39
+  ],
+  "elements": [
+   "Cu",
+   "Y"
+  ],
+  "count": 19
+ },
+ {
+  "id": "Cu2Zr2",
+  "formula": "CuZr",
+  "raw": "Cu2Zr2",
+  "display": "Cu\u2082Zr\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   29,
+   29,
+   40,
+   40
+  ],
+  "elements": [
+   "Cu",
+   "Zr"
+  ],
+  "count": 29
+ },
+ {
+  "id": "Fe2P8",
+  "formula": "FeP4",
+  "raw": "Fe2P8",
+  "display": "Fe\u2082P\u2088",
+  "n_atoms": 10,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   26,
+   26
+  ],
+  "elements": [
+   "Fe",
+   "P"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Ga2S3",
+  "formula": "Ga2S3",
+  "raw": "Ga2S3",
+  "display": "Ga\u2082S\u2083",
+  "n_atoms": 5,
+  "numbers": [
+   16,
+   16,
+   16,
+   31,
+   31
+  ],
+  "elements": [
+   "Ga",
+   "S"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Ga6Sc10",
+  "formula": "Ga3Sc5",
+  "raw": "Ga6Sc10",
+  "display": "Ga\u2086Sc\u2081\u2080",
+  "n_atoms": 16,
+  "numbers": [
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31
+  ],
+  "elements": [
+   "Ga",
+   "Sc"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Ga10Ni2",
+  "formula": "Ga5Ni",
+  "raw": "Ga10Ni2",
+  "display": "Ga\u2081\u2080Ni\u2082",
+  "n_atoms": 12,
+  "numbers": [
+   28,
+   28,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31
+  ],
+  "elements": [
+   "Ga",
+   "Ni"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Ga10V4",
+  "formula": "Ga5V2",
+  "raw": "Ga10V4",
+  "display": "Ga\u2081\u2080V\u2084",
+  "n_atoms": 14,
+  "numbers": [
+   23,
+   23,
+   23,
+   23,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31
+  ],
+  "elements": [
+   "Ga",
+   "V"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Ga8N8",
+  "formula": "GaN",
+  "raw": "Ga8N8",
+  "display": "Ga\u2088N\u2088",
+  "n_atoms": 16,
+  "numbers": [
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31
+  ],
+  "elements": [
+   "Ga",
+   "N"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Ga2Nb6",
+  "formula": "GaNb3",
+  "raw": "Ga2Nb6",
+  "display": "Ga\u2082Nb\u2086",
+  "n_atoms": 8,
+  "numbers": [
+   31,
+   31,
+   41,
+   41,
+   41,
+   41,
+   41,
+   41
+  ],
+  "elements": [
+   "Ga",
+   "Nb"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Ga1Pt3",
+  "formula": "GaPt3",
+  "raw": "Ga1Pt3",
+  "display": "Ga\u2081Pt\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   31,
+   78,
+   78,
+   78
+  ],
+  "elements": [
+   "Ga",
+   "Pt"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Ga1Rh3",
+  "formula": "GaRh3",
+  "raw": "Ga1Rh3",
+  "display": "Ga\u2081Rh\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   31,
+   45,
+   45,
+   45
+  ],
+  "elements": [
+   "Ga",
+   "Rh"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Ga2Ti4",
+  "formula": "GaTi2",
+  "raw": "Ga2Ti4",
+  "display": "Ga\u2082Ti\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   31,
+   31
+  ],
+  "elements": [
+   "Ga",
+   "Ti"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Ga1Ti3",
+  "formula": "GaTi3",
+  "raw": "Ga1Ti3",
+  "display": "Ga\u2081Ti\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   22,
+   22,
+   22,
+   31
+  ],
+  "elements": [
+   "Ga",
+   "Ti"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Ga1V3",
+  "formula": "GaV3",
+  "raw": "Ga1V3",
+  "display": "Ga\u2081V\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   23,
+   23,
+   23,
+   31
+  ],
+  "elements": [
+   "Ga",
+   "V"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Ga4Zr4",
+  "formula": "GaZr",
+  "raw": "Ga4Zr4",
+  "display": "Ga\u2084Zr\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   31,
+   31,
+   31,
+   31,
+   40,
+   40,
+   40,
+   40
+  ],
+  "elements": [
+   "Ga",
+   "Zr"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Ge6Mo3",
+  "formula": "Ge2Mo",
+  "raw": "Ge6Mo3",
+  "display": "Ge\u2086Mo\u2083",
+  "n_atoms": 9,
+  "numbers": [
+   32,
+   32,
+   32,
+   32,
+   32,
+   32,
+   42,
+   42,
+   42
+  ],
+  "elements": [
+   "Ge",
+   "Mo"
+  ],
+  "count": 19
+ },
+ {
+  "id": "Ge12Ru8",
+  "formula": "Ge3Ru2",
+  "raw": "Ge12Ru8",
+  "display": "Ge\u2081\u2082Ru\u2088",
+  "n_atoms": 20,
+  "numbers": [
+   32,
+   32,
+   32,
+   32,
+   32,
+   32,
+   32,
+   32,
+   32,
+   32,
+   32,
+   32,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44
+  ],
+  "elements": [
+   "Ge",
+   "Ru"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Ge6Ta10",
+  "formula": "Ge3Ta5",
+  "raw": "Ge6Ta10",
+  "display": "Ge\u2086Ta\u2081\u2080",
+  "n_atoms": 16,
+  "numbers": [
+   32,
+   32,
+   32,
+   32,
+   32,
+   32,
+   73,
+   73,
+   73,
+   73,
+   73,
+   73,
+   73,
+   73,
+   73,
+   73
+  ],
+  "elements": [
+   "Ge",
+   "Ta"
+  ],
+  "count": 24
+ },
+ {
+  "id": "Ge1Mn3",
+  "formula": "GeMn3",
+  "raw": "Ge1Mn3",
+  "display": "Ge\u2081Mn\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   25,
+   25,
+   25,
+   32
+  ],
+  "elements": [
+   "Ge",
+   "Mn"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Ge2Pt6",
+  "formula": "GePt3",
+  "raw": "Ge2Pt6",
+  "display": "Ge\u2082Pt\u2086",
+  "n_atoms": 8,
+  "numbers": [
+   32,
+   32,
+   78,
+   78,
+   78,
+   78,
+   78,
+   78
+  ],
+  "elements": [
+   "Ge",
+   "Pt"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Ge2S4",
+  "formula": "GeS2",
+  "raw": "Ge2S4",
+  "display": "Ge\u2082S\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   32,
+   32
+  ],
+  "elements": [
+   "Ge",
+   "S"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Ge2V6",
+  "formula": "GeV3",
+  "raw": "Ge2V6",
+  "display": "Ge\u2082V\u2086",
+  "n_atoms": 8,
+  "numbers": [
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   32,
+   32
+  ],
+  "elements": [
+   "Ge",
+   "V"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Ge4Zr4",
+  "formula": "GeZr",
+  "raw": "Ge4Zr4",
+  "display": "Ge\u2084Zr\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   32,
+   32,
+   32,
+   32,
+   40,
+   40,
+   40,
+   40
+  ],
+  "elements": [
+   "Ge",
+   "Zr"
+  ],
+  "count": 13
+ },
+ {
+  "id": "H21Y10",
+  "formula": "H21Y10",
+  "raw": "H21Y10",
+  "display": "H\u2082\u2081Y\u2081\u2080",
+  "n_atoms": 31,
+  "numbers": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   39
+  ],
+  "elements": [
+   "H",
+   "Y"
+  ],
+  "count": 14
+ },
+ {
+  "id": "H4Ti2",
+  "formula": "H2Ti",
+  "raw": "H4Ti2",
+  "display": "H\u2084Ti\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   1,
+   1,
+   1,
+   1,
+   22,
+   22
+  ],
+  "elements": [
+   "H",
+   "Ti"
+  ],
+  "count": 22
+ },
+ {
+  "id": "H3Ta6",
+  "formula": "HTa2",
+  "raw": "H3Ta6",
+  "display": "H\u2083Ta\u2086",
+  "n_atoms": 9,
+  "numbers": [
+   1,
+   1,
+   1,
+   73,
+   73,
+   73,
+   73,
+   73,
+   73
+  ],
+  "elements": [
+   "H",
+   "Ta"
+  ],
+  "count": 26
+ },
+ {
+  "id": "H2Zr2",
+  "formula": "HZr",
+  "raw": "H2Zr2",
+  "display": "H\u2082Zr\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   1,
+   1,
+   40,
+   40
+  ],
+  "elements": [
+   "H",
+   "Zr"
+  ],
+  "count": 19
+ },
+ {
+  "id": "Hf8Zn4",
+  "formula": "Hf2Zn",
+  "raw": "Hf8Zn4",
+  "display": "Hf\u2088Zn\u2084",
+  "n_atoms": 12,
+  "numbers": [
+   30,
+   30,
+   30,
+   30,
+   72,
+   72,
+   72,
+   72,
+   72,
+   72,
+   72,
+   72
+  ],
+  "elements": [
+   "Hf",
+   "Zn"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Hf3Pb1",
+  "formula": "Hf3Pb",
+  "raw": "Hf3Pb1",
+  "display": "Hf\u2083Pb\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   72,
+   72,
+   72,
+   82
+  ],
+  "elements": [
+   "Hf",
+   "Pb"
+  ],
+  "count": 23
+ },
+ {
+  "id": "Hf3Sn1",
+  "formula": "Hf3Sn",
+  "raw": "Hf3Sn1",
+  "display": "Hf\u2083Sn\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   50,
+   72,
+   72,
+   72
+  ],
+  "elements": [
+   "Hf",
+   "Sn"
+  ],
+  "count": 33
+ },
+ {
+  "id": "Hf10Sb18",
+  "formula": "Hf5Sb9",
+  "raw": "Hf10Sb18",
+  "display": "Hf\u2081\u2080Sb\u2081\u2088",
+  "n_atoms": 28,
+  "numbers": [
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   51,
+   72,
+   72,
+   72,
+   72,
+   72,
+   72,
+   72,
+   72,
+   72,
+   72
+  ],
+  "elements": [
+   "Hf",
+   "Sb"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Hf2Ir2",
+  "formula": "HfIr",
+  "raw": "Hf2Ir2",
+  "display": "Hf\u2082Ir\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   72,
+   72,
+   77,
+   77
+  ],
+  "elements": [
+   "Hf",
+   "Ir"
+  ],
+  "count": 28
+ },
+ {
+  "id": "Hf4Pd8",
+  "formula": "HfPd2",
+  "raw": "Hf4Pd8",
+  "display": "Hf\u2084Pd\u2088",
+  "n_atoms": 12,
+  "numbers": [
+   46,
+   46,
+   46,
+   46,
+   46,
+   46,
+   46,
+   46,
+   72,
+   72,
+   72,
+   72
+  ],
+  "elements": [
+   "Hf",
+   "Pd"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Hf1Pd3",
+  "formula": "HfPd3",
+  "raw": "Hf1Pd3",
+  "display": "Hf\u2081Pd\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   46,
+   46,
+   46,
+   72
+  ],
+  "elements": [
+   "Hf",
+   "Pd"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Hf1Pt3",
+  "formula": "HfPt3",
+  "raw": "Hf1Pt3",
+  "display": "Hf\u2081Pt\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   72,
+   78,
+   78,
+   78
+  ],
+  "elements": [
+   "Hf",
+   "Pt"
+  ],
+  "count": 20
+ },
+ {
+  "id": "Hf4Sb4",
+  "formula": "HfSb",
+  "raw": "Hf4Sb4",
+  "display": "Hf\u2084Sb\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   51,
+   51,
+   51,
+   51,
+   72,
+   72,
+   72,
+   72
+  ],
+  "elements": [
+   "Hf",
+   "Sb"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Hf2Sb4",
+  "formula": "HfSb2",
+  "raw": "Hf2Sb4",
+  "display": "Hf\u2082Sb\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   51,
+   51,
+   51,
+   51,
+   72,
+   72
+  ],
+  "elements": [
+   "Hf",
+   "Sb"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Hf2Si4",
+  "formula": "HfSi2",
+  "raw": "Hf2Si4",
+  "display": "Hf\u2082Si\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   72,
+   72
+  ],
+  "elements": [
+   "Hf",
+   "Si"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Hg1Na3",
+  "formula": "HgNa3",
+  "raw": "Hg1Na3",
+  "display": "Hg\u2081Na\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   11,
+   11,
+   11,
+   80
+  ],
+  "elements": [
+   "Hg",
+   "Na"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Hg1Pd3",
+  "formula": "HgPd3",
+  "raw": "Hg1Pd3",
+  "display": "Hg\u2081Pd\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   46,
+   46,
+   46,
+   80
+  ],
+  "elements": [
+   "Hg",
+   "Pd"
+  ],
+  "count": 25
+ },
+ {
+  "id": "Hg1Sc3",
+  "formula": "HgSc3",
+  "raw": "Hg1Sc3",
+  "display": "Hg\u2081Sc\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   21,
+   21,
+   21,
+   80
+  ],
+  "elements": [
+   "Hg",
+   "Sc"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Hg1Ti3",
+  "formula": "HgTi3",
+  "raw": "Hg1Ti3",
+  "display": "Hg\u2081Ti\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   22,
+   22,
+   22,
+   80
+  ],
+  "elements": [
+   "Hg",
+   "Ti"
+  ],
+  "count": 19
+ },
+ {
+  "id": "In3Na1",
+  "formula": "In3Na",
+  "raw": "In3Na1",
+  "display": "In\u2083Na\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   11,
+   49,
+   49,
+   49
+  ],
+  "elements": [
+   "In",
+   "Na"
+  ],
+  "count": 17
+ },
+ {
+  "id": "In3Zr1",
+  "formula": "In3Zr",
+  "raw": "In3Zr1",
+  "display": "In\u2083Zr\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   40,
+   49,
+   49,
+   49
+  ],
+  "elements": [
+   "In",
+   "Zr"
+  ],
+  "count": 18
+ },
+ {
+  "id": "In10Y6",
+  "formula": "In5Y3",
+  "raw": "In10Y6",
+  "display": "In\u2081\u2080Y\u2086",
+  "n_atoms": 16,
+  "numbers": [
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   49,
+   49,
+   49,
+   49,
+   49,
+   49,
+   49,
+   49,
+   49,
+   49
+  ],
+  "elements": [
+   "In",
+   "Y"
+  ],
+  "count": 15
+ },
+ {
+  "id": "In1Na3",
+  "formula": "InNa3",
+  "raw": "In1Na3",
+  "display": "In\u2081Na\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   11,
+   11,
+   11,
+   49
+  ],
+  "elements": [
+   "In",
+   "Na"
+  ],
+  "count": 13
+ },
+ {
+  "id": "In1Sc3",
+  "formula": "InSc3",
+  "raw": "In1Sc3",
+  "display": "In\u2081Sc\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   21,
+   21,
+   21,
+   49
+  ],
+  "elements": [
+   "In",
+   "Sc"
+  ],
+  "count": 20
+ },
+ {
+  "id": "In1Ti3",
+  "formula": "InTi3",
+  "raw": "In1Ti3",
+  "display": "In\u2081Ti\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   22,
+   22,
+   22,
+   49
+  ],
+  "elements": [
+   "In",
+   "Ti"
+  ],
+  "count": 49
+ },
+ {
+  "id": "In8Y8",
+  "formula": "InY",
+  "raw": "In8Y8",
+  "display": "In\u2088Y\u2088",
+  "n_atoms": 16,
+  "numbers": [
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   49,
+   49,
+   49,
+   49,
+   49,
+   49,
+   49,
+   49
+  ],
+  "elements": [
+   "In",
+   "Y"
+  ],
+  "count": 19
+ },
+ {
+  "id": "Ir3Ta1",
+  "formula": "Ir3Ta",
+  "raw": "Ir3Ta1",
+  "display": "Ir\u2083Ta\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   73,
+   77,
+   77,
+   77
+  ],
+  "elements": [
+   "Ir",
+   "Ta"
+  ],
+  "count": 20
+ },
+ {
+  "id": "Ir8Si10",
+  "formula": "Ir4Si5",
+  "raw": "Ir8Si10",
+  "display": "Ir\u2088Si\u2081\u2080",
+  "n_atoms": 18,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   77,
+   77,
+   77,
+   77,
+   77,
+   77,
+   77,
+   77
+  ],
+  "elements": [
+   "Ir",
+   "Si"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Ir4Ru4",
+  "formula": "IrRu",
+  "raw": "Ir4Ru4",
+  "display": "Ir\u2084Ru\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   44,
+   44,
+   44,
+   44,
+   77,
+   77,
+   77,
+   77
+  ],
+  "elements": [
+   "Ir",
+   "Ru"
+  ],
+  "count": 24
+ },
+ {
+  "id": "Ir3Te6",
+  "formula": "IrTe2",
+  "raw": "Ir3Te6",
+  "display": "Ir\u2083Te\u2086",
+  "n_atoms": 9,
+  "numbers": [
+   52,
+   52,
+   52,
+   52,
+   52,
+   52,
+   77,
+   77,
+   77
+  ],
+  "elements": [
+   "Ir",
+   "Te"
+  ],
+  "count": 32
+ },
+ {
+  "id": "Ir8Ti8",
+  "formula": "IrTi",
+  "raw": "Ir8Ti8",
+  "display": "Ir\u2088Ti\u2088",
+  "n_atoms": 16,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   77,
+   77,
+   77,
+   77,
+   77,
+   77,
+   77,
+   77
+  ],
+  "elements": [
+   "Ir",
+   "Ti"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Ir2V2",
+  "formula": "IrV",
+  "raw": "Ir2V2",
+  "display": "Ir\u2082V\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   23,
+   23,
+   77,
+   77
+  ],
+  "elements": [
+   "Ir",
+   "V"
+  ],
+  "count": 26
+ },
+ {
+  "id": "K4S2",
+  "formula": "K2S",
+  "raw": "K4S2",
+  "display": "K\u2084S\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   16,
+   16,
+   19,
+   19,
+   19,
+   19
+  ],
+  "elements": [
+   "K",
+   "S"
+  ],
+  "count": 14
+ },
+ {
+  "id": "K2P30",
+  "formula": "KP15",
+  "raw": "K2P30",
+  "display": "K\u2082P\u2083\u2080",
+  "n_atoms": 32,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   19,
+   19
+  ],
+  "elements": [
+   "K",
+   "P"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Mn4P16",
+  "formula": "MnP4",
+  "raw": "Mn4P16",
+  "display": "Mn\u2084P\u2081\u2086",
+  "n_atoms": 20,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   25,
+   25,
+   25,
+   25
+  ],
+  "elements": [
+   "Mn",
+   "P"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Mo3Pt1",
+  "formula": "Mo3Pt",
+  "raw": "Mo3Pt1",
+  "display": "Mo\u2083Pt\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   42,
+   42,
+   42,
+   78
+  ],
+  "elements": [
+   "Mo",
+   "Pt"
+  ],
+  "count": 22
+ },
+ {
+  "id": "Mo8P5",
+  "formula": "Mo8P5",
+  "raw": "Mo8P5",
+  "display": "Mo\u2088P\u2085",
+  "n_atoms": 13,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   15,
+   42,
+   42,
+   42,
+   42,
+   42,
+   42,
+   42,
+   42
+  ],
+  "elements": [
+   "Mo",
+   "P"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Mo2Pt4",
+  "formula": "MoPt2",
+  "raw": "Mo2Pt4",
+  "display": "Mo\u2082Pt\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   42,
+   42,
+   78,
+   78,
+   78,
+   78
+  ],
+  "elements": [
+   "Mo",
+   "Pt"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Mo1Pt3",
+  "formula": "MoPt3",
+  "raw": "Mo1Pt3",
+  "display": "Mo\u2081Pt\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   42,
+   78,
+   78,
+   78
+  ],
+  "elements": [
+   "Mo",
+   "Pt"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Mo2S4",
+  "formula": "MoS2",
+  "raw": "Mo2S4",
+  "display": "Mo\u2082S\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   42,
+   42
+  ],
+  "elements": [
+   "Mo",
+   "S"
+  ],
+  "count": 31
+ },
+ {
+  "id": "Mo2Se4",
+  "formula": "MoSe2",
+  "raw": "Mo2Se4",
+  "display": "Mo\u2082Se\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   34,
+   34,
+   34,
+   34,
+   42,
+   42
+  ],
+  "elements": [
+   "Mo",
+   "Se"
+  ],
+  "count": 23
+ },
+ {
+  "id": "N4W2",
+  "formula": "N2W",
+  "raw": "N4W2",
+  "display": "N\u2084W\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   7,
+   7,
+   7,
+   7,
+   74,
+   74
+  ],
+  "elements": [
+   "N",
+   "W"
+  ],
+  "count": 23
+ },
+ {
+  "id": "N2Nb2",
+  "formula": "NNb",
+  "raw": "N2Nb2",
+  "display": "N\u2082Nb\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   7,
+   7,
+   41,
+   41
+  ],
+  "elements": [
+   "N",
+   "Nb"
+  ],
+  "count": 14
+ },
+ {
+  "id": "N2Ti4",
+  "formula": "NTi2",
+  "raw": "N2Ti4",
+  "display": "N\u2082Ti\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   7,
+   7,
+   22,
+   22,
+   22,
+   22
+  ],
+  "elements": [
+   "N",
+   "Ti"
+  ],
+  "count": 15
+ },
+ {
+  "id": "N9V9",
+  "formula": "NV",
+  "raw": "N9V9",
+  "display": "N\u2089V\u2089",
+  "n_atoms": 18,
+  "numbers": [
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23
+  ],
+  "elements": [
+   "N",
+   "V"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Nb3Pd1",
+  "formula": "Nb3Pd",
+  "raw": "Nb3Pd1",
+  "display": "Nb\u2083Pd\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   41,
+   41,
+   41,
+   46
+  ],
+  "elements": [
+   "Nb",
+   "Pd"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Nb6Sb2",
+  "formula": "Nb3Sb",
+  "raw": "Nb6Sb2",
+  "display": "Nb\u2086Sb\u2082",
+  "n_atoms": 8,
+  "numbers": [
+   41,
+   41,
+   41,
+   41,
+   41,
+   41,
+   51,
+   51
+  ],
+  "elements": [
+   "Nb",
+   "Sb"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Nb3Pd6",
+  "formula": "NbPd2",
+  "raw": "Nb3Pd6",
+  "display": "Nb\u2083Pd\u2086",
+  "n_atoms": 9,
+  "numbers": [
+   41,
+   41,
+   41,
    46,
    46,
    46,
@@ -7224,8 +4553,1964 @@
    46
   ],
   "elements": [
-   "As",
+   "Nb",
    "Pd"
-  ]
+  ],
+  "count": 13
+ },
+ {
+  "id": "Nb2Rh2",
+  "formula": "NbRh",
+  "raw": "Nb2Rh2",
+  "display": "Nb\u2082Rh\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   41,
+   41,
+   45,
+   45
+  ],
+  "elements": [
+   "Nb",
+   "Rh"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Nb2S4",
+  "formula": "NbS2",
+  "raw": "Nb2S4",
+  "display": "Nb\u2082S\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   41,
+   41
+  ],
+  "elements": [
+   "Nb",
+   "S"
+  ],
+  "count": 39
+ },
+ {
+  "id": "Nb2Sb4",
+  "formula": "NbSb2",
+  "raw": "Nb2Sb4",
+  "display": "Nb\u2082Sb\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   41,
+   41,
+   51,
+   51,
+   51,
+   51
+  ],
+  "elements": [
+   "Nb",
+   "Sb"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Ni3Ta1",
+  "formula": "Ni3Ta",
+  "raw": "Ni3Ta1",
+  "display": "Ni\u2083Ta\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   28,
+   28,
+   28,
+   73
+  ],
+  "elements": [
+   "Ni",
+   "Ta"
+  ],
+  "count": 28
+ },
+ {
+  "id": "Ni2S4",
+  "formula": "NiS2",
+  "raw": "Ni2S4",
+  "display": "Ni\u2082S\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   28,
+   28
+  ],
+  "elements": [
+   "Ni",
+   "S"
+  ],
+  "count": 36
+ },
+ {
+  "id": "Ni2Se2",
+  "formula": "NiSe",
+  "raw": "Ni2Se2",
+  "display": "Ni\u2082Se\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   28,
+   28,
+   34,
+   34
+  ],
+  "elements": [
+   "Ni",
+   "Se"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Ni2Si2",
+  "formula": "NiSi",
+  "raw": "Ni2Si2",
+  "display": "Ni\u2082Si\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   14,
+   14,
+   28,
+   28
+  ],
+  "elements": [
+   "Ni",
+   "Si"
+  ],
+  "count": 25
+ },
+ {
+  "id": "Ni2Ta4",
+  "formula": "NiTa2",
+  "raw": "Ni2Ta4",
+  "display": "Ni\u2082Ta\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   28,
+   28,
+   73,
+   73,
+   73,
+   73
+  ],
+  "elements": [
+   "Ni",
+   "Ta"
+  ],
+  "count": 19
+ },
+ {
+  "id": "Ni4Y4",
+  "formula": "NiY",
+  "raw": "Ni4Y4",
+  "display": "Ni\u2084Y\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   28,
+   28,
+   28,
+   28,
+   39,
+   39,
+   39,
+   39
+  ],
+  "elements": [
+   "Ni",
+   "Y"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Os8Si12",
+  "formula": "Os2Si3",
+  "raw": "Os8Si12",
+  "display": "Os\u2088Si\u2081\u2082",
+  "n_atoms": 20,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   76,
+   76,
+   76,
+   76,
+   76,
+   76,
+   76,
+   76
+  ],
+  "elements": [
+   "Os",
+   "Si"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Os3Ta1",
+  "formula": "Os3Ta",
+  "raw": "Os3Ta1",
+  "display": "Os\u2083Ta\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   73,
+   76,
+   76,
+   76
+  ],
+  "elements": [
+   "Os",
+   "Ta"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Os2P8",
+  "formula": "OsP4",
+  "raw": "Os2P8",
+  "display": "Os\u2082P\u2088",
+  "n_atoms": 10,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   76,
+   76
+  ],
+  "elements": [
+   "Os",
+   "P"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Os2Si4",
+  "formula": "OsSi2",
+  "raw": "Os2Si4",
+  "display": "Os\u2082Si\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   76,
+   76
+  ],
+  "elements": [
+   "Os",
+   "Si"
+  ],
+  "count": 17
+ },
+ {
+  "id": "P8S12",
+  "formula": "P2S3",
+  "raw": "P8S12",
+  "display": "P\u2088S\u2081\u2082",
+  "n_atoms": 20,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16
+  ],
+  "elements": [
+   "P",
+   "S"
+  ],
+  "count": 13
+ },
+ {
+  "id": "P4S14",
+  "formula": "P2S7",
+  "raw": "P4S14",
+  "display": "P\u2084S\u2081\u2084",
+  "n_atoms": 18,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16
+  ],
+  "elements": [
+   "P",
+   "S"
+  ],
+  "count": 13
+ },
+ {
+  "id": "P8Sc12",
+  "formula": "P2Sc3",
+  "raw": "P8Sc12",
+  "display": "P\u2088Sc\u2081\u2082",
+  "n_atoms": 20,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21,
+   21
+  ],
+  "elements": [
+   "P",
+   "Sc"
+  ],
+  "count": 18
+ },
+ {
+  "id": "P4W2",
+  "formula": "P2W",
+  "raw": "P4W2",
+  "display": "P\u2084W\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   74,
+   74
+  ],
+  "elements": [
+   "P",
+   "W"
+  ],
+  "count": 23
+ },
+ {
+  "id": "P16Zn8",
+  "formula": "P2Zn",
+  "raw": "P16Zn8",
+  "display": "P\u2081\u2086Zn\u2088",
+  "n_atoms": 24,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30
+  ],
+  "elements": [
+   "P",
+   "Zn"
+  ],
+  "count": 14
+ },
+ {
+  "id": "P6Tc4",
+  "formula": "P3Tc2",
+  "raw": "P6Tc4",
+  "display": "P\u2086Tc\u2084",
+  "n_atoms": 10,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   15,
+   15,
+   43,
+   43,
+   43,
+   43
+  ],
+  "elements": [
+   "P",
+   "Tc"
+  ],
+  "count": 17
+ },
+ {
+  "id": "P4Zr4",
+  "formula": "PZr",
+  "raw": "P4Zr4",
+  "display": "P\u2084Zr\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   15,
+   15,
+   15,
+   15,
+   40,
+   40,
+   40,
+   40
+  ],
+  "elements": [
+   "P",
+   "Zr"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Pb2S2",
+  "formula": "PbS",
+  "raw": "Pb2S2",
+  "display": "Pb\u2082S\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   16,
+   16,
+   82,
+   82
+  ],
+  "elements": [
+   "Pb",
+   "S"
+  ],
+  "count": 58
+ },
+ {
+  "id": "Pb2Se2",
+  "formula": "PbSe",
+  "raw": "Pb2Se2",
+  "display": "Pb\u2082Se\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   34,
+   34,
+   82,
+   82
+  ],
+  "elements": [
+   "Pb",
+   "Se"
+  ],
+  "count": 21
+ },
+ {
+  "id": "Pb3Tl3",
+  "formula": "PbTl",
+  "raw": "Pb3Tl3",
+  "display": "Pb\u2083Tl\u2083",
+  "n_atoms": 6,
+  "numbers": [
+   81,
+   81,
+   81,
+   82,
+   82,
+   82
+  ],
+  "elements": [
+   "Pb",
+   "Tl"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Pb1Y3",
+  "formula": "PbY3",
+  "raw": "Pb1Y3",
+  "display": "Pb\u2081Y\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   39,
+   39,
+   39,
+   82
+  ],
+  "elements": [
+   "Pb",
+   "Y"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Pd4Ta2",
+  "formula": "Pd2Ta",
+  "raw": "Pd4Ta2",
+  "display": "Pd\u2084Ta\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   46,
+   46,
+   46,
+   46,
+   73,
+   73
+  ],
+  "elements": [
+   "Pd",
+   "Ta"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Pd6Ti3",
+  "formula": "Pd2Ti",
+  "raw": "Pd6Ti3",
+  "display": "Pd\u2086Ti\u2083",
+  "n_atoms": 9,
+  "numbers": [
+   22,
+   22,
+   22,
+   46,
+   46,
+   46,
+   46,
+   46,
+   46
+  ],
+  "elements": [
+   "Pd",
+   "Ti"
+  ],
+  "count": 12
+ },
+ {
+  "id": "Pd4Zn2",
+  "formula": "Pd2Zn",
+  "raw": "Pd4Zn2",
+  "display": "Pd\u2084Zn\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   30,
+   30,
+   46,
+   46,
+   46,
+   46
+  ],
+  "elements": [
+   "Pd",
+   "Zn"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Pd3Ta1",
+  "formula": "Pd3Ta",
+  "raw": "Pd3Ta1",
+  "display": "Pd\u2083Ta\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   46,
+   46,
+   46,
+   73
+  ],
+  "elements": [
+   "Pd",
+   "Ta"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Pd3Tl1",
+  "formula": "Pd3Tl",
+  "raw": "Pd3Tl1",
+  "display": "Pd\u2083Tl\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   46,
+   46,
+   46,
+   81
+  ],
+  "elements": [
+   "Pd",
+   "Tl"
+  ],
+  "count": 20
+ },
+ {
+  "id": "Pd3V1",
+  "formula": "Pd3V",
+  "raw": "Pd3V1",
+  "display": "Pd\u2083V\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   23,
+   46,
+   46,
+   46
+  ],
+  "elements": [
+   "Pd",
+   "V"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Pd3Zn1",
+  "formula": "Pd3Zn",
+  "raw": "Pd3Zn1",
+  "display": "Pd\u2083Zn\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   30,
+   46,
+   46,
+   46
+  ],
+  "elements": [
+   "Pd",
+   "Zn"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Pd2Ti2",
+  "formula": "PdTi",
+  "raw": "Pd2Ti2",
+  "display": "Pd\u2082Ti\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   22,
+   22,
+   46,
+   46
+  ],
+  "elements": [
+   "Pd",
+   "Ti"
+  ],
+  "count": 24
+ },
+ {
+  "id": "Pd3Ti6",
+  "formula": "PdTi2",
+  "raw": "Pd3Ti6",
+  "display": "Pd\u2083Ti\u2086",
+  "n_atoms": 9,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   46,
+   46,
+   46
+  ],
+  "elements": [
+   "Pd",
+   "Ti"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Pt3Ti1",
+  "formula": "Pt3Ti",
+  "raw": "Pt3Ti1",
+  "display": "Pt\u2083Ti\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   22,
+   78,
+   78,
+   78
+  ],
+  "elements": [
+   "Pt",
+   "Ti"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Pt2V2",
+  "formula": "PtV",
+  "raw": "Pt2V2",
+  "display": "Pt\u2082V\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   23,
+   23,
+   78,
+   78
+  ],
+  "elements": [
+   "Pt",
+   "V"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Pt4Y8",
+  "formula": "PtY2",
+  "raw": "Pt4Y8",
+  "display": "Pt\u2084Y\u2088",
+  "n_atoms": 12,
+  "numbers": [
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   39,
+   78,
+   78,
+   78,
+   78
+  ],
+  "elements": [
+   "Pt",
+   "Y"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Rb4Te2",
+  "formula": "Rb2Te",
+  "raw": "Rb4Te2",
+  "display": "Rb\u2084Te\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   37,
+   37,
+   37,
+   37,
+   52,
+   52
+  ],
+  "elements": [
+   "Rb",
+   "Te"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Re8Ti8",
+  "formula": "ReTi",
+  "raw": "Re8Ti8",
+  "display": "Re\u2088Ti\u2088",
+  "n_atoms": 16,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   75,
+   75,
+   75,
+   75,
+   75,
+   75,
+   75,
+   75
+  ],
+  "elements": [
+   "Re",
+   "Ti"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Rh4S6",
+  "formula": "Rh2S3",
+  "raw": "Rh4S6",
+  "display": "Rh\u2084S\u2086",
+  "n_atoms": 10,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   45,
+   45,
+   45,
+   45
+  ],
+  "elements": [
+   "Rh",
+   "S"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Rh3Ru1",
+  "formula": "Rh3Ru",
+  "raw": "Rh3Ru1",
+  "display": "Rh\u2083Ru\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   44,
+   45,
+   45,
+   45
+  ],
+  "elements": [
+   "Rh",
+   "Ru"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Rh3Sn1",
+  "formula": "Rh3Sn",
+  "raw": "Rh3Sn1",
+  "display": "Rh\u2083Sn\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   45,
+   45,
+   45,
+   50
+  ],
+  "elements": [
+   "Rh",
+   "Sn"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Rh9Ru9",
+  "formula": "RhRu",
+  "raw": "Rh9Ru9",
+  "display": "Rh\u2089Ru\u2089",
+  "n_atoms": 18,
+  "numbers": [
+   44,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45
+  ],
+  "elements": [
+   "Rh",
+   "Ru"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Rh4Si4",
+  "formula": "RhSi",
+  "raw": "Rh4Si4",
+  "display": "Rh\u2084Si\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   45,
+   45,
+   45,
+   45
+  ],
+  "elements": [
+   "Rh",
+   "Si"
+  ],
+  "count": 37
+ },
+ {
+  "id": "Rh8Ti8",
+  "formula": "RhTi",
+  "raw": "Rh8Ti8",
+  "display": "Rh\u2088Ti\u2088",
+  "n_atoms": 16,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45,
+   45
+  ],
+  "elements": [
+   "Rh",
+   "Ti"
+  ],
+  "count": 23
+ },
+ {
+  "id": "Rh2V2",
+  "formula": "RhV",
+  "raw": "Rh2V2",
+  "display": "Rh\u2082V\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   23,
+   23,
+   45,
+   45
+  ],
+  "elements": [
+   "Rh",
+   "V"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Rh2Zr2",
+  "formula": "RhZr",
+  "raw": "Rh2Zr2",
+  "display": "Rh\u2082Zr\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   40,
+   40,
+   45,
+   45
+  ],
+  "elements": [
+   "Rh",
+   "Zr"
+  ],
+  "count": 33
+ },
+ {
+  "id": "Ru8Si12",
+  "formula": "Ru2Si3",
+  "raw": "Ru8Si12",
+  "display": "Ru\u2088Si\u2081\u2082",
+  "n_atoms": 20,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44
+  ],
+  "elements": [
+   "Ru",
+   "Si"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Ru3Ta1",
+  "formula": "Ru3Ta",
+  "raw": "Ru3Ta1",
+  "display": "Ru\u2083Ta\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   44,
+   44,
+   44,
+   73
+  ],
+  "elements": [
+   "Ru",
+   "Ta"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Ru4Se8",
+  "formula": "RuSe2",
+  "raw": "Ru4Se8",
+  "display": "Ru\u2084Se\u2088",
+  "n_atoms": 12,
+  "numbers": [
+   34,
+   34,
+   34,
+   34,
+   34,
+   34,
+   34,
+   34,
+   44,
+   44,
+   44,
+   44
+  ],
+  "elements": [
+   "Ru",
+   "Se"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Ru4Si4",
+  "formula": "RuSi",
+  "raw": "Ru4Si4",
+  "display": "Ru\u2084Si\u2084",
+  "n_atoms": 8,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   44,
+   44,
+   44,
+   44
+  ],
+  "elements": [
+   "Ru",
+   "Si"
+  ],
+  "count": 28
+ },
+ {
+  "id": "Ru1Ta1",
+  "formula": "RuTa",
+  "raw": "Ru1Ta1",
+  "display": "Ru\u2081Ta\u2081",
+  "n_atoms": 2,
+  "numbers": [
+   44,
+   73
+  ],
+  "elements": [
+   "Ru",
+   "Ta"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Ru8Ti8",
+  "formula": "RuTi",
+  "raw": "Ru8Ti8",
+  "display": "Ru\u2088Ti\u2088",
+  "n_atoms": 16,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44,
+   44
+  ],
+  "elements": [
+   "Ru",
+   "Ti"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Ru1V1",
+  "formula": "RuV",
+  "raw": "Ru1V1",
+  "display": "Ru\u2081V\u2081",
+  "n_atoms": 2,
+  "numbers": [
+   23,
+   44
+  ],
+  "elements": [
+   "Ru",
+   "V"
+  ],
+  "count": 16
+ },
+ {
+  "id": "S4Si2",
+  "formula": "S2Si",
+  "raw": "S4Si2",
+  "display": "S\u2084Si\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   14,
+   14,
+   16,
+   16,
+   16,
+   16
+  ],
+  "elements": [
+   "S",
+   "Si"
+  ],
+  "count": 15
+ },
+ {
+  "id": "S4Ta2",
+  "formula": "S2Ta",
+  "raw": "S4Ta2",
+  "display": "S\u2084Ta\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   73,
+   73
+  ],
+  "elements": [
+   "S",
+   "Ta"
+  ],
+  "count": 38
+ },
+ {
+  "id": "S8Tc4",
+  "formula": "S2Tc",
+  "raw": "S8Tc4",
+  "display": "S\u2088Tc\u2084",
+  "n_atoms": 12,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   43,
+   43,
+   43,
+   43
+  ],
+  "elements": [
+   "S",
+   "Tc"
+  ],
+  "count": 12
+ },
+ {
+  "id": "S4Ti2",
+  "formula": "S2Ti",
+  "raw": "S4Ti2",
+  "display": "S\u2084Ti\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   22,
+   22
+  ],
+  "elements": [
+   "S",
+   "Ti"
+  ],
+  "count": 24
+ },
+ {
+  "id": "S4V2",
+  "formula": "S2V",
+  "raw": "S4V2",
+  "display": "S\u2084V\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   23,
+   23
+  ],
+  "elements": [
+   "S",
+   "V"
+  ],
+  "count": 20
+ },
+ {
+  "id": "S4W2",
+  "formula": "S2W",
+  "raw": "S4W2",
+  "display": "S\u2084W\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   74,
+   74
+  ],
+  "elements": [
+   "S",
+   "W"
+  ],
+  "count": 26
+ },
+ {
+  "id": "S8Ti5",
+  "formula": "S8Ti5",
+  "raw": "S8Ti5",
+  "display": "S\u2088Ti\u2085",
+  "n_atoms": 13,
+  "numbers": [
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   22,
+   22,
+   22,
+   22,
+   22
+  ],
+  "elements": [
+   "S",
+   "Ti"
+  ],
+  "count": 15
+ },
+ {
+  "id": "S2Sn2",
+  "formula": "SSn",
+  "raw": "S2Sn2",
+  "display": "S\u2082Sn\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   16,
+   16,
+   50,
+   50
+  ],
+  "elements": [
+   "S",
+   "Sn"
+  ],
+  "count": 23
+ },
+ {
+  "id": "S2Ti2",
+  "formula": "STi",
+  "raw": "S2Ti2",
+  "display": "S\u2082Ti\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   16,
+   16,
+   22,
+   22
+  ],
+  "elements": [
+   "S",
+   "Ti"
+  ],
+  "count": 16
+ },
+ {
+  "id": "S2Zn2",
+  "formula": "SZn",
+  "raw": "S2Zn2",
+  "display": "S\u2082Zn\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   16,
+   16,
+   30,
+   30
+  ],
+  "elements": [
+   "S",
+   "Zn"
+  ],
+  "count": 37
+ },
+ {
+  "id": "Sb2Te3",
+  "formula": "Sb2Te3",
+  "raw": "Sb2Te3",
+  "display": "Sb\u2082Te\u2083",
+  "n_atoms": 5,
+  "numbers": [
+   51,
+   51,
+   52,
+   52,
+   52
+  ],
+  "elements": [
+   "Sb",
+   "Te"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Sb3Ti13",
+  "formula": "Sb3Ti13",
+  "raw": "Sb3Ti13",
+  "display": "Sb\u2083Ti\u2081\u2083",
+  "n_atoms": 16,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   51,
+   51,
+   51
+  ],
+  "elements": [
+   "Sb",
+   "Ti"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Sb2Sc4",
+  "formula": "SbSc2",
+  "raw": "Sb2Sc4",
+  "display": "Sb\u2082Sc\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   21,
+   21,
+   21,
+   21,
+   51,
+   51
+  ],
+  "elements": [
+   "Sb",
+   "Sc"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Sb2Ti6",
+  "formula": "SbTi3",
+  "raw": "Sb2Ti6",
+  "display": "Sb\u2082Ti\u2086",
+  "n_atoms": 8,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   51,
+   51
+  ],
+  "elements": [
+   "Sb",
+   "Ti"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Sc2Te3",
+  "formula": "Sc2Te3",
+  "raw": "Sc2Te3",
+  "display": "Sc\u2082Te\u2083",
+  "n_atoms": 5,
+  "numbers": [
+   21,
+   21,
+   52,
+   52,
+   52
+  ],
+  "elements": [
+   "Sc",
+   "Te"
+  ],
+  "count": 12
+ },
+ {
+  "id": "Sc3Sn1",
+  "formula": "Sc3Sn",
+  "raw": "Sc3Sn1",
+  "display": "Sc\u2083Sn\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   21,
+   21,
+   21,
+   50
+  ],
+  "elements": [
+   "Sc",
+   "Sn"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Sc1Sn3",
+  "formula": "ScSn3",
+  "raw": "Sc1Sn3",
+  "display": "Sc\u2081Sn\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   21,
+   50,
+   50,
+   50
+  ],
+  "elements": [
+   "Sc",
+   "Sn"
+  ],
+  "count": 14
+ },
+ {
+  "id": "Se2Sn2",
+  "formula": "SeSn",
+  "raw": "Se2Sn2",
+  "display": "Se\u2082Sn\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   34,
+   34,
+   50,
+   50
+  ],
+  "elements": [
+   "Se",
+   "Sn"
+  ],
+  "count": 32
+ },
+ {
+  "id": "Se2Ti2",
+  "formula": "SeTi",
+  "raw": "Se2Ti2",
+  "display": "Se\u2082Ti\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   22,
+   22,
+   34,
+   34
+  ],
+  "elements": [
+   "Se",
+   "Ti"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Se12Ti24",
+  "formula": "SeTi2",
+  "raw": "Se12Ti24",
+  "display": "Se\u2081\u2082Ti\u2082\u2084",
+  "n_atoms": 36,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   34,
+   34,
+   34,
+   34,
+   34,
+   34,
+   34,
+   34,
+   34,
+   34,
+   34,
+   34
+  ],
+  "elements": [
+   "Se",
+   "Ti"
+  ],
+  "count": 15
+ },
+ {
+  "id": "Si6Ta3",
+  "formula": "Si2Ta",
+  "raw": "Si6Ta3",
+  "display": "Si\u2086Ta\u2083",
+  "n_atoms": 9,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   73,
+   73,
+   73
+  ],
+  "elements": [
+   "Si",
+   "Ta"
+  ],
+  "count": 18
+ },
+ {
+  "id": "Si4Ti2",
+  "formula": "Si2Ti",
+  "raw": "Si4Ti2",
+  "display": "Si\u2084Ti\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   22,
+   22
+  ],
+  "elements": [
+   "Si",
+   "Ti"
+  ],
+  "count": 20
+ },
+ {
+  "id": "Si6W3",
+  "formula": "Si2W",
+  "raw": "Si6W3",
+  "display": "Si\u2086W\u2083",
+  "n_atoms": 9,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   74,
+   74,
+   74
+  ],
+  "elements": [
+   "Si",
+   "W"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Si6V10",
+  "formula": "Si3V5",
+  "raw": "Si6V10",
+  "display": "Si\u2086V\u2081\u2080",
+  "n_atoms": 16,
+  "numbers": [
+   14,
+   14,
+   14,
+   14,
+   14,
+   14,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23
+  ],
+  "elements": [
+   "Si",
+   "V"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Si2Ti6",
+  "formula": "SiTi3",
+  "raw": "Si2Ti6",
+  "display": "Si\u2082Ti\u2086",
+  "n_atoms": 8,
+  "numbers": [
+   14,
+   14,
+   22,
+   22,
+   22,
+   22,
+   22,
+   22
+  ],
+  "elements": [
+   "Si",
+   "Ti"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Si2Zr2",
+  "formula": "SiZr",
+  "raw": "Si2Zr2",
+  "display": "Si\u2082Zr\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   14,
+   14,
+   40,
+   40
+  ],
+  "elements": [
+   "Si",
+   "Zr"
+  ],
+  "count": 27
+ },
+ {
+  "id": "Sn1Ti3",
+  "formula": "SnTi3",
+  "raw": "Sn1Ti3",
+  "display": "Sn\u2081Ti\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   22,
+   22,
+   22,
+   50
+  ],
+  "elements": [
+   "Sn",
+   "Ti"
+  ],
+  "count": 26
+ },
+ {
+  "id": "Sn1Zr3",
+  "formula": "SnZr3",
+  "raw": "Sn1Zr3",
+  "display": "Sn\u2081Zr\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   40,
+   40,
+   40,
+   50
+  ],
+  "elements": [
+   "Sn",
+   "Zr"
+  ],
+  "count": 26
+ },
+ {
+  "id": "Sr2Zn4",
+  "formula": "SrZn2",
+  "raw": "Sr2Zn4",
+  "display": "Sr\u2082Zn\u2084",
+  "n_atoms": 6,
+  "numbers": [
+   30,
+   30,
+   30,
+   30,
+   38,
+   38
+  ],
+  "elements": [
+   "Sr",
+   "Zn"
+  ],
+  "count": 20
+ },
+ {
+  "id": "Tc8V8",
+  "formula": "TcV",
+  "raw": "Tc8V8",
+  "display": "Tc\u2088V\u2088",
+  "n_atoms": 16,
+  "numbers": [
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   23,
+   43,
+   43,
+   43,
+   43,
+   43,
+   43,
+   43,
+   43
+  ],
+  "elements": [
+   "Tc",
+   "V"
+  ],
+  "count": 13
+ },
+ {
+  "id": "Te4W2",
+  "formula": "Te2W",
+  "raw": "Te4W2",
+  "display": "Te\u2084W\u2082",
+  "n_atoms": 6,
+  "numbers": [
+   52,
+   52,
+   52,
+   52,
+   74,
+   74
+  ],
+  "elements": [
+   "Te",
+   "W"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Te2Zr2",
+  "formula": "TeZr",
+  "raw": "Te2Zr2",
+  "display": "Te\u2082Zr\u2082",
+  "n_atoms": 4,
+  "numbers": [
+   40,
+   40,
+   52,
+   52
+  ],
+  "elements": [
+   "Te",
+   "Zr"
+  ],
+  "count": 17
+ },
+ {
+  "id": "Ti6Zn3",
+  "formula": "Ti2Zn",
+  "raw": "Ti6Zn3",
+  "display": "Ti\u2086Zn\u2083",
+  "n_atoms": 9,
+  "numbers": [
+   22,
+   22,
+   22,
+   22,
+   22,
+   22,
+   30,
+   30,
+   30
+  ],
+  "elements": [
+   "Ti",
+   "Zn"
+  ],
+  "count": 20
+ },
+ {
+  "id": "Ti3Zn1",
+  "formula": "Ti3Zn",
+  "raw": "Ti3Zn1",
+  "display": "Ti\u2083Zn\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   22,
+   22,
+   22,
+   30
+  ],
+  "elements": [
+   "Ti",
+   "Zn"
+  ],
+  "count": 19
+ },
+ {
+  "id": "Tl1Zr3",
+  "formula": "TlZr3",
+  "raw": "Tl1Zr3",
+  "display": "Tl\u2081Zr\u2083",
+  "n_atoms": 4,
+  "numbers": [
+   40,
+   40,
+   40,
+   81
+  ],
+  "elements": [
+   "Tl",
+   "Zr"
+  ],
+  "count": 16
+ },
+ {
+  "id": "Cu1Pd2Sn1",
+  "formula": "CuPd2Sn",
+  "raw": "Cu1Pd2Sn1",
+  "display": "Cu\u2081Pd\u2082Sn\u2081",
+  "n_atoms": 4,
+  "numbers": [
+   29,
+   46,
+   46,
+   50
+  ],
+  "elements": [
+   "Cu",
+   "Pd",
+   "Sn"
+  ],
+  "count": 13
  }
 ]
