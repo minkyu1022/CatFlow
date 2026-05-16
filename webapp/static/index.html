@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#0b0d12" />
   <title>CatFlow · Catalyst Generator</title>
+  <script>
+    /* apply the saved theme before first paint to avoid a flash */
+    (function () {
+      try {
+        document.documentElement.setAttribute(
+          "data-theme", localStorage.getItem("catflow-theme") || "dark");
+      } catch (e) {}
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -13,9 +22,13 @@
 </head>
 <body>
   <div class="aurora" aria-hidden="true"></div>
+  <button id="theme-toggle" class="theme-toggle" type="button"
+          aria-label="Toggle light / dark theme"></button>
 
   <div class="wrap">
     <header>
+      <img class="mascot" src="/static/catcat.png"
+           alt="CatFlow mascot — a calico cat with a molecule" />
       <div class="brand">
         <span class="mark" aria-hidden="true">
           <svg viewBox="0 0 40 40" width="40" height="40">

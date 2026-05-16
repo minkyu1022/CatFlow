@@ -28,6 +28,27 @@
   --mono:  "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
 }
 
+/* light theme — applied when <html data-theme="light"> */
+:root[data-theme="light"] {
+  --bg:       #f5f6f8;
+  --bg-2:     #f7f8fa;
+  --panel:    #ffffff;
+  --panel-2:  #f1f3f6;
+  --panel-3:  #e7eaef;
+  --line:     #e2e5ea;
+  --line-2:   #c8cdd7;
+  --ink:      #1b1e26;
+  --ink-2:    #586071;
+  --ink-3:    #8b92a1;
+  --flow:     #0c9d88;
+  --flow-2:   #0a8472;
+  --flow-dim: #bce8e0;
+  --energy:   #c9821a;
+  --ads:      #df5038;
+  --ok:       #1f9d63;
+  --danger:   #df5038;
+}
+
 html, body { height: 100%; }
 body {
   font-family: var(--sans);
@@ -64,6 +85,20 @@ body::before {
 
 /* ---------------------------------------------------------- header */
 header { text-align: center; margin-bottom: 26px; }
+.mascot {
+  display: block; margin: 0 auto 2px;
+  width: 172px; max-width: 62%; height: auto;
+  pointer-events: none; user-select: none;
+}
+.theme-toggle {
+  position: fixed; top: 12px; right: 12px; z-index: 6;
+  width: 38px; height: 38px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--panel);
+  color: var(--ink-2); font-size: 16px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.theme-toggle:hover { color: var(--flow); border-color: var(--flow-dim); }
 .brand {
   display: flex; align-items: center; justify-content: center; gap: 11px;
 }
@@ -82,12 +117,12 @@ header { text-align: center; margin-bottom: 26px; }
 @keyframes fadeNode { to { opacity: 1; } }
 
 header h1 {
-  font-family: var(--serif);
-  font-size: 2.85rem; font-weight: 500; line-height: 1;
+  font-family: var(--sans);
+  font-size: 2.85rem; font-weight: 700; line-height: 1;
   letter-spacing: -0.5px;
 }
 header h1 .t-cat { color: var(--ink); }
-header h1 .t-flow { color: var(--flow); font-style: italic; }
+header h1 .t-flow { color: var(--flow); }
 .tagline {
   margin-top: 10px;
   font-family: var(--mono); font-size: 0.7rem; font-weight: 400;

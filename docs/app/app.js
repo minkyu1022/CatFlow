@@ -602,6 +602,21 @@ $("comp-custom").oninput = (e) => {
 };
 $("gen-btn").onclick = generate;
 
+/* theme toggle — initial data-theme is set by an inline <head> script */
+(function initTheme() {
+  const btn = $("theme-toggle");
+  const cur = () =>
+    document.documentElement.getAttribute("data-theme") || "dark";
+  const paint = () => { if (btn) btn.textContent = cur() === "light" ? "☾" : "☀"; };
+  paint();
+  if (btn) btn.onclick = () => {
+    const next = cur() === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("catflow-theme", next); } catch (e) {}
+    paint();
+  };
+})();
+
 resolveAPI().then(loadMenus).catch((e) => {
   $("gen-error").textContent = "Failed to load menus: " + e.message;
   $("gen-error").classList.remove("hidden");
