@@ -35,6 +35,7 @@ DATA_DIR.mkdir(exist_ok=True)
 DATASET_ROOT = HERE / "_newdata" / "data"
 PER_ADS_DIR = DATASET_ROOT / "dataset_per_adsorbate"
 COMPOSITION_LMDB = DATASET_ROOT / "dataset" / "val_id" / "dataset.lmdb"
+MAX_COMPOSITION_ATOMS = 64
 
 # Elements with a gas-phase reference energy (adsorption energy well defined).
 EVALUABLE_ELEMENTS = {"H", "C", "N", "O"}
@@ -118,7 +119,7 @@ def build_compositions(max_keep: int = 300) -> list[dict]:
                 e = pickle.loads(val)
                 numbers = [int(z) for z in
                            e["primitive_slab"].get_atomic_numbers()]
-                if not (1 <= len(numbers) <= 48):
+                if not (1 <= len(numbers) <= MAX_COMPOSITION_ATOMS):
                     continue
                 _, red = formula_from_numbers(numbers)
                 groups.setdefault(red, []).append(sorted(numbers))

@@ -1,7 +1,7 @@
 """
 FastAPI backend for the CatFlow web demo.
 
-    python server.py            # serves on 0.0.0.0:8000
+    python server.py            # serves on 127.0.0.1:8000 by default
 
 Endpoints
     GET  /                   -> mobile-first single-page UI
@@ -113,7 +113,7 @@ def get_compositions():
     return COMPOSITIONS
 
 
-MAX_COMPOSITION_ATOMS = 48
+MAX_COMPOSITION_ATOMS = 64
 
 
 def parse_composition(formula: str) -> dict:
@@ -130,7 +130,11 @@ def parse_composition(formula: str) -> dict:
     if len(formula) > 256:
         raise HTTPException(400, "composition string too long")
 
-    tokens = re.findall(r"([A-Z][a-z]?)\s*(\d*)", formula.strip())
+    formula = formula.strip()
+    if not re.fullmatch(r"(?:[A-Z][a-z]?\s*\d*\s*)+", formula):
+        raise HTTPException(400, "invalid composition formula")
+
+    tokens = re.findall(r"([A-Z][a-z]?)\s*(\d*)", formula)
     numbers: list[int] = []
     for sym, count in tokens:
         if not sym:
@@ -238,5 +242,6 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)),
+    uvicorn.run(app, host=os.environ.get("CATFLOW_HOST", "127.0.0.1"),
+                port=int(os.environ.get("PORT", 8000)),
                 timeout_keep_alive=600)

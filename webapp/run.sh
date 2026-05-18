@@ -1,7 +1,7 @@
 #!/bin/bash
 # Launch the CatFlow web demo.
-#   ./run.sh            -> serves on 0.0.0.0:8000
-# Env overrides: PORT, CATFLOW_DEVICE (default cuda:0), CATFLOW_PY (interpreter)
+#   ./run.sh            -> serves on 127.0.0.1:8000
+# Env overrides: PORT, CATFLOW_HOST, CATFLOW_DEVICE, CATFLOW_PY (interpreter)
 set -e
 cd "$(dirname "$0")"
 
@@ -15,6 +15,7 @@ if [ ! -f data/adsorbates.json ] || [ ! -f data/compositions.json ]; then
 fi
 
 export PORT="${PORT:-8000}"
+export CATFLOW_HOST="${CATFLOW_HOST:-127.0.0.1}"
 export CATFLOW_DEVICE="${CATFLOW_DEVICE:-cuda:0}"
-echo "[run] starting server on port $PORT (device $CATFLOW_DEVICE) ..."
+echo "[run] starting server on $CATFLOW_HOST:$PORT (device $CATFLOW_DEVICE) ..."
 exec "$PY" server.py

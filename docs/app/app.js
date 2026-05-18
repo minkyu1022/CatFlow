@@ -29,6 +29,7 @@ const state = {
 };
 
 const VIEWER_BG = "#0e1118";   // dark molecular-viewer background
+const MAX_COMPOSITION_ATOMS = 64;
 
 /* ---------------------------------------------------------------- helpers */
 const $ = (id) => document.getElementById(id);
@@ -117,6 +118,8 @@ function parseCustomComposition(text) {
   if (!t) return { ok: false };
   if (!/^[A-Za-z0-9\s]+$/.test(t))
     return { ok: false, error: "letters and numbers only" };
+  if (!/^(?:[A-Z][a-z]?\s*\d*\s*)+$/.test(t))
+    return { ok: false, error: "invalid formula" };
   const re = /([A-Z][a-z]?)\s*(\d*)/g;
   const counts = {};
   let n = 0, m;
@@ -130,7 +133,8 @@ function parseCustomComposition(text) {
     n += c;
   }
   if (n === 0) return { ok: false, error: "could not read any element" };
-  if (n > 48) return { ok: false, error: "max 48 atoms per cell" };
+  if (n > MAX_COMPOSITION_ATOMS)
+    return { ok: false, error: `max ${MAX_COMPOSITION_ATOMS} atoms per cell` };
   const els = Object.keys(counts).sort();
   const formula = els.map((e) => e + (counts[e] > 1 ? counts[e] : "")).join("");
   return { ok: true, formula, n_atoms: n };
@@ -307,7 +311,8 @@ function renderSample(idx) {
   host.appendChild(evalBtn);
   const evalStatus = el("div", "status hidden");
   evalStatus.style.marginTop = "10px";
-  evalStatus.innerHTML = '<div class="spinner"></div><span>Relaxing…</span>';
+  evalStatus.innerHTML =
+    '<div class="spinner"></div><span class="eval-status-text">Relaxing...</span>';
   host.appendChild(evalStatus);
   const evalErr = el("div", "err hidden");
   evalErr.style.marginTop = "8px";
@@ -368,6 +373,22 @@ function renderSample(idx) {
     evalErr.classList.add("hidden");
     energyBox.classList.add("hidden");
     evalStatus.classList.remove("hidden");
+    const statusText = evalStatus.querySelector(".eval-status-text");
+    const started = Date.now();
+    const phases = [
+      [0, "Preparing UMA relaxation"],
+      [5, "Relaxing slab + adsorbate system"],
+      [20, "Relaxing clean slab / waiting for optimizer"],
+      [45, "Still optimizing; strained samples can take longer"],
+    ];
+    const updateEvalStatus = () => {
+      const elapsed = Math.floor((Date.now() - started) / 1000);
+      const phase = phases.reduce((msg, [at, text]) =>
+        elapsed >= at ? text : msg, phases[0][1]);
+      statusText.textContent = `${phase} · ${elapsed}s elapsed`;
+    };
+    updateEvalStatus();
+    const statusTimer = setInterval(updateEvalStatus, 1000);
     try {
       const r = await fetch(API + "/api/eval", {
         method: "POST",
@@ -385,6 +406,7 @@ function renderSample(idx) {
       evalErr.textContent = "⚠ " + e.message;
       evalErr.classList.remove("hidden");
     } finally {
+      clearInterval(statusTimer);
       evalStatus.classList.add("hidden");
       evalBtn.disabled = !state.result.adsorbate.evaluable;
     }

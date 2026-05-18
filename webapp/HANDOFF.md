@@ -120,12 +120,14 @@ tar -xzf /tmp/data.tar.gz -C _newdata   # -> _newdata/data/dataset_per_adsorbate
 # then:  python prepare_data.py          # rebuilds data/adsorbates.json + compositions.json
 
 # 4. run
-./run.sh                # serves on 0.0.0.0:8000  (env: PORT, CATFLOW_DEVICE)
+./run.sh                # serves on 127.0.0.1:8000  (env: PORT, CATFLOW_HOST, CATFLOW_DEVICE)
 ```
 
-`run.sh` hard-codes the original server's interpreter path — edit the `PY=`
-line to the new env's python, or just run `python server.py` directly with the
-env active. Models + UMA load at startup (~20 s); the log prints
+`run.sh` uses `CATFLOW_PY` or its default interpreter path; override it for the
+new env, or just run `python server.py` directly with the env active. The
+backend binds to `127.0.0.1` by default because the public demo should enter
+through cloudflared; set `CATFLOW_HOST=0.0.0.0` only for intentional direct
+network exposure. Models + UMA load at startup (~20 s); the log prints
 `[server] ready.`
 
 Verify: `curl localhost:8000/api/adsorbates` (67 items),

@@ -55,14 +55,15 @@ for phones.
 
 ```bash
 cd CatFlow/webapp
-./run.sh                 # serves on 0.0.0.0:8000
+./run.sh                 # serves on 127.0.0.1:8000
 ```
 
-Environment variables: `PORT` (default 8000), `CATFLOW_DEVICE`
-(default `cuda:0`).
+Environment variables: `PORT` (default 8000), `CATFLOW_HOST` (default
+`127.0.0.1`), `CATFLOW_DEVICE` (default `cuda:0`).
 
-Open `http://<host>:8000`. The UI is designed for phones; on a remote
-machine use an SSH tunnel (`ssh -L 8000:localhost:8000 <host>`).
+Open `http://localhost:8000`. The UI is designed for phones; on a remote
+machine use an SSH tunnel (`ssh -L 8000:localhost:8000 <host>`), or set
+`CATFLOW_HOST=0.0.0.0` only when direct network exposure is intended.
 
 ## Notes
 
