@@ -69,7 +69,7 @@ Needs a Python env (3.10 / 3.11) with a CUDA build of PyTorch plus:
 ```
 pytorch-lightning (lightning)  fairchem-core      ase        pymatgen
 lmdb    omegaconf    hydra-core    einops    pebble    torch_geometric
-smact   numpy   tqdm   fastapi   uvicorn   pydantic
+smact   numpy   tqdm   fastapi   uvicorn   pydantic   slowapi
 playwright            (only for running test_ui.py)
 ```
 

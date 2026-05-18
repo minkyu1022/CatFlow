@@ -18,11 +18,14 @@ import traceback
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 
 HERE = Path(__file__).resolve().parent
 DATA_DIR = HERE / "data"
@@ -33,6 +36,20 @@ ENGINE = None     # CatFlowEngine
 EVALUATOR = None  # EnergyEvaluator
 ADSORBATES: list[dict] = []
 COMPOSITIONS: list[dict] = []
+
+
+def _client_key(request: Request) -> str:
+    """Rate-limit key. Behind the cloudflared tunnel every request's peer
+    address is the tunnel itself (localhost), so a plain remote-address key
+    would lump all users together. Cloudflare forwards the real client IP in
+    the CF-Connecting-IP header — use that, falling back to the peer address
+    for direct (non-tunnelled) access."""
+    return request.headers.get("CF-Connecting-IP") or get_remote_address(request)
+
+
+# Per-client rate limiting. The GPU endpoints (/api/generate, /api/eval) are
+# the abuse surface — the public tunnel URL has no auth, so cap requests.
+limiter = Limiter(key_func=_client_key)
 
 
 @asynccontextmanager
@@ -53,6 +70,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="CatFlow Demo", lifespan=lifespan)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # CORS — the static UI is served from GitHub Pages while this backend runs on
 # the GPU server behind a tunnel, so cross-origin requests must be allowed.
@@ -130,7 +149,8 @@ class GenerateRequest(BaseModel):
 
 
 @app.post("/api/generate")
-def generate(req: GenerateRequest):
+@limiter.limit("10/minute")
+def generate(request: Request, req: GenerateRequest):
     adsorbate = _ads_by_id(req.adsorbate_id)
     composition = None
     if req.mode == "structure":
@@ -164,7 +184,8 @@ class EvalRequest(BaseModel):
 
 
 @app.post("/api/eval")
-def evaluate(req: EvalRequest):
+@limiter.limit("20/minute")
+def evaluate(request: Request, req: EvalRequest):
     adsorbate = _ads_by_id(req.adsorbate_id)
     try:
         atoms = ENGINE.get_structure(req.job_id, req.sample_idx)
