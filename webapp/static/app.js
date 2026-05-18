@@ -174,7 +174,7 @@ async function generate() {
   $("gen-error").classList.add("hidden");
   $("gen-status").classList.remove("hidden");
   $("gen-status-text").textContent =
-    "Running flow matching (50 steps, 10 samples)… this can take ~30–90 s.";
+    "Running flow matching (50 steps, 10 samples)… this can take ~10 s.";
   $("result-card").classList.add("hidden");
   disposeViewers();
 
