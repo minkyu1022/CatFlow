@@ -606,7 +606,7 @@ $("gen-btn").onclick = generate;
 (function initTheme() {
   const btn = $("theme-toggle");
   const cur = () =>
-    document.documentElement.getAttribute("data-theme") || "dark";
+    document.documentElement.getAttribute("data-theme") || "light";
   const paint = () => { if (btn) btn.textContent = cur() === "light" ? "☾" : "☀"; };
   paint();
   if (btn) btn.onclick = () => {
