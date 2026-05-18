@@ -113,10 +113,22 @@ def get_compositions():
     return COMPOSITIONS
 
 
+MAX_COMPOSITION_ATOMS = 48
+
+
 def parse_composition(formula: str) -> dict:
-    """Parse a free-text slab composition such as 'Pt3Ni', 'Pd Ag', 'Cu4'."""
+    """Parse a free-text slab composition such as 'Pt3Ni', 'Pd Ag', 'Cu4'.
+
+    Server-side validation is authoritative — the request can hit /api/generate
+    directly, bypassing the frontend parser.
+    """
     import re
     from ase.data import atomic_numbers, chemical_symbols
+
+    # Cap the raw input length up front: the regex below otherwise scans the
+    # whole string, and a multi-megabyte body is a cheap DoS.
+    if len(formula) > 256:
+        raise HTTPException(400, "composition string too long")
 
     tokens = re.findall(r"([A-Z][a-z]?)\s*(\d*)", formula.strip())
     numbers: list[int] = []
@@ -125,10 +137,21 @@ def parse_composition(formula: str) -> dict:
             continue
         if sym not in atomic_numbers:
             raise HTTPException(400, f"unknown element '{sym}'")
-        numbers.extend([atomic_numbers[sym]] * (int(count) if count else 1))
-    if not (1 <= len(numbers) <= 48):
+        # Bound each count BEFORE expanding the list. `int(count)` on a long
+        # digit string and `[z] * count` would otherwise blow up memory
+        # before the total-length check below ever runs. Any count past the
+        # atom cap is invalid anyway, so a >3-digit number is rejected flat.
+        if len(count) > 3:
+            raise HTTPException(
+                400, f"composition must have 1–{MAX_COMPOSITION_ATOMS} atoms")
+        n = int(count) if count else 1
+        if n < 1 or len(numbers) + n > MAX_COMPOSITION_ATOMS:
+            raise HTTPException(
+                400, f"composition must have 1–{MAX_COMPOSITION_ATOMS} atoms")
+        numbers.extend([atomic_numbers[sym]] * n)
+    if not (1 <= len(numbers) <= MAX_COMPOSITION_ATOMS):
         raise HTTPException(
-            400, "composition must have between 1 and 48 atoms")
+            400, f"composition must have 1–{MAX_COMPOSITION_ATOMS} atoms")
     numbers.sort()
     from collections import Counter
     cnt = Counter(chemical_symbols[z] for z in numbers)
