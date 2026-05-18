@@ -60,8 +60,14 @@ def structure_payload(atoms: Atoms) -> dict:
     """JSON-serialisable description of one structure for the frontend."""
     tags = atoms.get_tags().tolist() if atoms.has("tags") else [0] * len(atoms)
     cell = atoms.get_cell()
+    # 2x2x1 supercell, built in ASE so cell + coordinates stay in one frame.
+    # Doing the tiling here (rather than shifting copies in JS by the cell
+    # vectors) avoids the PDB CRYST1 round-trip bug: ase_write rotates atoms
+    # into a standard cell orientation, so a JS shift by the original,
+    # un-rotated cell vectors lands the replicas in the wrong frame.
     return {
         "pdb": atoms_to_pdb(atoms),
+        "pdb_super": atoms_to_pdb(atoms.repeat((2, 2, 1))),
         "tags": tags,
         "n_atoms": len(atoms),
         "formula": atoms.get_chemical_formula(),

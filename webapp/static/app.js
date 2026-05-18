@@ -527,21 +527,17 @@ function makeViewer(elemId, payload) {
     toggleSupercell() {
       if (!mainComp) return false;
       if (!superOn) {
-        if (!superComps.length) {
-          const c = payload.cell;
-          const offs = [
-            [c[0][0], c[0][1], c[0][2]],
-            [c[1][0], c[1][1], c[1][2]],
-            [c[0][0] + c[1][0], c[0][1] + c[1][1], c[0][2] + c[1][2]],
-          ];
-          offs.forEach((sh) => {
-            stage.loadFile(new Blob([payload.pdb], { type: "text/plain" }),
-              { ext: "pdb", defaultRepresentation: false }).then((cl) => {
-                cl.setPosition(sh);
-                structureRepresentations(cl, payload.tags, true);
-                superComps.push(cl);
-              });
-          });
+        if (!superComps.length && payload.pdb_super) {
+          // 2x2x1 supercell tiled server-side in ASE (consistent cell+coords).
+          // Rendered as a translucent ghost over the solid single cell; the
+          // ghost copies of the original atoms are smaller (radiusScale 0.42
+          // < 0.5) so they hide inside the solid spheres, leaving only the
+          // replica atoms visibly ghosted.
+          stage.loadFile(new Blob([payload.pdb_super], { type: "text/plain" }),
+            { ext: "pdb", defaultRepresentation: false }).then((cl) => {
+              structureRepresentations(cl, payload.tags, true);
+              superComps.push(cl);
+            });
         } else superComps.forEach((c) => c.setVisibility(true));
         superOn = true;
         setTimeout(() => stage.autoView(400), 250);
