@@ -90,38 +90,27 @@
       </nav>
     </header>
 
-    <!-- ============== TL;DR ============== -->
-    <section class="card" style="--i:1">
-      <h2><span class="num">01</span> Overview</h2>
+    <!-- ============== OVERVIEW ============== -->
+    <section class="ch" style="--i:1">
+      <h2>Overview</h2>
       <p class="intro">
         CatFlow co-generates slab structures and adsorbate configurations at the all-atom level via flow matching.
         A factorized representation reduces the modeling dimensionality of the slab-adsorbate system, and CatFlow
         outperforms baselines on both de novo generation and structure prediction over OC20. The model also
         demonstrates the capability for global minimum search.
       </p>
-    </section>
-
-    <!-- ============== DEMO CALLOUT ============== -->
-    <section class="card cta-card" style="--i:2">
-      <h2><span class="num star">✦</span> Try CatFlow live</h2>
-      <p class="intro tight">
-        Pick an adsorbate, optionally specify a slab composition, and watch the model generate
-        physically consistent slab–adsorbate systems in your browser. Optionally compute the
-        adsorption energy with <span class="mono">UMA&nbsp;(uma-s-1p1)</span>.
-      </p>
-      <a class="primary cta-btn" href="./app">
-        <span class="btn-label">Launch the demo</span>
-        <span class="btn-arrow" aria-hidden="true">→</span>
-      </a>
-      <p class="hint center">
-        runs against a public GPU server · ~10&nbsp;seconds per generation · no install required
+      <p class="cta-inline">
+        <a class="cta-btn" href="./app">
+          <span class="btn-label">Launch the live demo</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
       </p>
     </section>
 
     <!-- ============== GENERATION + RELAXATION ============== -->
-    <section class="card" style="--i:3">
-      <h2><span class="num">02</span> Generation &amp; relaxation</h2>
-      <p class="intro tight">
+    <section class="ch" style="--i:2">
+      <h2>Generation &amp; relaxation</h2>
+      <p class="intro">
         CatFlow generates a slab–adsorbate system through a continuous-and-discrete flow-matching trajectory, then
         relaxes the structure with UMA-s-1p1. Relaxation drives the sample toward a thermodynamic local minimum.
       </p>
@@ -147,10 +136,10 @@
     </section>
 
     <!-- ============== INTERACTIVE 3D VIEWER ============== -->
-    <section class="card" style="--i:4">
-      <h2><span class="num">03</span> Interactive viewer</h2>
-      <p class="intro tight">
-        Drag to rotate · scroll / pinch to zoom · atoms coloured by element.
+    <section class="ch" style="--i:3">
+      <h2>Interactive viewer</h2>
+      <p class="intro">
+        Drag to rotate · scroll or pinch to zoom · atoms coloured by element.
       </p>
 
       <div class="viewer-block">
@@ -168,8 +157,8 @@
     </section>
 
     <!-- ============== CONCEPT ============== -->
-    <section class="card" style="--i:5">
-      <h2><span class="num">04</span> Concept</h2>
+    <section class="ch" style="--i:4">
+      <h2>Concept</h2>
       <figure class="figure-frame">
         <img src="figures/concept.png" alt="CatFlow concept diagram" />
         <figcaption>
@@ -180,8 +169,8 @@
     </section>
 
     <!-- ============== CO-GENERATION TRAJECTORY ============== -->
-    <section class="card" style="--i:6">
-      <h2><span class="num">05</span> Co-generation trajectory</h2>
+    <section class="ch" style="--i:5">
+      <h2>Co-generation trajectory</h2>
       <figure class="figure-frame">
         <img src="figures/cogen_traj.png" alt="Co-generation trajectory" />
         <figcaption>
@@ -192,9 +181,9 @@
     </section>
 
     <!-- ============== CITATION ============== -->
-    <section class="card" style="--i:7">
-      <h2><span class="num">06</span> Citation</h2>
-      <p class="intro tight">If you find CatFlow useful, please cite:</p>
+    <section class="ch" style="--i:6">
+      <h2>Citation</h2>
+      <p class="intro">If you find CatFlow useful, please cite:</p>
       <div class="bib">
         <button id="copy-bib" class="ghost bib-copy" type="button">Copy</button>
 <pre id="bib-pre">@article{kim2026catflow,
