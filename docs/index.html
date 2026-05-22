@@ -99,16 +99,30 @@
         outperforms baselines on both de novo generation and structure prediction over OC20. The model also
         demonstrates the capability for global minimum search.
       </p>
-      <p class="cta-inline">
-        <a class="cta-btn" href="./app">
-          <span class="btn-label">Launch the live demo</span>
-          <span class="btn-arrow" aria-hidden="true">→</span>
-        </a>
+    </section>
+
+    <!-- ============== LIVE DEMO (embedded) ============== -->
+    <section class="ch" style="--i:2">
+      <h2>Live demo</h2>
+      <p class="intro">
+        Pick an adsorbate, optionally specify a slab composition, and watch the model generate physically consistent
+        slab–adsorbate systems below. Runs against a public GPU server &mdash; no install required.
       </p>
+      <div class="demo-embed">
+        <iframe
+          src="./app/"
+          class="demo-frame"
+          title="CatFlow live demo"
+          loading="eager"
+          allow="clipboard-write"></iframe>
+        <p class="demo-aside">
+          <a href="./app/" target="_blank" rel="noopener">Open the demo in a new tab&nbsp;↗</a>
+        </p>
+      </div>
     </section>
 
     <!-- ============== GENERATION + RELAXATION ============== -->
-    <section class="ch" style="--i:2">
+    <section class="ch" style="--i:3">
       <h2>Generation &amp; relaxation</h2>
       <p class="intro">
         CatFlow generates a slab–adsorbate system through a continuous-and-discrete flow-matching trajectory, then
@@ -136,7 +150,7 @@
     </section>
 
     <!-- ============== INTERACTIVE 3D VIEWER ============== -->
-    <section class="ch" style="--i:3">
+    <section class="ch" style="--i:4">
       <h2>Interactive viewer</h2>
       <p class="intro">
         Drag to rotate · scroll or pinch to zoom · atoms coloured by element.
@@ -157,7 +171,7 @@
     </section>
 
     <!-- ============== CONCEPT ============== -->
-    <section class="ch" style="--i:4">
+    <section class="ch" style="--i:5">
       <h2>Concept</h2>
       <figure class="figure-frame">
         <img src="figures/concept.png" alt="CatFlow concept diagram" />
@@ -169,7 +183,7 @@
     </section>
 
     <!-- ============== CO-GENERATION TRAJECTORY ============== -->
-    <section class="ch" style="--i:5">
+    <section class="ch" style="--i:6">
       <h2>Co-generation trajectory</h2>
       <figure class="figure-frame">
         <img src="figures/cogen_traj.png" alt="Co-generation trajectory" />
@@ -181,7 +195,7 @@
     </section>
 
     <!-- ============== CITATION ============== -->
-    <section class="ch" style="--i:6">
+    <section class="ch" style="--i:7">
       <h2>Citation</h2>
       <p class="intro">If you find CatFlow useful, please cite:</p>
       <div class="bib">
