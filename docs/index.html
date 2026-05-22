@@ -4,141 +4,255 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <title>CatFlow</title>
-  <link rel="stylesheet" type="text/css" href="page/style.css?v=6" />
+  <meta name="theme-color" content="#0b0d12" />
+  <title>CatFlow · Co-generation of Slab–Adsorbate Systems via Flow Matching</title>
+  <meta name="description"
+        content="CatFlow — a flow-matching framework for de novo design and structure prediction of heterogeneous catalysts." />
+
+  <script>
+    /* apply saved theme before first paint to avoid a flash; shared with webapp */
+    (function () {
+      try {
+        document.documentElement.setAttribute(
+          "data-theme", localStorage.getItem("catflow-theme") || "light");
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="page/style.css?v=8" />
+  <script src="https://unpkg.com/ngl@2.0.0-dev.37/dist/ngl.js"></script>
 </head>
 
 <body>
-  <script src="https://unpkg.com/ngl@2.0.0-dev.37/dist/ngl.js"></script>
-  <script src="./page/viewer.js?v=sleep"></script>
 
-  <!-- Title -->
-  <h1>CatFlow</h1>
-  <h3>Co-generation of Slab-Adsorbate Systems via Flow Matching</h3>
+  <div class="aurora" aria-hidden="true"></div>
 
-  <!-- Authors -->
-  <div class="authors">
-    <a href="https://minkyu1022.github.io/mkkim/">Minkyu Kim</a>,
-    <a href="https://nayoung10.github.io/">Nayoung Kim</a>,
-    <a href="https://scholar.google.com/citations?hl=ko&user=FqIni_IAAAAJ">Honghui Kim</a>,
-    <a href="https://sungsoo-ahn.github.io/">Sungsoo Ahn</a>
-  </div>
+  <button id="theme-toggle" class="theme-toggle" type="button"
+          aria-label="Toggle light / dark theme"></button>
 
-  <!-- Badges -->
-  <div class="badges">
-    <a href="https://arxiv.org/abs/2602.05372">Paper</a>&nbsp;&nbsp;
-    <a href="https://github.com/minkyu1022/CatFlow">Code</a>&nbsp;&nbsp;
-    <a href="./app">Demo</a>
-  </div>
+  <div class="wrap">
 
-  <!-- Abstract -->
-  <div class="section">
-    <h2>Overview</h2>
-    <p class="intro">
-      Discovering heterogeneous catalysts tailored for specific reaction intermediates remains a fundamental bottleneck
-      in materials science. While traditional trial-and-error methods and recent generative models have shown promise,
-      they struggle to capture the intrinsic coupling between surface geometry and adsorbate interactions.
-      We propose <strong>CatFlow</strong>, a flow matching-based framework for de novo design and structure prediction
-      of
-      heterogeneous catalysts. Our model operates on a primitive cell-based factorized representation of the
-      slab-adsorbate complex, reducing the number of learnable variables by an average of 9.2x while explicitly encoding
-      the surface orientation of the slab-adsorbate interface. Experiments on the Open Catalyst 2020 dataset demonstrate
-      that CatFlow significantly improves the structural fidelity of generated catalysts compared to autoregressive and
-      sequential baselines. Further experiments show that the generated structures accurately capture the adsorption
-      energy distributions of physically plausible interfaces and lie closer to thermodynamic local minima.
-    </p>
-  </div>
+    <!-- ============== HERO ============== -->
+    <header class="hero" style="--i:0">
+      <img class="mascot" src="./app/catcat.png"
+           alt="CatFlow mascot — a calico cat curled around a molecule" />
 
-  <!-- Generation + Relaxation Trajectory GIF -->
-  <div class="section">
-    <h2>Sample Generation and Relaxation</h2>
-    <p class="intro">
-      CatFlow generates a slab-adsorbate system through continuous and discrete flow matching trajectory,
-      followed by structure relaxation using the UMA-s-1p1.
-      The relaxation drives the generated structure toward a thermodynamic local minimum.
-    </p>
-    <div class="gif-container">
-      <img src="figures/full_trajectory.gif" alt="Generation and relaxation trajectory" />
-    </div>
-
-    <!-- Energy Table -->
-    <table class="energy-table">
-      <tr>
-        <th>Metric</th>
-        <th>Value</th>
-      </tr>
-      <tr>
-        <td>E<sub>ads</sub> (unrelaxed)</td>
-        <td>2.1352 eV</td>
-      </tr>
-      <tr>
-        <td>E<sub>ads</sub> (relaxed)</td>
-        <td>-1.8153 eV</td>
-      </tr>
-    </table>
-    <p class="caption">
-      Adsorption energy before and after relaxation.
-      The negative relaxed E<sub>ads</sub> indicates a thermodynamically favorable adsorption configuration.
-    </p>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Interactive 3D Viewer -->
-  <div class="section">
-    <h2>Interactive 3D Viewer</h2>
-    <p class="intro">
-      Explore the generated slab-adsorbate system structure interactively.
-      Drag to rotate, scroll to zoom, and use the buttons below to control the view.
-    </p>
-    <div class="viewer-container">
-      <div id="viewport-sample"
-        style="width: 500px; height: 500px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 4px;"></div>
-      <div class="button-container">
-        <button id="toggleSpin-sample">Spin</button>
-        <button id="toggleCell-sample">Unit Cell</button> <button id="toggleSupercell-sample">Supercell</button> <button
-          id="resetView-sample">Reset View</button>
+      <div class="brand">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="40" height="40">
+            <path d="M4 28 C 12 28, 12 12, 20 12 S 28 28, 36 28" />
+            <circle cx="20" cy="12" r="3.2" class="m-node" />
+            <circle cx="4" cy="28" r="2.1" />
+            <circle cx="36" cy="28" r="2.1" />
+          </svg>
+        </span>
+        <h1><span class="t-cat">Cat</span><span class="t-flow">Flow</span></h1>
       </div>
-    </div>
-    <ul class="instructions">
-      <li>Drag (left click): rotate the structure</li>
-      <li>Scroll (up/down): zoom in/out</li>
-      <li>Spin button: toggle auto-rotation</li>
-      <li>Reset View: return to default camera position</li>
-    </ul>
+
+      <p class="subtitle">Co-generation of Slab–Adsorbate Systems via Flow Matching</p>
+
+      <div class="conf-pill" role="note">
+        <span class="cp-dot" aria-hidden="true"></span>
+        <span class="cp-venue">ICML 2026</span>
+        <span class="cp-sep" aria-hidden="true">·</span>
+        <span class="cp-status">Accepted</span>
+      </div>
+
+      <div class="seam" aria-hidden="true"></div>
+
+      <div class="authors">
+        <a href="https://minkyu1022.github.io/mkkim/">Minkyu&nbsp;Kim</a>
+        <span class="dot">·</span>
+        <a href="https://nayoung10.github.io/">Nayoung&nbsp;Kim</a>
+        <span class="dot">·</span>
+        <a href="https://scholar.google.com/citations?hl=ko&amp;user=FqIni_IAAAAJ">Honghui&nbsp;Kim</a>
+        <span class="dot">·</span>
+        <a href="https://sungsoo-ahn.github.io/">Sungsoo&nbsp;Ahn</a>
+      </div>
+
+      <nav class="badges" aria-label="primary links">
+        <a class="badge" href="https://arxiv.org/abs/2602.05372">
+          <span class="b-icon" aria-hidden="true">📄</span>
+          <span class="b-text"><span class="b-k">Paper</span><span class="b-v">arXiv</span></span>
+        </a>
+        <a class="badge" href="https://github.com/minkyu1022/CatFlow">
+          <span class="b-icon" aria-hidden="true">⌬</span>
+          <span class="b-text"><span class="b-k">Code</span><span class="b-v">GitHub</span></span>
+        </a>
+        <a class="badge primary" href="./app">
+          <span class="b-icon" aria-hidden="true">✦</span>
+          <span class="b-text"><span class="b-k">Live demo</span><span class="b-v">Try it →</span></span>
+        </a>
+      </nav>
+    </header>
+
+    <!-- ============== TL;DR ============== -->
+    <section class="card" style="--i:1">
+      <h2><span class="num">01</span> Overview</h2>
+      <p class="intro">
+        CatFlow co-generates slab structures and adsorbate configurations at the all-atom level via flow matching.
+        A factorized representation reduces the modeling dimensionality of the slab-adsorbate system, and CatFlow
+        outperforms baselines on both de novo generation and structure prediction over OC20. The model also
+        demonstrates the capability for global minimum search.
+      </p>
+    </section>
+
+    <!-- ============== DEMO CALLOUT ============== -->
+    <section class="card cta-card" style="--i:2">
+      <h2><span class="num star">✦</span> Try CatFlow live</h2>
+      <p class="intro tight">
+        Pick an adsorbate, optionally specify a slab composition, and watch the model generate
+        physically consistent slab–adsorbate systems in your browser. Optionally compute the
+        adsorption energy with <span class="mono">UMA&nbsp;(uma-s-1p1)</span>.
+      </p>
+      <a class="primary cta-btn" href="./app">
+        <span class="btn-label">Launch the demo</span>
+        <span class="btn-arrow" aria-hidden="true">→</span>
+      </a>
+      <p class="hint center">
+        runs against a public GPU server · ~10&nbsp;seconds per generation · no install required
+      </p>
+    </section>
+
+    <!-- ============== GENERATION + RELAXATION ============== -->
+    <section class="card" style="--i:3">
+      <h2><span class="num">02</span> Generation &amp; relaxation</h2>
+      <p class="intro tight">
+        CatFlow generates a slab–adsorbate system through a continuous-and-discrete flow-matching trajectory, then
+        relaxes the structure with UMA-s-1p1. Relaxation drives the sample toward a thermodynamic local minimum.
+      </p>
+      <figure class="gif-frame">
+        <img src="figures/full_trajectory.gif" alt="Generation and relaxation trajectory" />
+        <figcaption>Generation, then relaxation, of a single sample.</figcaption>
+      </figure>
+
+      <div class="ev-grid">
+        <div class="ev-cell">
+          <div class="k">E<sub>ads</sub> · unrelaxed</div>
+          <div class="v">+2.1352 eV</div>
+        </div>
+        <div class="ev-cell hi">
+          <div class="k">E<sub>ads</sub> · relaxed</div>
+          <div class="v">−1.8153 eV</div>
+        </div>
+      </div>
+      <p class="legend">
+        Adsorption energy before and after relaxation. A negative relaxed E<sub>ads</sub> indicates a
+        thermodynamically favorable adsorption configuration.
+      </p>
+    </section>
+
+    <!-- ============== INTERACTIVE 3D VIEWER ============== -->
+    <section class="card" style="--i:4">
+      <h2><span class="num">03</span> Interactive viewer</h2>
+      <p class="intro tight">
+        Drag to rotate · scroll / pinch to zoom · atoms coloured by element.
+      </p>
+
+      <div class="viewer-block">
+        <div class="vlabel">
+          <span>Relaxed sample · C<sub>2</sub>H<sub>2</sub>O on an Ir/Ti slab</span>
+        </div>
+        <div id="viewport-sample" class="viewport"></div>
+        <div class="vctrl">
+          <button id="toggleCell-sample" class="ghost">Unit cell</button>
+          <button id="toggleSupercell-sample" class="ghost">2×2 supercell</button>
+          <button id="toggleSpin-sample" class="ghost">Spin</button>
+          <button id="resetView-sample" class="ghost">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== CONCEPT ============== -->
+    <section class="card" style="--i:5">
+      <h2><span class="num">04</span> Concept</h2>
+      <figure class="figure-frame">
+        <img src="figures/concept.png" alt="CatFlow concept diagram" />
+        <figcaption>
+          CatFlow generates slab–adsorbate systems via flow matching on a factorized representation,
+          capturing the coupling between surface geometry and adsorbate placement.
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- ============== CO-GENERATION TRAJECTORY ============== -->
+    <section class="card" style="--i:6">
+      <h2><span class="num">05</span> Co-generation trajectory</h2>
+      <figure class="figure-frame">
+        <img src="figures/cogen_traj.png" alt="Co-generation trajectory" />
+        <figcaption>
+          CatFlow simultaneously denoises the slab structure and adsorbate positions in a coupled manner,
+          yielding physically consistent slab–adsorbate systems.
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- ============== CITATION ============== -->
+    <section class="card" style="--i:7">
+      <h2><span class="num">06</span> Citation</h2>
+      <p class="intro tight">If you find CatFlow useful, please cite:</p>
+      <div class="bib">
+        <button id="copy-bib" class="ghost bib-copy" type="button">Copy</button>
+<pre id="bib-pre">@article{kim2026catflow,
+  title   = {CatFlow: Co-generation of Slab--Adsorbate Systems via Flow Matching},
+  author  = {Kim, Minkyu and Kim, Nayoung and Kim, Honghui and Ahn, Sungsoo},
+  journal = {arXiv preprint arXiv:2602.05372},
+  year    = {2026}
+}</pre>
+      </div>
+    </section>
+
+    <!-- ============== FOOTER ============== -->
+    <footer>
+      <span class="f-line"></span>
+      CatFlow — co-generation of slab–adsorbate systems via flow matching.<br />
+      Structure relaxation &amp; energies by UMA <span class="mono">(uma-s-1p1)</span>.
+    </footer>
+
   </div>
 
-  <div class="divider"></div>
+  <script src="./page/viewer.js?v=8"></script>
+  <script>
+    /* theme toggle — shared key with webapp ("catflow-theme") */
+    (function () {
+      const btn = document.getElementById("theme-toggle");
+      const root = document.documentElement;
+      const cur = () => root.getAttribute("data-theme") || "light";
+      const paint = () => { if (btn) btn.textContent = cur() === "light" ? "☾" : "☀"; };
+      paint();
+      if (btn) btn.addEventListener("click", () => {
+        const next = cur() === "light" ? "dark" : "light";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("catflow-theme", next); } catch (e) {}
+        paint();
+        /* let the NGL viewer (if loaded) refresh its background to match */
+        window.dispatchEvent(new CustomEvent("catflow-theme", { detail: next }));
+      });
+    })();
 
-  <!-- Concept Figure -->
-  <div class="section">
-    <h2>Concept</h2>
-    <div class="figure-container">
-      <img src="figures/concept.png" alt="CatFlow concept" />
-    </div>
-    <p class="caption">
-      CatFlow generates slab-adsorbate systems via flow matching on a factorized representation,
-      capturing the coupling between surface geometry and adsorbate placement.
-    </p>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Co-generation Trajectory Figure -->
-  <div class="section">
-    <h2>Co-generation Trajectory</h2>
-    <div class="figure-container">
-      <img src="figures/cogen_traj.png" alt="CatFlow co-generation trajectory" />
-    </div>
-    <p class="caption">
-      Visualization of the co-generation process: CatFlow simultaneously generates the slab structure and
-      adsorbate positions in a coupled manner, producing physically consistent slab-adsorbate systems.
-    </p>
-  </div>
-
+    /* BibTeX copy button */
+    (function () {
+      const btn = document.getElementById("copy-bib");
+      const pre = document.getElementById("bib-pre");
+      if (!btn || !pre) return;
+      btn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(pre.textContent.trim());
+          const t = btn.textContent;
+          btn.textContent = "Copied ✓";
+          btn.classList.add("on");
+          setTimeout(() => { btn.textContent = t; btn.classList.remove("on"); }, 1400);
+        } catch (e) {
+          btn.textContent = "Press ⌘C";
+          setTimeout(() => { btn.textContent = "Copy"; }, 1400);
+        }
+      });
+    })();
+  </script>
 </body>
 
 </html>

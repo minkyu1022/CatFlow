@@ -1,5 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-  var stage = new NGL.Stage("viewport-sample", { backgroundColor: "white" });
+  /* viewer background follows the page theme (shared with the webapp) */
+  function bgForTheme() {
+    var t = document.documentElement.getAttribute("data-theme") || "light";
+    return t === "light" ? "#fbfcfd" : "#0e1118";
+  }
+  var stage = new NGL.Stage("viewport-sample", { backgroundColor: bgForTheme() });
+  window.addEventListener("catflow-theme", function () {
+    try { stage.setParameters({ backgroundColor: bgForTheme() }); } catch (e) {}
+  });
 
   var pdbData = `CRYST1    8.941   10.322   29.755  89.88  90.11  89.94 P 1           1
 MODEL     1
@@ -77,11 +85,13 @@ ENDMDL`;
       if (!isSpinning) {
         stage.setSpin([0, 1, 0], 0.01);
         isSpinning = true;
-        toggleSpinBtn.textContent = "Stop Spin";
+        toggleSpinBtn.textContent = "Stop";
+        toggleSpinBtn.classList.add("on");
       } else {
         stage.setSpin(null, null);
         isSpinning = false;
         toggleSpinBtn.textContent = "Spin";
+        toggleSpinBtn.classList.remove("on");
       }
     });
   }
@@ -99,8 +109,7 @@ ENDMDL`;
       if (unitcellRep) {
         var isVisible = !unitcellRep.visible;
         unitcellRep.setVisibility(isVisible);
-        toggleCellBtn.style.fontWeight = isVisible ? "bold" : "normal";
-        toggleCellBtn.style.color = isVisible ? "blue" : "black";
+        toggleCellBtn.classList.toggle("on", isVisible);
       }
     });
   }
@@ -136,18 +145,16 @@ ENDMDL`;
         }
 
         isSupercellOn = true;
-        toggleSupercellBtn.textContent = "Hide Supercell";
-        toggleSupercellBtn.style.color = "blue";
-        toggleSupercellBtn.style.fontWeight = "bold";
+        toggleSupercellBtn.textContent = "Hide supercell";
+        toggleSupercellBtn.classList.add("on");
 
         setTimeout(function () { stage.autoView(500); }, 300);
 
       } else {
         supercellComps.forEach(function (c) { c.setVisibility(false); });
         isSupercellOn = false;
-        toggleSupercellBtn.textContent = "Supercell";
-        toggleSupercellBtn.style.color = "black";
-        toggleSupercellBtn.style.fontWeight = "normal";
+        toggleSupercellBtn.textContent = "2×2 supercell";
+        toggleSupercellBtn.classList.remove("on");
         mainComp.autoView(500);
       }
     });
