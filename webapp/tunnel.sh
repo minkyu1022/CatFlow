@@ -32,7 +32,7 @@ if ! curl -fsS "http://localhost:$PORT/api/adsorbates" >/dev/null 2>&1; then
     echo "[tunnel]          start the backend first:  ./run.sh" >&2
 fi
 
-"$CF" tunnel --url "http://localhost:$PORT" > "$LOG" 2>&1 &
+"$CF" tunnel --no-autoupdate --url "http://localhost:$PORT" > "$LOG" 2>&1 &
 CF_PID=$!
 trap 'kill $CF_PID 2>/dev/null || true' EXIT
 echo "[tunnel] cloudflared started (pid $CF_PID), waiting for URL ..."
