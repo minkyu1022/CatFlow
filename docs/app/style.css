@@ -529,10 +529,14 @@ footer .mono { color: var(--ink-2); }
    Kicks in only when #result-card becomes visible and viewport
    is wide enough. Otherwise falls back to the single centered
    column that mobile-first users see.
+
+   No max-width transition on .wrap: NGL.Stage snapshots the
+   viewport size when it's created (right after .hidden comes
+   off). If the wrap were still growing at that moment, NGL
+   would size its canvas to the intermediate width and never
+   catch up when the transition finished — leaving the WebGL
+   canvas painting only the upper-left corner of the .viewport.
    ============================================================ */
-.wrap {
-  transition: max-width 0.5s cubic-bezier(.2, .7, .3, 1);
-}
 
 @media (min-width: 960px) {
   .wrap:has(#result-card:not(.hidden)) {
