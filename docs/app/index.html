@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./style.css?v=9" />
   <script src="https://unpkg.com/ngl@2.0.0-dev.37/dist/ngl.js"></script>
 </head>
 <body>
@@ -44,6 +44,7 @@
       <div class="seam" aria-hidden="true"></div>
     </header>
 
+    <div class="controls-col">
     <!-- 1. mode -->
     <section class="card" style="--i:1">
       <h2><span class="num">01</span> Choose a task</h2>
@@ -101,6 +102,7 @@
       </div>
       <div class="err hidden" id="gen-error"></div>
     </section>
+    </div><!-- /.controls-col -->
 
     <!-- results -->
     <section class="card result hidden" id="result-card" style="--i:5">

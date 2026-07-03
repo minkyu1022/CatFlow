@@ -524,6 +524,43 @@ footer .mono { color: var(--ink-2); }
 
 .hidden { display: none !important; }
 
+/* ============================================================
+   Split-pane layout — controls left, results right
+   Kicks in only when #result-card becomes visible and viewport
+   is wide enough. Otherwise falls back to the single centered
+   column that mobile-first users see.
+   ============================================================ */
+.wrap {
+  transition: max-width 0.5s cubic-bezier(.2, .7, .3, 1);
+}
+
+@media (min-width: 960px) {
+  .wrap:has(#result-card:not(.hidden)) {
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    grid-template-areas:
+      "hero hero"
+      "ctrl res"
+      "foot foot";
+    column-gap: 26px;
+    row-gap: 0;
+    align-items: start;
+  }
+  .wrap:has(#result-card:not(.hidden)) > header        { grid-area: hero; }
+  .wrap:has(#result-card:not(.hidden)) > .controls-col { grid-area: ctrl; min-width: 0; }
+  .wrap:has(#result-card:not(.hidden)) > #result-card  { grid-area: res; margin-bottom: 14px; min-width: 0; }
+  .wrap:has(#result-card:not(.hidden)) > footer        { grid-area: foot; }
+
+  @keyframes slideInFromRight {
+    from { opacity: 0; transform: translateX(28px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .wrap:has(#result-card:not(.hidden)) > #result-card {
+    animation: slideInFromRight 0.55s cubic-bezier(.2, .7, .3, 1) both;
+  }
+}
+
 @media (max-width: 360px) {
   header h1 { font-size: 2.4rem; }
   .ev-grid { grid-template-columns: 1fr; }
