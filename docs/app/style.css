@@ -559,6 +559,19 @@ footer .mono { color: var(--ink-2); }
   .wrap:has(#result-card:not(.hidden)) > #result-card {
     animation: slideInFromRight 0.55s cubic-bezier(.2, .7, .3, 1) both;
   }
+
+  /* keep viewers square + centered so the dark canvas fills its box */
+  .wrap:has(#result-card:not(.hidden)) .viewport {
+    width: 100%;
+    max-width: 440px;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .wrap:has(#result-card:not(.hidden)) .viewport.traj {
+    height: auto;
+  }
 }
 
 @media (max-width: 360px) {
